@@ -1,4 +1,4 @@
-define ['d3', 'jquery', 'queue', 'topojson'], (d3, $, queue, topojson) ->
+define ['d3', 'topojson'], (d3, topojson) ->
   render: (node, data, baseUrl) ->
     width = node.clientWidth
     height = node.clientHeight
@@ -42,18 +42,16 @@ define ['d3', 'jquery', 'queue', 'topojson'], (d3, $, queue, topojson) ->
       path = d3.geo.path()
         .projection(projection)
 
-      queue()
-        .defer d3.json, baseUrl + '/japan.topojson'
-        .await (error, json) ->
-          svg.selectAll '.states'
-              .data topojson.feature(json, json.objects.japan).features
-            .enter().append 'path'
-              .attr 'stroke', 'gray'
-              .attr 'stroke-width', '0.5'
-              .attr 'id', (d) -> 'state_' + d.properties.id
-              .attr 'class', 'states'
-              .attr 'fill', '#ffffff'
-              .attr 'd', path
-          update()
+      d3.json baseUrl + '/japan.topojson', (error, json) ->
+        svg.selectAll '.states'
+            .data topojson.feature(json, json.objects.japan).features
+          .enter().append 'path'
+            .attr 'stroke', 'gray'
+            .attr 'stroke-width', '0.5'
+            .attr 'id', (d) -> 'state_' + d.properties.id
+            .attr 'class', 'states'
+            .attr 'fill', '#ffffff'
+            .attr 'd', path
+        update()
     else
       update()
