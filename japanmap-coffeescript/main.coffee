@@ -10,7 +10,7 @@ define ['d3', 'topojson'], (d3, topojson) ->
     ###
     _initialize = () ->
       width = node.clientWidth
-      height = node.clientHeight
+      height = 600
 
       svg = d3.select(node)
         .append 'svg'
@@ -53,6 +53,8 @@ define ['d3', 'topojson'], (d3, topojson) ->
     exports =
       ###*
       # (Required) called on data updated.
+      #
+      # @param data: ChartData
       ###
       update: (data) ->
         _data = data

@@ -10,7 +10,7 @@ define(['d3', 'topojson'], function (d3, topojson) {
      */
     var _initialize = function () {
       var width = node.clientWidth;
-      var height = node.clientHeight;
+      var height = 600;
 
       var svg = d3.select(node)
         .append('svg')
@@ -58,6 +58,8 @@ define(['d3', 'topojson'], function (d3, topojson) {
     var exports = {
       /**
        * (Required) called on data updated.
+       *
+       * @param data: ChartData
        */
       update: function (data) {
         _data = data;
@@ -93,5 +95,5 @@ define(['d3', 'topojson'], function (d3, topojson) {
     };
 
     return exports;
-  }
+  };
 });
