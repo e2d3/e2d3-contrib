@@ -1,35 +1,17 @@
 define ['d3', 'topojson'], (d3, topojson) ->
-  render: (node, data, baseUrl) ->
-    width = node.clientWidth
-    height = node.clientHeight
+  (node, baseUrl) ->
+    ###
+    # private variable
+    ###
+    _data = null
 
-    map = data.toMap()
-    values = map.values()
+    ###
+    # constructor
+    ###
+    _initialize = () ->
+      width = node.clientWidth
+      height = node.clientHeight
 
-    color = d3.scale.linear()
-      .domain [d3.min(values), d3.max(values)]
-      .range ['#ffffff', '#ff0000']
-      .interpolate d3.interpolateLab
-
-    update = () ->
-      initLabel = '2011年'
-
-      svg = d3.select(node).select('svg')
-
-      svg.selectAll(".states")
-        .attr 'fill', (d) ->
-          if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][initLabel]))
-            color +map[d.properties.nam_ja][initLabel]
-          else
-            '#ffffff'
-
-    if !d3.select(node).select('svg').empty()
-      oldwidth = d3.select(node).select('svg').attr 'width'
-      oldheight = d3.select(node).select('svg').attr 'height'
-      if +width != +oldwidth || +height != +oldheight
-        d3.select(node).select('svg').remove()
-
-    if d3.select(node).select('svg').empty()
       svg = d3.select(node)
         .append 'svg'
           .attr 'width', width
@@ -52,6 +34,52 @@ define ['d3', 'topojson'], (d3, topojson) ->
             .attr 'class', 'states'
             .attr 'fill', '#ffffff'
             .attr 'd', path
-        update()
-    else
-      update()
+        exports.update _data if _data
+
+    ###
+    # destructor
+    ###
+    _dispose = () ->
+      d3.select(node).select('svg').remove()
+
+    ###
+    # execute
+    ###
+    _initialize()
+
+    ###
+    # export
+    ###
+    exports =
+      ###*
+      # (Required) called on data updated.
+      ###
+      update: (data) ->
+        _data = data
+
+        map = data.toMap()
+        values = map.values()
+
+        color = d3.scale.linear()
+          .domain [d3.min(values), d3.max(values)]
+          .range ['#ffffff', '#ff0000']
+          .interpolate d3.interpolateLab
+
+        initLabel = '2011年'
+
+        d3.select(node)
+          .selectAll('svg .states')
+            .attr 'fill', (d) ->
+              if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][initLabel]))
+                color +map[d.properties.nam_ja][initLabel]
+              else
+                '#ffffff'
+
+      ###*
+      # (Optional) called on window resized.
+      ###
+      resize: () ->
+        _dispose()
+        _initialize()
+
+    exports
