@@ -1,7 +1,7 @@
 define(['d3'], function (d3) {
   return function (node, baseUrl) {
     var width = 400;
-    var height = 400;
+    var height = 300;
 
     var svg = d3.select(node)
       .append('svg')
@@ -14,8 +14,8 @@ define(['d3'], function (d3) {
       *
       * @param data: ChartData
       */
-      update: function (table) {
-        var list = table.transpose().toList(['name', 'value']);
+      update: function (data) {
+        var list = data.transpose().toList(['name', 'value']);
 
         var x = d3.scale.ordinal()
           .rangeRoundBands([0, width], .2)
@@ -26,16 +26,19 @@ define(['d3'], function (d3) {
         var color = d3.scale.category10()
           .domain(list.map(function (d) { return d.name; }))
 
-        svg.selectAll('rect')
-          .data(list)
-          .enter()
-          .append('rect')
+        rect = svg.selectAll('rect').data(list);
+
+        rect.enter().append('rect');
+
+        rect.exit().remove();
+
+        rect
           .attr('width', x.rangeBand())
           .attr('height', function (d) { return height - y(d.value); })
           .attr('x', function (d) { return x(d.name); })
           .attr('y', function (d) { return y(d.value); })
           .style('fill', function (d) { return color(d.name); });
-        }
+      }
     };
   };
 });

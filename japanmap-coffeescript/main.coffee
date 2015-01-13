@@ -10,7 +10,7 @@ define ['d3', 'topojson'], (d3, topojson) ->
     ###
     _initialize = () ->
       width = node.clientWidth
-      height = 600
+      height = node.clientHeight
 
       svg = d3.select(node)
         .append 'svg'

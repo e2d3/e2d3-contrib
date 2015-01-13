@@ -10,7 +10,7 @@ define(['d3', 'topojson'], function (d3, topojson) {
      */
     var _initialize = function () {
       var width = node.clientWidth;
-      var height = 600;
+      var height = node.clientHeight;
 
       var svg = d3.select(node)
         .append('svg')
@@ -75,8 +75,7 @@ define(['d3', 'topojson'], function (d3, topojson) {
         var initLabel = '2011年';
 
         d3.select(node)
-          .select('svg')
-          .selectAll('.states')
+          .selectAll('svg .states')
           .attr('fill', function (d) {
             if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][initLabel])) {
               return color(+map[d.properties.nam_ja][initLabel]);
