@@ -24,6 +24,9 @@ define(['d3', 'topojson'], function (d3, topojson) {
       var path = d3.geo.path()
         .projection(projection);
 
+      svg.append('g')
+        .attr('id', 'legend_group');
+
       d3.json(baseUrl + '/japan.topojson', function (error, json) {
         svg.selectAll('.states')
           .data(topojson.feature(json, json.objects.japan).features)
@@ -83,6 +86,26 @@ define(['d3', 'topojson'], function (d3, topojson) {
               return '#ffffff';
             }
           });
+
+        var legend_data = color.ticks(5).reverse();
+        d3.select(node).select('#legend_group')
+          .selectAll('.legend')
+          .data(legend_data)
+          .enter()
+          .append('rect')
+          .attr('x', 0)
+          .attr('y', function(value, i){return i*20})
+          .attr('width', '15')
+          .attr('height', '15')
+          .attr('fill', function(value){return color(value)})
+        d3.select(node).select('#legend_group')
+          .selectAll('.legend')
+          .data(legend_data)
+          .enter()
+          .append('text')
+          .attr('x', 20)
+          .attr('y', function(value, i){return i*20+10})
+          .text(function(value){return value})
       },
       /**
        * (Optional) called on window resized.
