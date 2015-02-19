@@ -1,14 +1,9 @@
 define(['d3', 'topojson'], function (d3, topojson) {
   return function (node, baseUrl) {
     /*
-     * private variable
-     */
-    var _data = null;
-
-    /*
      * constructor
      */
-    var _initialize = function () {
+    var _initialize = function (data) {
       var width = node.clientWidth;
       var height = node.clientHeight;
 
@@ -34,8 +29,8 @@ define(['d3', 'topojson'], function (d3, topojson) {
           .attr('class', 'states')
           .attr('fill', '#ffffff')
           .attr('d', path);
-        if (_data) {
-          exports.update(_data);
+        if (data) {
+          exports.update(data);
         }
       });
     };
@@ -62,8 +57,6 @@ define(['d3', 'topojson'], function (d3, topojson) {
        * @param data: ChartData
        */
       update: function (data) {
-        _data = data;
-
         var map = data.toMap();
         var values = map.values();
 
@@ -87,8 +80,8 @@ define(['d3', 'topojson'], function (d3, topojson) {
       /**
        * (Optional) called on window resized.
        */
-      resize: function() {
-        _initialize();
+      resize: function(data) {
+        _initialize(data);
         _dispose();
       }
     };
