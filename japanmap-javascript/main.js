@@ -50,7 +50,7 @@ define(['d3', 'topojson'], function (d3, topojson) {
     /*
      * execute
      */
-    _initialize()
+    _initialize();
 
     /*
      * export

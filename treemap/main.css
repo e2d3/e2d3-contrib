@@ -1,0 +1,12 @@
+﻿.chart {
+  display: block;
+  margin: auto;
+}
+
+text {
+  font-size: 11px;
+}
+
+rect {
+  fill: none;
+}
