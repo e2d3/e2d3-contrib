@@ -1,9 +1,11 @@
 define(['d3', 'topojson'], function (d3, topojson) {
   return function (node, baseUrl) {
+    _data = null;
+
     /*
      * constructor
      */
-    var _initialize = function (data) {
+    var _initialize = function () {
       var width = node.clientWidth;
       var height = node.clientHeight;
 
@@ -32,8 +34,8 @@ define(['d3', 'topojson'], function (d3, topojson) {
           .attr('class', 'states')
           .attr('fill', '#ffffff')
           .attr('d', path);
-        if (data) {
-          exports.update(data);
+        if (_data) {
+          exports.update(_data);
         }
       });
     };
@@ -60,6 +62,8 @@ define(['d3', 'topojson'], function (d3, topojson) {
        * @param data: ChartData
        */
       update: function (data) {
+        _data = data;
+
         var map = data.toMap();
         var values = map.values();
 
@@ -68,7 +72,7 @@ define(['d3', 'topojson'], function (d3, topojson) {
           .range(['#ffffff', '#ff0000'])
           .interpolate(d3.interpolateLab);
 
-        var initLabel = '2011年';
+        var initLabel = map.header[2];
 
         d3.select(node)
           .selectAll('svg .states')
@@ -106,7 +110,7 @@ define(['d3', 'topojson'], function (d3, topojson) {
        * (Optional) called on window resized.
        */
       resize: function(data) {
-        _initialize(data);
+        _initialize();
         _dispose();
       }
     };

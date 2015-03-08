@@ -1,9 +1,11 @@
 define ['d3', 'topojson'], (d3, topojson) ->
   (node, baseUrl) ->
+    _data = null
+
     ###
     # constructor
     ###
-    _initialize = (data) ->
+    _initialize = () ->
       width = node.clientWidth
       height = node.clientHeight
 
@@ -29,7 +31,7 @@ define ['d3', 'topojson'], (d3, topojson) ->
             .attr 'class', 'states'
             .attr 'fill', '#ffffff'
             .attr 'd', path
-        exports.update data if data
+        exports.update _data if _data
 
     ###
     # destructor
@@ -52,6 +54,8 @@ define ['d3', 'topojson'], (d3, topojson) ->
       # @param data: ChartData
       ###
       update: (data) ->
+        _data = data
+
         map = data.toMap()
         values = map.values()
 
