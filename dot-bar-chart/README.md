@@ -1,1 +1,1 @@
-Dot Bar ChartThe motional bar chart which is made with dots.
+Dot Bar Chart====The motional bar chart which is made with dots.
