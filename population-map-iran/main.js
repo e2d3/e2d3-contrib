@@ -8,7 +8,7 @@ var svg = d3.select(root).append('svg')
   .attr('height', height)
   .attr('style', 'display: block; margin: auto;');
 var projection = d3.geo.mercator()
-  .center([136, 35])
+  .center([53, 35])
   .scale(1200)
   .translate([width / 2, height / 2]);
 var path = d3.geo.path()
@@ -17,13 +17,13 @@ var path = d3.geo.path()
 svg.append('g')
   .attr('id', 'legend_group');
 
-d3.json(baseUrl + '/japan.topojson', function (error, json) {
+d3.json(baseUrl + '/ir.topojson', function (error, json) {
   svg.selectAll('.states')
-    .data(topojson.feature(json, json.objects.japan).features)
+    .data(topojson.feature(json, json.objects.ir).features)
   .enter().append('path')
     .attr('stroke', 'gray')
     .attr('stroke-width', '0.5')
-    .attr('id', function (d) { return 'state_' + d.properties.id})
+    .attr('id', function (d) { return 'state_' + d.properties.adm1_code})
     .attr('class', 'states')
     .attr('fill', '#ffffff')
     .attr('d', path);
@@ -33,19 +33,20 @@ d3.json(baseUrl + '/japan.topojson', function (error, json) {
 
 function update(data) {
   var map = data.toMap();
+  var initIndex = 2;
+  var initLabel = map.header[initIndex];
   var values = map.values();
 
   var color = d3.scale.linear()
-    .domain([d3.min(values), d3.max(values)])
+    .domain(d3.extent(data, function(d, i){if(i!==0)return +d[3].split(',').join('')}))
     .range(['#ffffff', '#ff0000'])
     .interpolate(d3.interpolateLab);
 
-  var initLabel = map.header[2];
-
   svg.selectAll('.states')
     .attr('fill', function (d) {
-      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][initLabel])) {
-        return color(+map[d.properties.nam_ja][initLabel]);
+      if (map[d.properties.name] && $.isNumeric(map[d.properties.name][initLabel].split(',').join(''))) {
+        //console.log('%s:%s', map[d.properties.name][initLabel], color(+map[d.properties.name][initLabel].split(',').join('')));
+        return color(+map[d.properties.name][initLabel].split(',').join(''));
       } else {
         return '#ffffff';
       }
