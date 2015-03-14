@@ -10,7 +10,7 @@ svg = d3.select(root)
     .attr 'style', 'display: block; margin: auto;'
 projection = d3.geo.mercator()
   .center [136, 35]
-  .scale 1200
+  .scale height * 2.0
   .translate [width / 2, height / 2]
 path = d3.geo.path()
   .projection(projection)
