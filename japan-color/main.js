@@ -73,7 +73,7 @@ function show(data) {
     var values = []; // all of data;
     data.keys.forEach(function(i) {
       labels.forEach(function(k) {
-        var v = data[i][k] = +(data[i][k].replace(/,/g, ""));
+        var v = data[i][k];
         values.push(v)
       });
     });
