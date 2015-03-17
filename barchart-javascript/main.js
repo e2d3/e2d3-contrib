@@ -45,6 +45,8 @@ function update(data) {
         .style('fill', function (d) { return color(d.name); });
   }
 
+  chart.selectAll('.axis').remove();
+
   chart.append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + height + ')')
