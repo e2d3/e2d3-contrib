@@ -3,7 +3,6 @@ define(['e2d3bridge', 'original'], function (bridge, original) {
     return {
       update: function (data) {
         show(data.toList());
-//        show(data);
       }
     };
   };
