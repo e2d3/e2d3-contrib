@@ -1,20 +1,3 @@
-/*
-
-var w = 550 - 10,
-    h = 400 - 70,
-    x = d3.scale.linear().range([0, w]),
-    y = d3.scale.linear().range([0, h]),
-    color = d3.scale.category20c(),
-    root,
-    node,
-    target,
-    treemap,
-    svg;
-
-*/
-
-
-
 
 function e2d3Show(updateFlag) {
     if (updateFlag) {
