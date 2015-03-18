@@ -30,19 +30,18 @@ d3.json baseUrl + '/japan.topojson', (error, json) ->
 update = (data) ->
   _data = data
 
-  map = data.toMap()
-  values = map.values()
+  map = data.toMap typed: true
+  key = map.header[2]
+  values = map.values(key)
 
   color = d3.scale.linear()
     .domain [d3.min(values), d3.max(values)]
     .range ['#ffffff', '#ff0000']
     .interpolate d3.interpolateLab
 
-  initLabel = '2011年'
-
   svg.selectAll('.states')
     .attr 'fill', (d) ->
-      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][initLabel]))
-        color +map[d.properties.nam_ja][initLabel]
+      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key]))
+        color +map[d.properties.nam_ja][key]
       else
         '#ffffff'

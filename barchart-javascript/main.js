@@ -27,12 +27,12 @@ var chart = d3.select(root).append('svg')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 function update(data) {
-  var list = data.transpose().toList(['name', 'age']);
+  var list = data.transpose().toList({header: ['name', 'age'], typed: true});
 
   var key = 'age';
 
   x.domain(list.map(function (d) { return d.name; }));
-  y.domain([0, d3.max(list.values())]);
+  y.domain([0, d3.max(list.values('age'))]);
   color.domain(list.map(function (d) { return d.name; }))
 
   var setup = function (selection) {

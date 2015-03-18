@@ -1,7 +1,7 @@
 //# require=d3,jquery,topojson
 
 function update(data) {
-  show(data.toMap());
+  show(data.toMap({ typed: true }));
 }
 
 /**

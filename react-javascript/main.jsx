@@ -40,14 +40,14 @@ var svg = d3.select(root)
   .attr('height', height);
 
 function update(data) {
-  var list = data.transpose().toList(['name', 'age', 'height']);
+  var list = data.transpose().toList({header: ['name', 'age', 'height'], typed: true});
 
   var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .2)
     .domain(list.map(function (d) { return d.name; }));
   var y = d3.scale.linear()
     .rangeRound([height, 0])
-    .domain([0, d3.max(list.values())]);
+    .domain([0, d3.max(list.values('age', 'height'))]);
   var color = d3.scale.category10()
     .domain(list.map(function (d) { return d.name; }))
 

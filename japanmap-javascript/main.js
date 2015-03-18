@@ -32,20 +32,19 @@ d3.json(baseUrl + '/japan.topojson', function (error, json) {
 });
 
 function update(data) {
-  var map = data.toMap();
-  var values = map.values();
+  var map = data.toMap({typed: true});
+  var key = map.header[2];
+  var values = map.values(key);
 
   var color = d3.scale.linear()
     .domain([d3.min(values), d3.max(values)])
     .range(['#ffffff', '#ff0000'])
     .interpolate(d3.interpolateLab);
 
-  var initLabel = map.header[2];
-
   svg.selectAll('.states')
     .attr('fill', function (d) {
-      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][initLabel])) {
-        return color(+map[d.properties.nam_ja][initLabel]);
+      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key])) {
+        return color(+map[d.properties.nam_ja][key]);
       } else {
         return '#ffffff';
       }
