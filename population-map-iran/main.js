@@ -26,27 +26,34 @@ d3.json(baseUrl + '/ir.topojson', function (error, json) {
     .attr('id', function (d) { return 'state_' + d.properties.adm1_code})
     .attr('class', 'states')
     .attr('fill', '#ffffff')
-    .attr('d', path);
+    .attr('d', path)
+    .attr('data-text', function(d){return d.name})
+    ;
 
   reload();
 });
 
 function update(data) {
+  console.log('!!update!!!');
   var map = data.toMap();
   var initIndex = 2;
   var initLabel = map.header[initIndex];
   var values = map.values();
 
+  var tsv = data.toList();
+  tsv.forEach(function(d){
+    d.Population = +d.Population;
+  });
   var color = d3.scale.linear()
-    .domain(d3.extent(data, function(d, i){if(i!==0)return +d[3].split(',').join('')}))
+    .domain(d3.extent(tsv, function(d){return d.Population}))
     .range(['#ffffff', '#ff0000'])
     .interpolate(d3.interpolateLab);
-
+  console.dir(tsv);
   svg.selectAll('.states')
     .attr('fill', function (d) {
-      if (map[d.properties.name] && $.isNumeric(map[d.properties.name][initLabel].split(',').join(''))) {
-        //console.log('%s:%s', map[d.properties.name][initLabel], color(+map[d.properties.name][initLabel].split(',').join('')));
-        return color(+map[d.properties.name][initLabel].split(',').join(''));
+      var obj = tsv.filter(function(e){return e.Province==d.properties.name})[0];
+      if (obj) {
+        return color(obj.Population);
       } else {
         return '#ffffff';
       }
