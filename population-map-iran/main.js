@@ -54,8 +54,7 @@ function update(data) {
       if (obj) {
         return color(obj.Population);
       } else {
-        console.dir(d.properties.name);
-        return '#ffffff';
+        return '#cccccc';
       }
     });
 }
