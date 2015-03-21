@@ -34,7 +34,6 @@ d3.json(baseUrl + '/ir.topojson', function (error, json) {
 });
 
 function update(data) {
-  console.log('!!update!!!');
   var map = data.toMap();
   var initIndex = 2;
   var initLabel = map.header[initIndex];
@@ -48,13 +47,14 @@ function update(data) {
     .domain(d3.extent(tsv, function(d){return d.Population}))
     .range(['#ffffff', '#ff0000'])
     .interpolate(d3.interpolateLab);
-  console.dir(tsv);
+
   svg.selectAll('.states')
     .attr('fill', function (d) {
       var obj = tsv.filter(function(e){return e.Province==d.properties.name})[0];
       if (obj) {
         return color(obj.Population);
       } else {
+        console.dir(d.properties.name);
         return '#ffffff';
       }
     });
