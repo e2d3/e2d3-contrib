@@ -36,10 +36,22 @@ var parseDate = d3.time.format("%Y%m%d").parse;
 var city;
 
 function update(data) {
-  var keys = data[0];
-  var cities = keys.filter(function(d){return d!= 'date';});
-  var label = form.selectAll('label').data(cities).enter().append('label').text(function(d){return d;}).insert('input').attr({type:'radio',name:'city',value:function(d){return d;}});
-  list = data.toList(keys).slice(1);
+  form.selectAll('*').remove();
+  chart.selectAll('*').remove();
+
+  var list = data.toList();
+  var cities = list.header.filter(function (d) { return d != 'date'; });
+  var label = form.selectAll('label')
+      .data(cities)
+    .enter().append('label')
+      .text(function (d) { return d; })
+    .insert('input')
+      .attr({
+          type:'radio',
+          name:'city',
+          value: function (d) { return d; }
+        })
+      .property('checked', function (d, i) { return i == 0; });
 
   city = cities[0];
 
@@ -49,8 +61,8 @@ function update(data) {
       d[c] = + d[c];
     });
   });
-  x.domain(d3.extent(list.map(function(d){return d.date;})));
-  y.domain(d3.extent(list, function(d) { return d[city]; }));
+  x.domain(d3.extent(list.map(function (d) { return d.date; })));
+  y.domain(d3.extent(list, function (d) { return d[city]; }));
 
   chart.append("g")
       .attr("class", "x axis")
@@ -83,7 +95,7 @@ function update(data) {
   d3.selectAll("input").on("change", change);
 
   var timeout = setTimeout(function() {
-    d3.select("input[value=\"San Francisco\"]").property("checked", true).each(change);
+    d3.select("input[value=\"" + cities[1] + "\"]").property("checked", true).each(change);
   }, 2000);
 
   function change() {
@@ -108,5 +120,3 @@ function update(data) {
     return "translate(" + x(d.date) + "," + y(d[city]) + ")";
   }
 }
-
-

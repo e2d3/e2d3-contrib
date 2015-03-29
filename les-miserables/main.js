@@ -1,8 +1,8 @@
 //# require=d3
 
 var margin = {top: 80, right: 40, bottom: 40, left: 80};
-var width = root.clientWidth*0.75 - margin.left - margin.right;
-var height = root.clientHeight*0.75 - margin.top - margin.bottom;
+var width = root.clientWidth - margin.left - margin.right;
+var height = root.clientHeight - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal().rangeBands([0, width]),
     z = d3.scale.linear().domain([0, 4]).clamp(true),
@@ -11,10 +11,12 @@ var x = d3.scale.ordinal().rangeBands([0, width]),
 var svg = d3.select(root).append('svg')
     .attr('width', root.clientWidth)
     .attr('height', root.clientHeight)
-    .style("margin-left", -margin.left + "px")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 function update(data) {
+  svg.selectAll('*').remove();
+
   var miserables = {nodes:[],links:[]};
   var node_index_map = {};
   data.toList(['source_name','source_group','target_name','target_group','value']).forEach(function(d)
@@ -64,8 +66,8 @@ function update(data) {
 
   svg.append("rect")
       .attr("class", "background")
-      .attr("width", Math.max(width,height))
-      .attr("height", Math.max(width,height));
+      .attr("width", width)
+      .attr("height", width);
 
   var row = svg.selectAll(".row")
       .data(matrix)
