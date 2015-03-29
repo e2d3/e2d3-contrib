@@ -1,0 +1,19 @@
+#switch_box {
+	position: absolute;
+	top: 0;
+	text-align: left;
+	padding: 10px;
+}
+.switch_label {
+	display: inline-block;
+	padding: 3px;
+	color: #999;
+	cursor: pointer;
+}
+.switch_radio {
+	display: none;
+}
+.switch_radio:checked + .switch_label {
+	color: #333;
+	background-color: #fee;
+}
