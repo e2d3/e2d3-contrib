@@ -62,7 +62,7 @@ function update(data) {
       });
   }
 
-  d3.selectAll('.switch_radio').on('click', function(){
+  d3.selectAll('.switch_radio').on('change', function(){
     data_prop = d3.select(this).attr('value');
     render();
   });
