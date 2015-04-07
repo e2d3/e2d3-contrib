@@ -1,10 +1,14 @@
-Bubble Chart
+Visualization of K-means
 ====
 
-Bubble Chart
+Visualization of K-means
 
 ## Data Format
 
-| Data Label1 | Data Label2 | Data Label3 |Data Label4 |
-|-------------|-------------|-------------|------------|
-| Data        | Data        | Data        |Data        |
+| Data Label1 | Data Label2 |
+|-------------|-------------|
+| Data        | Data        |
+
+## Author
+keisuke Osone
+https://github.com/keisuke-osone
