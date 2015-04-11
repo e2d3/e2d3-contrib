@@ -44,7 +44,7 @@ function e2d3Show(updateFlag) {
             e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
         });
     }
-    
+
 }
 function e2d3Update(responce) {
     console.log("Begin e2d3Update");
@@ -52,7 +52,6 @@ function e2d3Update(responce) {
 }
 
 function show(data) {
-    console.log("start show e");
 //    $("#e2d3-chart-area").empty();
 
   color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
@@ -109,6 +108,3 @@ function show(data) {
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
 };
-
-
-
