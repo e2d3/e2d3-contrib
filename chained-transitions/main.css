@@ -1,17 +1,13 @@
-﻿.chart {
-  display: block;
-  margin: auto;
+svg {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 text {
-  font-size: 11px;
+  font: 10px sans-serif;
 }
 
-rect {
-  fill: none;
-}
-body {
-  font: 10px sans-serif;
+form {
+  z-index: 100;
 }
 
 .axis path,
@@ -29,4 +25,10 @@ body {
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }

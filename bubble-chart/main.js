@@ -11,15 +11,13 @@ function e2d3Show(updateFlag) {
             e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
         });
     }
-    
+
 }
 function e2d3Update(responce) {
     console.log("Begin e2d3Update");
     e2d3Show(true);
 }
 
-function show(data) {
-    console.log("start show e");
 
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.income; }
@@ -28,9 +26,9 @@ function radius(d) { return d.population; }
 function color(d) { return d.region; }
 function key(d) { return d.name; }
 // Chart dimensions.
-var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
-    width = 960 - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 29.5},
+    width = 770 - margin.right,
+    height = 460 - margin.top - margin.bottom;
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.log().domain([300, 1e5]).range([0, width]),
     yScale = d3.scale.linear().domain([10, 85]).range([height, 0]),
@@ -76,6 +74,10 @@ var label = svg.append("text")
     .attr("y", height - 24)
     .attr("x", width)
     .text(1800);
+
+
+function show(data) {
+
 // Load the data.
 //d3.json("nations.json", function(nations) {
   var nations = [];
