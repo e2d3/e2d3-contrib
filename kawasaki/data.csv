@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream
-A,B,C,D,E,F
-32,52,15,42,30,68
-172,178,162,183,165,182
-172,178,162,183,165,182
-=======
+
 政治家名,政治家名カナ表記,対象の都道府県,対象の市区町村または都道府県,対象の選挙区,政策分野注力度1社会保障,政策分野注力度2産業政策,政策分野注力度3社会資本整備,政策分野注力度4教育・子育て,政策分野注力度5農林漁業,政策分野注力度6税財政・財政再建,政策分野注力度7労働,政策分野注力度8環境・エネルギー,政策分野注力度9行政・議会改革,政策分野注力度10安全・防災・震災復興,政策の詳細へのURL,写真ＵＲＬ
 添田勝,ソエダマサル,神奈川県,川崎市,宮前区,20,15,10,20,5,15,10,5,0,0,http://soedamasaru.jp/seisaku/index.html,"http://res.cloudinary.com/hrscywv4p/image/upload/c_limit,f_auto,h_1440,q_80,w_720/v1/266220/kawasaki_soeda_mekgzu.jpg"
 石川建二,イシカワケンジ,神奈川県,川崎市,宮前区,10,10,10,15,10,5,10,10,10,10,,"http://res.cloudinary.com/hrscywv4p/image/upload/c_limit,f_auto,h_1440,q_80,w_720/v1/266220/kawasaki_ishikawa_ugobkt.jpg"
@@ -44,4 +39,3 @@ A,B,C,D,E,F
 小野寺よしあき,オノデラヨシアキ,神奈川県,川崎市,中原区,10,10,0,20,0,30,5,0,5,20,http://www.onodera-yoshiaki.com/,"http://res.cloudinary.com/hrscywv4p/image/upload/c_limit,f_auto,h_1440,q_80,w_720/v1/266220/kawasaki_onodera_ulbwai.jpg"
 勝又光江,カツマタミツエ,神奈川県,川崎市,麻生区,20,10,5,20,5,5,10,10,5,10,,"http://res.cloudinary.com/hrscywv4p/image/upload/c_limit,f_auto,h_1440,q_80,w_720/v1/266220/kawasaki_katsumata_ncozxj.jpg"
 はなわ孝一,ハナワコウイチ,神奈川県,川崎市,麻生区,20,0,25,25,0,0,5,15,0,10,,"http://res.cloudinary.com/hrscywv4p/image/upload/c_limit,f_auto,h_1440,q_80,w_720/v1/266220/kawasaki_hanawa_tovxq6.jpg"
->>>>>>> Stashed changes
