@@ -19,11 +19,7 @@ var SelectBox = React.createClass({
     return (
       <div>
         <select value={this.state.value} onChange={this.handleChange}>
-<<<<<<< Updated upstream
-          <option value="age">雇用</option>
-          <option value="height">公害</option>
-          <option value="height2">子育て</option>
-=======
+
           <option value="政策分野注力度1社会保障">政策分野注力度1社会保障</option>
           <option value="政策分野注力度2産業政策">政策分野注力度2産業政策</option>
           <option value="政策分野注力度3社会資本整備">政策分野注力度3社会資本整備</option>
@@ -34,20 +30,14 @@ var SelectBox = React.createClass({
           <option value="政策分野注力度8環境・エネルギー">政策分野注力度8環境・エネルギー</option>
           <option value="政策分野注力度9行政・議会改革">政策分野注力度9行政・議会改革</option>
           <option value="政策分野注力度10安全・防災・震災復興">政策分野注力度10安全・防災・震災復興</option>
->>>>>>> Stashed changes
         </select>
       </div>
     );
   }
 });
 
-<<<<<<< Updated upstream
 
-
-var SelectBox2 = React.createClass({
-=======
 var WardSelectBox = React.createClass({
->>>>>>> Stashed changes
   getInitialState: function () {
     return { value: _ward };
   },
@@ -60,11 +50,6 @@ var WardSelectBox = React.createClass({
     return (
       <div>
         <select value={this.state.value} onChange={this.handleChange}>
-<<<<<<< Updated upstream
-          <option value="age">川崎区</option>
-          <option value="height">中原区</option>
-          <option value="height2">ほげ区</option>
-=======
           <option value="宮前区">宮前区</option>
           <option value="幸区">幸区</option>
           <option value="高津区">高津区</option>
@@ -72,7 +57,6 @@ var WardSelectBox = React.createClass({
           <option value="多摩区">多摩区</option>
           <option value="中原区">中原区</option>
           <option value="麻生区">麻生区</option>
->>>>>>> Stashed changes
         </select>
       </div>
     );
@@ -100,25 +84,12 @@ var Wrapper = React.createClass({
 });
 
 React.render(
-<<<<<<< Updated upstream
-<SelectBox onChange={function (key) {
-    _key = key;
-    reload();
-  }}/,
-  root
-);
-
-
-var width = 400;
-var height = 300;
-=======
   <Wrapper/>,
   root
 );
 
 var width = 800;
 var height = 600;
->>>>>>> Stashed changes
 
 var svg = d3.select(root)
   .append('svg')
@@ -126,9 +97,6 @@ var svg = d3.select(root)
   .attr('height', height);
 
 function update(data) {
-<<<<<<< Updated upstream
-  var list = data.transpose().toList({header: ['name', 'age', 'height', 'height2'], typed: true});
-=======
 //  d3.select(root).selectAll('*').remove();
 
 //  var list = data.transpose().toList({header: ['name', 'age', 'height'], typed: true});
@@ -140,7 +108,6 @@ function update(data) {
       list.push(e);
     }
   });
->>>>>>> Stashed changes
 
   var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .2)
