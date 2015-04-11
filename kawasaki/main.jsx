@@ -3,9 +3,6 @@
 var _key = "政策分野注力度1社会保障";
 var _ward = '麻生区';
 
-
-var _ward = 'kawasakiku';
-
 var SelectBox = React.createClass({
   getInitialState: function () {
     return { value: _key };
@@ -19,7 +16,6 @@ var SelectBox = React.createClass({
     return (
       <div>
         <select value={this.state.value} onChange={this.handleChange}>
-
           <option value="政策分野注力度1社会保障">政策分野注力度1社会保障</option>
           <option value="政策分野注力度2産業政策">政策分野注力度2産業政策</option>
           <option value="政策分野注力度3社会資本整備">政策分野注力度3社会資本整備</option>
