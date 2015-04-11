@@ -11,15 +11,13 @@ function e2d3Show(updateFlag) {
             e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
         });
     }
-    
+
 }
 function e2d3Update(responce) {
     console.log("Begin e2d3Update");
     e2d3Show(true);
 }
 
-function show(data) {
-    console.log("start show e");
 
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.income; }
@@ -76,6 +74,10 @@ var label = svg.append("text")
     .attr("y", height - 24)
     .attr("x", width)
     .text(1800);
+
+
+function show(data) {
+
 // Load the data.
 //d3.json("nations.json", function(nations) {
   var nations = [];
