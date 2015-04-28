@@ -110,7 +110,7 @@ function draw(m, data) {
             return d.syurui + metrics;
         })
 
-    var newDots = symbols.appendSymbol(s.enter(), metrics)
+    var newDots = symbols.appendSymbol(dots.enter(), metrics)
         .attr('class', metrics + 'class')
 
     setDotProperty(newDots);
@@ -122,7 +122,7 @@ function draw(m, data) {
         .data(data, function(d, i) {
             return d.syurui + metrics;
         })
-    var newTexts = l.enter().append('text')
+    var newTexts = texts.enter().append('text')
         .attr('class', metrics + 'label');
     setTextProperty(newTexts);
     setTextProperty(texts);
