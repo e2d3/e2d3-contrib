@@ -61,10 +61,9 @@ function update(data) {
 }
 
 function draw(m, data) {
-    if (preMetrics === m) {
-        return;
+    if (preMetrics !== m) {
+        remove();
     }
-    remove();
     preMetrics = m;
 
     var metrics = m;
