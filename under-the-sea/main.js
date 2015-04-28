@@ -95,7 +95,8 @@ function draw(m, data) {
         .scale(yScale)
         .orient('left');
 
-    //draw axis
+    //repaint axis
+    drawArea.select('.y').remove();
     drawArea
         .append('g')
         .attr('class', 'y axis')
@@ -103,21 +104,31 @@ function draw(m, data) {
         .call(yAxis)
 
     //dots
-    var s = drawArea
+    var dots = drawArea
         .selectAll('.' + metrics + 'class')
         .data(data, function(d, i) {
             return d.syurui + metrics;
         })
 
-    add(s.enter()
-        .append('g'));
-    add(s
-        .append('g'));
+    var newDots = symbols.appendSymbol(s.enter(), metrics)
+        .attr('class', metrics + 'class')
 
-    function add(line) {
-        symbols.appendSymbol(line, metrics)
-            .attr('class', metrics + 'class')
-            .attr('x', function(d, i) {
+    setDotProperty(newDots);
+    setDotProperty(dots);
+
+
+    var texts = drawArea
+        .selectAll('.' + metrics + 'label')
+        .data(data, function(d, i) {
+            return d.syurui + metrics;
+        })
+    var newTexts = l.enter().append('text')
+        .attr('class', metrics + 'label');
+    setTextProperty(newTexts);
+    setTextProperty(texts);
+
+    function setDotProperty(line) {
+        line.attr('x', function(d, i) {
                 return width;
             })
             .transition()
@@ -136,12 +147,12 @@ function draw(m, data) {
             .attr('display', function(d) {
                 return (d[metrics] > 0) ? 'inherited' : 'none';
             })
+    }
 
-        line.append('text')
-            .text(function(d) {
+    function setTextProperty(line) {
+        line.text(function(d) {
                 return d.syurui;
             })
-            .attr('class', metrics + 'label')
             .attr('font-size', '9px')
             .attr('fill', 'white')
             .attr('display', function(d) {
@@ -219,7 +230,6 @@ function remove() {
         })
         .remove()
 
-    d3.select('.y').remove();
 }
 
 
