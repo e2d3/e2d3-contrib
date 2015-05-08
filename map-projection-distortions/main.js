@@ -1,6 +1,6 @@
 //# require=d3
 
-var margin = { top: 30, right: 40, bottom: 20, left: 200 },
+var margin = { top: 30, right: 40, bottom: 20, left: 210 },
     width = root.clientWidth - margin.left - margin.right,
     height = root.clientHeight - margin.top - margin.bottom;
 
@@ -11,13 +11,15 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var svg = d3.select(root).append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", root.clientWidth)
+    .attr("height", root.clientHeight)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
 function update(data) {
+  svg.selectAll('*').remove();
+
   var label = data[0],
       data = data.toList();
 
