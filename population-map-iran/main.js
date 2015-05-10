@@ -1,8 +1,10 @@
 //# require=d3,topojson
+var labels = ['Population', 'Share of Population', 'Population Average Annul Growth', 'Internet Rate', 'Unemployment Rate', 'Economic Participation Rate', 'Contribution of GDP'];
 
 var width = root.clientWidth;
 var height = root.clientHeight;
 
+var tsv;
 var data_prop = 'Population';
 
 var svg = d3.select(root).append('svg')
@@ -19,6 +21,10 @@ var path = d3.geo.path()
 svg.append('g')
   .attr('id', 'legend_group');
 
+
+d3.select(root).append('div')
+  .attr('class', 'tooltip');
+
 d3.json(baseUrl + '/ir.topojson', function (error, json) {
   svg.selectAll('.states')
     .data(topojson.feature(json, json.objects.ir).features)
@@ -30,6 +36,28 @@ d3.json(baseUrl + '/ir.topojson', function (error, json) {
     .attr('fill', '#ffffff')
     .attr('d', path)
     .attr('data-text', function(d){return d.name})
+    .on('mousemove', function(e){
+      var target = d3.select(this);
+      var name = target.data()[0].properties.name;
+      var line = tsv.filter(function(d){return d.Province==name})[0];
+      if(!line) return;
+
+      var str = '<h5>'+name+'</h5>';
+      labels.map(function(label){
+        str += '<p'+(label==data_prop?' class="selected"':'')+'>'+label+': '+line[label]+'</p>';
+      });
+      console.log(str);
+
+      var xy = d3.mouse(this);
+
+      d3.select('.tooltip')
+        .style({
+          top: xy[1]+'px',
+          left: xy[0]+'px'
+        })
+        .html(str)
+        ;
+    })
     ;
 
   reload();
@@ -38,11 +66,9 @@ d3.json(baseUrl + '/ir.topojson', function (error, json) {
 function update(data) {
   function render(){
     var map = data.toMap();
-    var initIndex = 2;
-    var initLabel = map.header[initIndex];
     var values = map.values();
 
-    var tsv = data.toList();
+    tsv = data.toList();
     tsv.forEach(function(d){
       d[data_prop] = +d[data_prop];
     });
@@ -71,7 +97,6 @@ function update(data) {
 }
 showSwitchButtons();
 function showSwitchButtons() {
-  var labels = ['Population', 'Share of Population', 'Population Average Annul Growth', 'Internet Rate', 'Unemployment Rate', 'Economic Participation Rate', 'Contribution of GDP'];
 
   var switch_box = d3.select(root)
     .append('div')
@@ -82,7 +107,7 @@ function showSwitchButtons() {
     .data(labels).enter()
       .append('div')
         .attr('class', 'switch')
-        .html(function(d, i){ 
+        .html(function(d, i){
           return '<input type="radio" id="switch_radio_'+i+'" name="switch_radio" class="switch_radio" value="'+d+'" />'
                 +'<label class="switch_label" for="switch_radio_'+i+'">'+d+'</label>'
         });

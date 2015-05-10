@@ -13,7 +13,21 @@
 .switch_radio {
 	display: none;
 }
-.switch_radio:checked + .switch_label {
+.switch_radio:checked + .switch_label, .switch_label:hover {
 	color: #333;
 	background-color: #fee;
+}
+.tooltip {
+	position: absolute;
+	top: 0;
+	background-color: white;
+	box-shadow: 0px 0px 5px rgba(0,0,0,.2);
+	pointer-events: none;
+}
+.tooltip > h5, .tooltip > p {
+	margin: 3px;
+	text-align: left;
+}
+.tooltip > p.selected {
+	font-weight: bold;
 }
