@@ -1,3 +1,11 @@
+.province {
+	opacity: .7;
+}
+.province:hover {
+	opacity: 1;
+	stroke-width: 2px;
+}
+
 #switch_box {
 	position: absolute;
 	top: 0;
@@ -28,6 +36,10 @@
 	margin: 3px;
 	text-align: left;
 }
+.tooltip > p {
+	font-size: 12px;
+	color: #999;
+}
 .tooltip > p.selected {
-	font-weight: bold;
+	color: #333;
 }

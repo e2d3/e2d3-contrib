@@ -26,17 +26,17 @@ d3.select(root).append('div')
   .attr('class', 'tooltip');
 
 d3.json(baseUrl + '/ir.topojson', function (error, json) {
-  svg.selectAll('.states')
+  svg.selectAll('.province')
     .data(topojson.feature(json, json.objects.ir).features)
   .enter().append('path')
     .attr('stroke', 'gray')
     .attr('stroke-width', '0.5')
     .attr('id', function (d) { return 'state_' + d.properties.adm1_code})
-    .attr('class', 'states')
+    .attr('class', 'province')
     .attr('fill', '#ffffff')
     .attr('d', path)
     .attr('data-text', function(d){return d.name})
-    .on('mousemove', function(e){
+    .on('mousemove', function(){
       var target = d3.select(this);
       var name = target.data()[0].properties.name;
       var line = tsv.filter(function(d){return d.Province==name})[0];
@@ -46,17 +46,19 @@ d3.json(baseUrl + '/ir.topojson', function (error, json) {
       labels.map(function(label){
         str += '<p'+(label==data_prop?' class="selected"':'')+'>'+label+': '+line[label]+'</p>';
       });
-      console.log(str);
 
       var xy = d3.mouse(this);
 
       d3.select('.tooltip')
         .style({
           top: xy[1]+'px',
-          left: xy[0]+'px'
+          left: xy[0]+'px',
+          display: 'block'
         })
         .html(str)
         ;
+    }).on('mouseout', function(){
+      d3.select('.tooltip').style({display:'none'});
     })
     ;
 
@@ -77,7 +79,7 @@ function update(data) {
       .range(['#ffffff', '#ff0000'])
       .interpolate(d3.interpolateLab);
 
-    svg.selectAll('.states')
+    svg.selectAll('.province')
       .attr('fill', function (d) {
         var obj = tsv.filter(function(e){return e.Province==d.properties.name})[0];
         if (obj) {
@@ -108,7 +110,7 @@ function showSwitchButtons() {
       .append('div')
         .attr('class', 'switch')
         .html(function(d, i){
-          return '<input type="radio" id="switch_radio_'+i+'" name="switch_radio" class="switch_radio" value="'+d+'" />'
+          return '<input type="radio" id="switch_radio_'+i+'" name="switch_radio" class="switch_radio" value="'+d+'"'+(i==0?' checked':'')+' />'
                 +'<label class="switch_label" for="switch_radio_'+i+'">'+d+'</label>'
         });
 }
