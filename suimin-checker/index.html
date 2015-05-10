@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+text {
+  font: 10px sans-serif;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.label {
+  fill: #777;
+}
+
+.year.label {
+  font: 500 96px "Helvetica Neue";
+  fill: #ddd;
+}
+
+.year.label.active {
+  fill: #aaa;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+  cursor: ew-resize;
+}
+</style>
+<body>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script>
+
+  // Various accessors that specify the four dimensions of data to visualize.
+  function x(d) { return d[dateScale(today)].name; }
+  function y(d) { return d[dateScale(today)].sleep; }
+  function radius(d) { return d[dateScale(today)].duration; }
+  function color(d) { return d[dateScale(today)]; }
+  function key(d) { return d[dateScale(today)].name; }
+
+  // Chart dimensions.
+  var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
+      width = 960 - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+  // Various scales. These domains make assumptions of data, naturally.
+//  var xScale = d3.scale.log().domain([300, 1e5]).range([0, width]),
+  var xScale = d3.scale.ordinal().rangePoints([0,width],0.5);
+  var yScale = d3.time.scale().range([height-50, 50]);
+  var radiusScale = d3.scale.sqrt().range([10, 40]);
+  var colorScale = function(d)
+  {
+    if ( d['sleep'] >= timeformat.parse('23:00'))
+    {
+      return '#FB6189';
+    }
+    if ( d['duration'] < (timeformat.parse('09:00')-timeformat.parse('0:00')))
+    {
+      return '#FB6189';
+    }
+    if ( d['duration'] >= (timeformat.parse('10:30')-timeformat.parse('0:00')))
+    {
+      return '#FEC233';
+    }
+    return '#4189C1';
+  }
+  d3.scale.category10();  //@@@ should be implement
+  var dateScale = d3.scale.ordinal();
+
+
+  // The x & y axes.
+  var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d"));
+  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+  // Create the SVG container and set the origin.
+  var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // Add the x-axis.
+  var xAxisSelection = svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  // Add the y-axis.
+  var yAxisSelection = svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+
+  // Add the year label; the value is set on transition.
+  var label = svg.append("text")
+      .attr("class", "year label")
+      .attr("text-anchor", "end")
+      .attr("y", height - 16)
+      .attr("x", width)
+      .text('');
+  var today = '';
+  var days = [];
+  var names = [];
+  var dateformat = d3.time.format('%m/%d/%Y');
+  var timeformat = d3.time.format('%H:%M');
+  var data = [];
+
+  // Load the data.
+  d3.csv("data.csv", function(err,raw) {
+    if (err != null)
+    {
+      console.log(err);
+      return;
+    }
+
+    // A bisector since many nation's data is sparsely-defined.
+    var bisect = d3.bisector(function(d) { return d[0]; });
+    raw.forEach(function(d)
+    {
+      d['日付'] = dateformat(dateformat.parse(d['日付']));
+      d['就寝時間'] = timeformat(timeformat.parse(d['就寝時間']));
+      d['起床時間'] = timeformat(timeformat.parse(d['起床時間']));
+    });
+
+    days = raw.map(function(d){return d['日付'];}).filter(function(d,i,self){return i==self.indexOf(d);});
+    names = raw.map(function(d){return d['名前'];}).filter(function(d,i,self){return i==self.indexOf(d);});
+    today = days[0];
+
+    data = [];
+    names.forEach(function(name)
+    {
+      var datum = [];
+      var hisData = raw.filter(function(d){return d['名前']==name;});
+      days.forEach(function(day)
+      {
+        var row = hisData.filter(function(d){return d['日付']==day});
+        if (row.length > 0)
+        {
+          row = row[0];
+          var duration = (timeformat.parse('24:00')-timeformat.parse(row['就寝時間'])) + (timeformat.parse(row['起床時間']) - timeformat.parse('0:00'));
+          var sleep = timeformat.parse(row['就寝時間']);
+          var date = dateformat(dateformat.parse(day));
+          var wellness = 'good';  // @@ define wellness
+          datum.push({name:name,duration:duration,sleep:sleep,wellness:wellness});
+        }
+      })
+      data.push(datum);
+    });
+
+    xScale.domain(names);
+    yScale.domain(d3.extent(raw.map(function(d){return timeformat.parse(d['就寝時間']);})));
+    radiusScale.domain([d3.min(
+      data.map(function(d){return d3.min(d3.values(d).map(function(dd){return dd.duration;}));})
+    ),d3.max(
+      data.map(function(d){return d3.max(d3.values(d).map(function(dd){return dd.duration;}));})
+    )]);
+    dateScale.domain(days).range(d3.range(0,days.length));
+
+    xAxisSelection.call(xAxis);
+    yAxisSelection.call(yAxis);
+
+
+    // Add a dot per nation. Initialize the data at 1800, and set the colors.
+
+    var dot = svg.append("g")
+        .attr("class", "dots")
+      .selectAll(".dot")
+        .data(data)
+      .enter().append("circle")
+        .attr("class", "dot")
+        .style("fill", function(d) { return colorScale(color(d)); })
+        .call(position);
+
+    // Add a title.
+    dot.append("title")
+        .text(function(d) { return d.name; });
+    label.text(today);
+
+    // Add an overlay for the year label.
+    var box = label.node().getBBox();
+
+    var overlay = svg.append("rect")
+          .attr("class", "overlay")
+          .attr("x", box.x)
+          .attr("y", box.y)
+          .attr("width", box.width)
+          .attr("height", box.height);
+//          .on("mouseover", enableInteraction);
+    label.text(today);
+
+    var interactionScale = d3.scale.linear()
+      .domain(d3.extent(days.map(function(d){return dateformat.parse(d);})))
+      .range([box.x + 10, box.x + box.width - 10])
+      .clamp(true);
+
+    svg.transition().duration(100);
+
+
+    overlay
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout)
+        .on("mousemove", mousemove)
+        .on("touchmove", mousemove);
+
+    function mouseover() {
+      label.classed("active", true);
+    }
+
+    function mouseout() {
+      label.classed("active", false);
+    }
+
+    function mousemove() {
+      today = dateformat(new Date(interactionScale.invert(d3.mouse(this)[0])));
+      label.text(today);
+      dot.transition().call(position);
+    }
+
+    // Start a transition that interpolates the data based on year.
+//    svg.transition()
+//        .duration(30000)
+//        .ease("linear");
+//        .tween("date", tweenDate)
+//        .each("end", enableInteraction);
+
+    // Positions the dots based on data.
+    function position(dot) {
+      dot .attr("cx", function(d) { return xScale(x(d)); })
+          .attr("cy", function(d) { return yScale(y(d)); })
+          .style("fill", function(d) { return colorScale(color(d)); })
+          .attr("r", function(d) { return radiusScale(radius(d)); });
+    }
+
+/*
+    // Defines a sort order so that the smallest dots are drawn on top.
+    function order(a, b) {
+      return radius(b) - radius(a);
+    }
+
+    // After the transition finishes, you can mouseover to change the year.
+    function enableInteraction() {
+      var yearScale = d3.scale.linear()
+          .domain([1800, 2009])
+          .range([box.x + 10, box.x + box.width - 10])
+          .clamp(true);
+
+      // Cancel the current transition, if any.
+      svg.transition().duration(0);
+
+      overlay
+          .on("mouseover", mouseover)
+          .on("mouseout", mouseout)
+          .on("mousemove", mousemove)
+          .on("touchmove", mousemove);
+
+      function mouseover() {
+        label.classed("active", true);
+      }
+
+      function mouseout() {
+        label.classed("active", false);
+      }
+
+      function mousemove() {
+        displayYear(yearScale.invert(d3.mouse(this)[0]));
+      }
+    }
+
+    // Tweens the entire chart by first tweening the year, and then the data.
+    // For the interpolated data, the dots and label are redrawn.
+    function tweenDate() {
+
+      var tweenDays = d3.interpolateNumber(d3.min(days.map(function(d){return dateformat.parse(d).getTime();})), d3.max(days.map(function(d){return dateformat.parse(d).getTime();})));
+      return function(t) {      today = dateformat(new Date(tweenDays(t)));
+ displayYear(tweenDays(t)); };
+    }
+
+    // Updates the display to show the specified year.
+    function displayYear(year) {
+      dot.data(interpolateData(year), key).call(position).sort(order);
+      label.text(Math.round(year));
+    }
+
+    // Interpolates the dataset for the given (fractional) year.
+    function interpolateData(year) {
+      return data.map(function(d) {
+        return {
+          name: d.name,
+          region: d.region,
+          income: interpolateValues(d.income, year),
+          population: interpolateValues(d.population, year),
+          lifeExpectancy: interpolateValues(d.lifeExpectancy, year)
+        };
+      });
+    }
+
+    // Finds (and possibly interpolates) the value for the specified year.
+    function interpolateValues(values, year) {
+      var i = bisect.left(values, year, 0, values.length - 1),
+          a = values[i];
+      if (i > 0) {
+        var b = values[i - 1],
+            t = (year - a[0]) / (b[0] - a[0]);
+        return a[1] * (1 - t) + b[1] * t;
+      }
+      return a[1];
+    }
+
+*/
+  });
+
+  </script>
