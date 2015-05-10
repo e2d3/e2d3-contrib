@@ -126,6 +126,7 @@ function update(data)
 
   // Add a dot per nation. Initialize the data at 1800, and set the colors.
 
+  svg.selectAll('g.dots').remove();
   var dot = svg.append("g")
     .attr("class", "dots")
     .selectAll(".dot")
@@ -138,12 +139,13 @@ function update(data)
 
   // Add a title.
   dot.append("title")
-    .text(function(d) { return d.name; });
+    .text(function(d) { return key(d); });
   label.text(today);
 
   // Add an overlay for the year label.
   var box = label.node().getBBox();
 
+  svg.selectAll('rect.overlay').remove();
   var overlay = svg.append("rect")
       .attr("class", "overlay")
       .attr("x", box.x)

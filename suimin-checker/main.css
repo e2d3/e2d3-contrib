@@ -1,8 +1,8 @@
 body {
-  font: 14px rounded-mplus-1mn-regular;
+  font: 14px Meiryo;
 }
 text {
-  font: 24px rounded-mplus-1mn-regular;
+  font: 24px Meiryo;
 }
 
 .dot {
@@ -20,7 +20,7 @@ text {
 }
 
 .year.label {
-  font: 500 96px "Helvetica Neue";
+  font: 500 96px "Meiryo";
   fill: #ddd;
 }
 
