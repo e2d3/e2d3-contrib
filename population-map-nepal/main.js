@@ -12,7 +12,7 @@ var svg = d3.select(root).append('svg')
   .attr('height', height)
   .attr('style', 'display: block; margin: auto;');
 var projection = d3.geo.mercator()
-  .center([83, 28])
+  .center([84, 28])
   .scale(4000)
   .translate([width / 2, height / 2]);
 var path = d3.geo.path()
@@ -25,9 +25,9 @@ svg.append('g')
 d3.select(root).append('div')
   .attr('class', 'tooltip');
 
-d3.json(baseUrl + '/nepal_adm3.topojson', function (error, json) {
+d3.json(baseUrl + '/nepal_adm4.topojson', function (error, json) {
   svg.selectAll('.province')
-    .data(topojson.feature(json, json.objects.NPL_adm3).features)
+    .data(topojson.feature(json, json.objects.NPL_adm4).features)
   .enter().append('path')
     .attr('stroke', 'gray')
     .attr('stroke-width', '0.5')
