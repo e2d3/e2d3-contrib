@@ -5,6 +5,7 @@ selected = null
 valueheaders = []
 logscale = false
 duration = 2000
+ease = 'cubic-in-out'
 first = true
 
 powerOfTen = (d) -> d / Math.pow(10, Math.ceil(Math.log(d) / Math.LN10 - 1e-12)) == 1
@@ -170,7 +171,7 @@ update = (data) ->
   if svg.select('.x').empty()
     svg.append('g').call(setupXAxis)
   else
-    svg.select('.y').transition().duration(duration).call(setupXAxis)
+    svg.select('.y').transition().duration(duration).ease(ease).call(setupXAxis)
 
   if svg.select('.y').empty()
     svg.append('g').call(setupYAxis)
@@ -179,7 +180,7 @@ update = (data) ->
       .attr y: '6px', dy: '.71em', transform: 'rotate(-90)'
       .text("In billions of #{unit}")
   else
-    svg.select('.y').transition().duration(duration).call(setupYAxis)
+    svg.select('.y').transition().duration(duration).ease(ease).call(setupYAxis)
 
   plot = svg.selectAll('.target')
     .data(targets)
@@ -196,7 +197,7 @@ update = (data) ->
         stroke: 'black'
         'stroke-width': 0
 
-  plot.transition().duration(duration).call(setupPlot)
+  plot.transition().duration(duration).ease(ease).call(setupPlot)
 
   enter = plot.enter().append('circle').call(setupPlot)
     .on 'mouseover', (d) ->
@@ -214,12 +215,12 @@ update = (data) ->
     enter
       .attr
         r: 0
-      .transition().duration(duration)
+      .transition().duration(duration).ease(ease)
       .attr
         r: (d) -> r(rvalue(d[selected]))
 
   plot.exit()
-    .transition().duration(duration)
+    .transition().duration(duration).ease(ease)
     .attr
       r: 0
     .remove()
