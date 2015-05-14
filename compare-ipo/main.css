@@ -1,0 +1,100 @@
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path {
+  display: none;
+}
+
+.detail-window {
+  position: absolute;
+
+  font: 12px sans-serif;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+
+  pointer-events: none;
+
+  z-index: 100;
+}
+
+.detail-heading {
+  font-size: 12px;
+  text-align: left;
+  padding: 8px 8px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-bottom: 1px solid #ccc;
+}
+
+.detail-body {
+  padding: 6px 6px;
+}
+
+.detail-body table {
+  width: 100%;
+}
+
+.detail-body td {
+  width: 50%;
+}
+
+.date {
+  font-weight: bold;
+  color: #999;
+}
+
+.positive {
+  font-size: 16px;
+  color: red;
+}
+
+.negative {
+  font-size: 16px;
+  color: green;
+}
+
+.even {
+  font-size: 16px;
+}
+
+.selection-window {
+  position: absolute;
+
+  right: 16px;
+  top: 0px;
+
+  font: 12px sans-serif;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+
+  z-index: 50;
+}
+
+.selection {
+  display: inline-block;
+  padding: 8px;
+  color: steelblue;
+  text-decoration: none;
+}
+
+.selection:hover {
+  font-weight: bold;
+}
+
+.selected {
+  font-weight: bold;
+  background-color: #f3f3f3;
+}
