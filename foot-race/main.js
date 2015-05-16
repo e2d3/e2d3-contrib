@@ -143,7 +143,7 @@ function draw(m, data) {
                 return xScale(xMax);
             })
             .attr('y', function(d, i) {
-                return i * 30;
+                return i * 50;
             })
             .attr('stroke', 'none')
             .attr('display', function(d) {
@@ -175,7 +175,7 @@ function draw(m, data) {
                 return xScale(xMax);
             })
             .attr('y', function(d, i) {
-                return i * 30;
+                return i * 50;
             })
 
     }
