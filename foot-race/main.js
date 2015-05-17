@@ -1,5 +1,6 @@
 //# require=d3,Symbols
 
+var recordUnit = '記録秒';
 var margin = {
     top: 20,
     right: 80,
@@ -7,9 +8,14 @@ var margin = {
     left: 50
 };
 
+
 //size
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
+
+var startDelay = 1000;
+var objYspace = 50;
+var xStartPosOrg = 0;
 
 //draw background-image (should be called before base-svg creation)
 d3.select(root).append('img')
@@ -36,50 +42,35 @@ var svg = d3.select(root).append('svg')
         left: 0, //margin.left
     });
 
-//draw background svg
-drawBackground(svg, width, height, margin);
-
 //define draw area
 var drawArea = svg
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-//create symbol-manage object
-var symbols = new Symbols(svg);
-symbols.storeAllSym(true);
-
 //variables
-var preMetrics = '';
 var dataReserved = null;
-//button-labels
-var labels = ['bolt'];
 //initial metrix
-var initialMetrix = 'bolt';
+var initialMetrix = recordUnit;
 
+// おそらくupdateが呼ばれる
 function update(data) {
+
     draw(initialMetrix, data.toList());
 }
 
 function draw(m, data) {
-    if (preMetrics !== m) {
-        remove();
-    }
-    preMetrics = m;
+
+    //create symbol-manage object
+    var symbols = new Symbols(svg);
+    symbols.storeAllSym(data, false);
 
     var metrics = m;
 
     //max min
-    var yMax = d3.max(data, function(d) {
-        return 20;
-    });
-
-    var yMin = d3.min(data, function(d) {
-        return 0;
-    });
-
-    var xMax = data.length;
-
-    var xMin = 0;;
+    var yMax = height;
+    var yMin = 0;
+    var xMax = width;
+    var xMin = 0;
 
     //scale
     var yScale = d3.scale.linear()
@@ -90,24 +81,11 @@ function draw(m, data) {
         .domain([xMin, xMax])
         .range([0, width - margin.right - margin.left]);
 
-    //axix
-    var yAxis = d3.svg.axis()
-        .scale(yScale)
-        .orient('right');
-
-    //repaint axis
-    drawArea.select('.y').remove();
-    drawArea
-        .append('g')
-        .attr('class', 'y axis')
-        .attr('fill', 'white')
-//        .call(yAxis)
-
     //dots
     var dots = drawArea
         .selectAll('.' + metrics + 'class')
         .data(data, function(d, i) {
-            return d.name + metrics;
+            return d['名前'] + metrics;
         })
 
     var newDots = symbols.appendSymbol(dots.enter(), metrics)
@@ -116,73 +94,72 @@ function draw(m, data) {
     setDotProperty(newDots);
     setDotProperty(dots);
 
-
     var texts = drawArea
         .selectAll('.' + metrics + 'label')
-        .data(data, function(d, i) {
-            return d.name + metrics;
-        })
+        .data(data);
     var newTexts = texts.enter().append('text')
         .attr('class', metrics + 'label');
     setTextProperty(newTexts);
     setTextProperty(texts);
 
     function setDotProperty(line) {
-        line.attr('x', function(d, i) {
-                return xScale(0);
-            })
+        line.attr('x', xStartPosOrg)
+            .attr('y', function(d, i){
+                return i * objYspace;
+            }) 
             .transition()
-            .delay(function(d, i) {
-                return (xMax - i) * 50;
-            })
+            .delay(startDelay)
             .duration(function (d) {
-                return d[metrics] * 500;
+                if (d['単位'] == 'm') {
+                    time = d[recordUnit] / d['距離'];
+                }else if (d['単位'] == 'km') {
+                    time = d[recordUnit] / (d['距離'] * 1000);
+                }
+                return time * 20000;
             })
             .ease('linear')
             .attr('x', function(d, i) {
                 return xScale(xMax);
             })
             .attr('y', function(d, i) {
-                return i * 50;
+                return i * objYspace;
             })
             .attr('stroke', 'none')
-            .attr('display', function(d) {
-                return (d[metrics] > 0) ? 'inherited' : 'none';
-            })
+            .attr('display', 'inherited')
     }
 
     function setTextProperty(line) {
         line.text(function(d) {
-                return d.name;
+                return d['名前'];
             })
             .attr('font-size', '9px')
             .attr('fill', 'white')
-            .attr('display', function(d) {
-                return (d[metrics] > 0) ? 'inherited' : 'none';
-            })
-            .attr('x', function(d, i) {
-                return xScale(0);
-            })
+            .attr('display', 'inherited')
+            .attr('x', xStartPosOrg)
+            .attr('y', function(d, i){
+                return i * objYspace;
+            }) 
             .transition()
-            .delay(function(d, i) {
-                return (xMax - i) * 50;
-            })
+            .delay(startDelay)
             .duration(function (d) {
-                return d[metrics] * 500;
+                if (d['単位'] == 'm') {
+                    time = d[recordUnit] / d['距離'];
+                }else if (d['単位'] == 'km') {
+                    time = d[recordUnit] / (d['距離'] * 1000);
+                }
+                return time * 20000;
             })
             .ease('linear')
             .attr('x', function(d, i) {
                 return xScale(xMax);
             })
             .attr('y', function(d, i) {
-                return i * 50;
+                return i * objYspace;
             })
 
     }
     dataReserved = data;
 }
-
-//makeLabels(labels, initialMetrix);
 
 //label click
 jQuery(document).on('click', '.chart-label', function() {
@@ -194,50 +171,6 @@ jQuery(document).on('click', '.chart-label', function() {
     draw(initialMetrix, dataReserved);
 });
 
-function makeLabels(labels, value) {
-    jQuery('#chart-labels').remove();
-    var box = jQuery('<div>').attr('id', 'chart-labels');
-    jQuery(labels).each(function() {
-        var label = jQuery('<label>').addClass('chart-label').attr('data-chart-label', this).html(this);
-        if (value == this) {
-            jQuery(label).addClass('active');
-        }
-        jQuery(box).append(label);
-    });
-
-    if (labels) {
-        jQuery(root).append(box).hide().fadeIn();
-    }
-}
-
-function remove() {
-    drawArea
-        .selectAll('.' + preMetrics + 'class')
-        .data({})
-        .exit()
-        .transition()
-        .duration(4000)
-        .ease('linear')
-        .attr('x', function(d, i) {
-            return -width;
-        })
-        .remove()
-
-    drawArea
-        .selectAll('.' + preMetrics + 'label')
-        .data({})
-        .exit()
-        .transition()
-        .duration(4000)
-        .ease('linear')
-        .attr('x', function(d, i) {
-            return -width;
-        })
-        .remove()
-
-}
-
-
-function drawBackground(svg, width, height, margin) {
-    var background = svg.append('g');
+function calcSpeed(d){
+    return d[metrics] * 500;
 }
