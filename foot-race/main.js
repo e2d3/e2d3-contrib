@@ -1,5 +1,19 @@
 //# require=d3,Symbols
 
+function update(data) {
+    draw(data.toList());
+}
+
+function draw(data) {
+
+    d3.select(root).selectAll('*').remove();
+
+//initial metrix
+var initialMetrix = 'speed';
+var m =initialMetrix;
+
+//-------
+
 var margin = {
     top: 20,
     right: 80,
@@ -52,15 +66,10 @@ symbols.storeAllSym(true);
 var preMetrics = '';
 var dataReserved = null;
 //button-labels
-var labels = ['bolt'];
-//initial metrix
-var initialMetrix = 'bolt';
+var labels = ['speed'];
 
-function update(data) {
-    draw(initialMetrix, data.toList());
-}
+//-------
 
-function draw(m, data) {
     if (preMetrics !== m) {
         remove();
     }
@@ -180,9 +189,6 @@ function draw(m, data) {
 
     }
     dataReserved = data;
-}
-
-//makeLabels(labels, initialMetrix);
 
 //label click
 jQuery(document).on('click', '.chart-label', function() {
@@ -241,3 +247,10 @@ function remove() {
 function drawBackground(svg, width, height, margin) {
     var background = svg.append('g');
 }
+
+
+
+}
+
+//makeLabels(labels, initialMetrix);
+
