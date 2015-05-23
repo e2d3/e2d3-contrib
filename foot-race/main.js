@@ -1,13 +1,26 @@
 //# require=d3,Symbols
 
+function update(data) {
+    draw(data.toList());
+}
+
+function draw(data) {
+
+    d3.select(root).selectAll('*').remove();
+
+
 var recordUnit = '記録秒';
+
+//initial metrix
+var initialMetrix = recordUnit;
+var m = initialMetrix;
+
 var margin = {
     top: 20,
     right: 80,
     bottom: 30,
     left: 50
 };
-
 
 //size
 var width = root.clientWidth - margin.left - margin.right;
@@ -49,16 +62,10 @@ var drawArea = svg
 
 //variables
 var dataReserved = null;
-//initial metrix
-var initialMetrix = recordUnit;
 
-// おそらくupdateが呼ばれる
-function update(data) {
 
-    draw(initialMetrix, data.toList());
-}
 
-function draw(m, data) {
+
 
     //create symbol-manage object
     var symbols = new Symbols(svg);
@@ -106,7 +113,7 @@ function draw(m, data) {
         line.attr('x', xStartPosOrg)
             .attr('y', function(d, i){
                 return i * objYspace;
-            }) 
+            })
             .transition()
             .delay(startDelay)
             .duration(function (d) {
@@ -138,7 +145,7 @@ function draw(m, data) {
             .attr('x', xStartPosOrg)
             .attr('y', function(d, i){
                 return i * objYspace;
-            }) 
+            })
             .transition()
             .delay(startDelay)
             .duration(function (d) {
@@ -159,7 +166,6 @@ function draw(m, data) {
 
     }
     dataReserved = data;
-}
 
 //label click
 jQuery(document).on('click', '.chart-label', function() {
@@ -167,10 +173,13 @@ jQuery(document).on('click', '.chart-label', function() {
     jQuery(this).addClass('active');
 
     initialMetrix = jQuery(this).attr('data-chart-label');
-    console.log('label change : ' + initialMetrix);
+    // console.log('label change : ' + initialMetrix);
     draw(initialMetrix, dataReserved);
 });
 
 function calcSpeed(d){
     return d[metrics] * 500;
 }
+
+}
+
