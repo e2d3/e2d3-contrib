@@ -37,7 +37,7 @@ define(function() {
             case 'ebi':
                 sym = ebi();
                 break;
-            case 'bolt':
+            case 'speed':
                 sym = tuna();
                 break;
             case 'tai':
@@ -59,7 +59,7 @@ define(function() {
             name: 'tai',
             d: tai()
         }, {
-            name: 'bolt',
+            name: 'speed',
             d: tuna()
         }];
         for (var i = syms.length - 1; i >= 0; i--) {
