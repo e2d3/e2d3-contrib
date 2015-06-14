@@ -1,4 +1,4 @@
-//# require=d3,Cesium
+//# require=d3,cesium
 
 
 //Cesiumが読み込まれているか確認
