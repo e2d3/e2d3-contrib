@@ -1,4 +1,4 @@
-Cesium Maker Test
+Cesium Maker 
 ====
 
 Cesium上にマーカーを表示するよ！
