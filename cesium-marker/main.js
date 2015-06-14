@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 //# require=d3,c=Cesium
+=======
+//# require=d3,Cesium
+>>>>>>> 1124bbe25d4965448fcddf48504a0c328ed9cc48
 
 
 //Cesiumが読み込まれているか確認
