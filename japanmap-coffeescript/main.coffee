@@ -1,4 +1,4 @@
-## require=d3,topojson
+## require=d3,topojson,jquery
 
 width = root.clientWidth
 height = root.clientHeight
