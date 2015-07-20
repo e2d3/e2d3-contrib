@@ -1,4 +1,4 @@
-//# require=d3,googlemaps=async!http://maps.google.com/maps/api/js?sensor=false
+//# require=d3,googlemaps:async!http://maps.google.com/maps/api/js?sensor=false
 
 var mapOptions = {
   center: new google.maps.LatLng(35.673838, 139.750899),
