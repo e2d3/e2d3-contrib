@@ -39,6 +39,8 @@ update = (data) ->
     .range ['#ffffff', '#ff0000']
     .interpolate d3.interpolateLab
 
+  return false if svg.selectAll('.states').empty()
+
   svg.selectAll('.states')
     .attr 'fill', (d) ->
       if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key]))

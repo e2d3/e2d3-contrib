@@ -41,6 +41,9 @@ function update(data) {
     .range(['#ffffff', '#ff0000'])
     .interpolate(d3.interpolateLab);
 
+  if (svg.selectAll('.states').empty())
+    return false;
+
   svg.selectAll('.states')
     .attr('fill', function (d) {
       if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key])) {
