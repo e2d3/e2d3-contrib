@@ -1,4 +1,4 @@
-//# require=e2d3bridge
+//# require=e2d3bridge,jquery
 
 function update(data) {
   show(e2d3bridge.nested(data));
