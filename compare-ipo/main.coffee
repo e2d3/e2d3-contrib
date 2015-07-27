@@ -141,7 +141,8 @@ update = (data) ->
 
   valueheaders = targets.header.filter (h) -> h != 'date' && h != 'name' && h != 'category'
 
-  selected = valueheaders[0] if !~valueheaders.indexOf(selected)
+  if !~valueheaders.indexOf(selected)
+    selectData(0, true)
 
   updateSelectionWindow(valueheaders)
 
@@ -180,7 +181,7 @@ update = (data) ->
       .attr y: '6px', dy: '.71em', transform: 'rotate(-90)'
       .text("In billions of #{unit}")
   else
-    svg.select('.y').transition().duration(duration).ease(ease).call(setupYAxis)
+    svg.select('.y').transition().duration(duration).ease(ease).call(setupYAxis).each('end', onready)
 
   plot = svg.selectAll('.target')
     .data(targets)
@@ -228,3 +229,5 @@ update = (data) ->
   if first
     first = false
     reload()
+
+  return false
