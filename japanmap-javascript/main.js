@@ -9,7 +9,7 @@ var svg = d3.select(root).append('svg')
   .attr('style', 'display: block; margin: auto;');
 var projection = d3.geo.mercator()
   .center([136, 35])
-  .scale(height * 2.0)
+  .scale(Math.min(width, height) * 2.0)
   .translate([width / 2, height / 2]);
 var path = d3.geo.path()
   .projection(projection);

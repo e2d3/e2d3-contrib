@@ -1,4 +1,4 @@
-//# require=d3,Symbols
+//# require=d3,Symbols,jQuery:jquery
 
 var margin = {
     top: 20,
@@ -15,7 +15,7 @@ var height = root.clientHeight - margin.top - margin.bottom;
 d3.select(root).append('img')
     .attr({
         width: width,
-        height: height,
+        height: root.clientHeight,
         src: baseUrl + '/umi.jpg',
     })
     .style({

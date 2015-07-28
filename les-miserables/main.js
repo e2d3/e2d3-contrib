@@ -3,8 +3,10 @@
 var margin = {top: 80, right: 40, bottom: 40, left: 80};
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
+var size = Math.min(width, height);
+margin.left += Math.abs(width - height) / 2;
 
-var x = d3.scale.ordinal().rangeBands([0, width]),
+var x = d3.scale.ordinal().rangeBands([0, size]),
     z = d3.scale.linear().domain([0, 4]).clamp(true),
     c = d3.scale.category10().domain(d3.range(10));
 
@@ -66,8 +68,8 @@ function update(data) {
 
   svg.append("rect")
       .attr("class", "background")
-      .attr("width", width)
-      .attr("height", width);
+      .attr("width", size)
+      .attr("height", size);
 
   var row = svg.selectAll(".row")
       .data(matrix)
@@ -77,7 +79,7 @@ function update(data) {
       .each(row);
 
   row.append("line")
-      .attr("x2", width);
+      .attr("x2", size);
 
   row.append("text")
       .attr("x", -6)
@@ -93,7 +95,7 @@ function update(data) {
       .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
 
   column.append("line")
-      .attr("x1", -width);
+      .attr("x1", -size);
 
   column.append("text")
       .attr("x", 6)
@@ -125,7 +127,7 @@ function update(data) {
   function mouseout() {
     d3.selectAll("text").classed("active", false);
   }
-/*
+
   d3.select("#order").on("change", function() {
     clearTimeout(timeout);
     order(this.value);
@@ -150,7 +152,6 @@ function update(data) {
 
   var timeout = setTimeout(function() {
     order("group");
-    d3.select("#order").property("selectedIndex", 2).node().focus();
+    // d3.select("#order").property("selectedIndex", 2).node().focus();
   }, 5000);
-*/
 };

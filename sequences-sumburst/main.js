@@ -4,12 +4,48 @@ function update(data) {
   show(e2d3bridge.nested(data));
 }
 
+function createTargetSelector(targets, options) {
+    var box = $("<div>").attr("id","e2d3-target-selector-box");
+    var group;
+    if (!targets) {
+        return;
+    }
+    switch (options.type) {
+        case "dropdown":
+            group = $("<select>").attr("id", "e2d3-target-selector");
+            targets.forEach(function (d) {
+                var t = $("<option>").html(d).val(d);
+                $(group).append(t);
+            });
+            if (options.value) $(group).val(options.value);
+            break;
+        case "vertical":
+            group = $("<div>").addClass("btn-group-vertical");
+            targets.forEach(function (d) {
+                var l = $("<label>").addClass("btn btn-default");
+                var t = $("<input>").attr({ type: "radio" }).val(d);
+                if (options.value && d === options.value) $(t).prop("checked", true);
+                $(l).append(t);
+                $(group).append(l);
+            });
+            break;
+        case "slider":
+
+            break;
+        default:
+    }
+    $(box).append(group);
+    if (targets.length === 1) $(box).hide();
+    $("#e2d3-chart-area").prepend(box);
+
+}
+
 /**
  * Created by yuuu on 14/12/22.
  */
-var width = 550;
-var height = 400;
-var radius = Math.min(width, height) / 2;
+var width = root.clientWidth;
+var height = root.clientHeight;
+var radius = Math.min(width, height) / 2 - 70;
 var target;
 
 // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
