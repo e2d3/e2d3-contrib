@@ -7,6 +7,7 @@ var numberFormat = d3.format('.0f');
 dim.graphWidth = dim.width - margin.left - margin.right;
 dim.graphHeight = dim.height - margin.top - margin.bottom;
 
+var prev, next, trans;
 
 d3.select('body').on('keydown', function () {
     if (d3.event.which === 39) {
@@ -17,58 +18,58 @@ d3.select('body').on('keydown', function () {
     }
 });
 
-var svg = d3.select('#e2d3-chart-area').append('svg')
-  .attr({ width: dim.width, height: dim.height })
-  .style({ padding: 0 });
-
-var axisLayer = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id","g-axis-layer");
-var graphLayer = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id", "g-graph-layer");
-var inputLayer = svg.append('g').attr('transform', 'translate(0,' + (dim.height - inputHeight) + ')').attr("id", "g-input-layer");
-
-var xScale = d3.scale.ordinal().rangeBands([0, dim.graphWidth], 0.05);
-var xLocalScale = d3.scale.ordinal();
-var yScale = d3.scale.ordinal().rangePoints([dim.graphHeight, 0]);
-var colorScale = d3.scale.category10();
-var inputScale = d3.scale.ordinal().rangeBands([0, dim.width - margin.right]);
-
-var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
-var yAxis = d3.svg.axis().orient('left').scale(yScale);
-
-var xAxisObj = axisLayer.append('g')
-  .attr('transform', 'translate(' + 0 + ',' + dim.graphHeight + ')')
-  .attr('class', 'axis')
-  .call(xAxis);
-var yAxisObj = axisLayer.append('g')
-  .attr('transform', 'translate(' + 0 + ',' + 0 + ')')
-  .attr('class', 'axis')
-  .call(yAxis);
-
-axisLayer.selectAll('.axis text').style('font', '14px "Lucida Grande", Helvetica, Arial, sans-serif');
-axisLayer.selectAll('.axis path.domain').style({ fill: 'none', stroke: '#000000', 'shape-rendering': 'crispEdges' });
-axisLayer.selectAll('.axis line').style({ fill: 'none', stroke: '#000000', 'shape-rendering': 'crispEdges' });
-
-var time = 0;
-var radius = 3;
-var mar = 0.6;
-var barWidth = 16;
-
-var auto = true;
-
-var duration = 2000;
-var delayMax = 1000;
-
-var prev, next, trans;
-
-prev = function () {
-    trans(time - 1);
-}
-
-next = function () {
-    trans(time + 1);
-}
-
 function update(data) {
-    json = data.toMap({typed: true});
+    d3.select(root).selectAll('*').remove();
+
+    var svg = d3.select(root).append('svg')
+      .attr({ width: dim.width, height: dim.height })
+      .style({ padding: 0 });
+
+    var axisLayer = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id","g-axis-layer");
+    var graphLayer = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id", "g-graph-layer");
+    var inputLayer = svg.append('g').attr('transform', 'translate(0,' + (dim.height - inputHeight) + ')').attr("id", "g-input-layer");
+
+    var xScale = d3.scale.ordinal().rangeBands([0, dim.graphWidth], 0.05);
+    var xLocalScale = d3.scale.ordinal();
+    var yScale = d3.scale.ordinal().rangePoints([dim.graphHeight, 0]);
+    var colorScale = d3.scale.category10();
+    var inputScale = d3.scale.ordinal().rangeBands([0, dim.width - margin.right]);
+
+    var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
+    var yAxis = d3.svg.axis().orient('left').scale(yScale);
+
+    var xAxisObj = axisLayer.append('g')
+      .attr('transform', 'translate(' + 0 + ',' + dim.graphHeight + ')')
+      .attr('class', 'axis')
+      .call(xAxis);
+    var yAxisObj = axisLayer.append('g')
+      .attr('transform', 'translate(' + 0 + ',' + 0 + ')')
+      .attr('class', 'axis')
+      .call(yAxis);
+
+    axisLayer.selectAll('.axis text').style('font', '14px "Lucida Grande", Helvetica, Arial, sans-serif');
+    axisLayer.selectAll('.axis path.domain').style({ fill: 'none', stroke: '#000000', 'shape-rendering': 'crispEdges' });
+    axisLayer.selectAll('.axis line').style({ fill: 'none', stroke: '#000000', 'shape-rendering': 'crispEdges' });
+
+    var time = 0;
+    var radius = 3;
+    var mar = 0.6;
+    var barWidth = 16;
+
+    var auto = true;
+
+    var duration = 2000;
+    var delayMax = 1000;
+
+    prev = function () {
+        trans(time - 1);
+    }
+
+    next = function () {
+        trans(time + 1);
+    }
+
+    var json = data.toMap({typed: true});
 
     var displaydata = [];
     var labels = json.keys;
