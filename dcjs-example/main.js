@@ -37,7 +37,7 @@ function update(data) {
         function() { return { count: 0, x: 0, y: 0 }; }
       );
 
-    dc.bubbleChart(this)
+    var chart = dc.bubbleChart(this)
       .width(this.clientWidth)
       .height(this.clientHeight)
       .margins(margin)
@@ -58,6 +58,8 @@ function update(data) {
       .maxBubbleRelativeSize('0.01')
       .renderHorizontalGridLines(true)
       .renderVerticalGridLines(true);
+
+    return chart;
   });
 
   createChart(['データ数'], 'count', function (key) {
@@ -67,14 +69,18 @@ function update(data) {
     });
     var group = dimension.group();
 
-    dc.rowChart(this)
+    var chart = dc.rowChart(this)
       .width(this.clientWidth)
       .height(this.clientHeight)
       .margins(margin)
       .dimension(dimension)
       .group(group)
       .label(function (d) { return d.key.split('.')[1]; })
-      .xAxis().ticks(4);
+      .labelOffsetY(12);
+
+    chart.xAxis().ticks(4);
+
+    return chart;
   });
 
   createChart(list.header.slice(1, 2), 'months', function (key) {
@@ -89,7 +95,7 @@ function update(data) {
         function() { return { count: 0, total: 0 }; }
       );
 
-    dc.rowChart(this)
+    var chart = dc.rowChart(this)
       .width(this.clientWidth)
       .height(this.clientHeight)
       .margins(margin)
@@ -97,8 +103,11 @@ function update(data) {
       .group(group)
       .valueAccessor(function (d) { return d.value.count > 0 ? d.value.total / d.value.count : null; })
       .label(function (d) { return d.key.split('.')[1]; })
-      .labelOffsetY(11)
-      .xAxis().ticks(4);
+      .labelOffsetY(12);
+
+    chart.xAxis().ticks(4);
+
+    return chart;
   });
 
   createChart(list.header.slice(1), 'dimension', function (key) {
@@ -115,7 +124,7 @@ function update(data) {
 
     scale = d3.scale.linear().domain([scale.domain()[0] - step, scale.domain()[1] + step]);
 
-    dc.barChart(this)
+    var chart = dc.barChart(this)
       .width(this.clientWidth)
       .height(this.clientHeight)
       .margins(margin)
@@ -127,8 +136,11 @@ function update(data) {
       .round(rounding)
       .x(scale)
       .xUnits(function (start, end, xDomain) { return (end - start) / step; })
-      .renderHorizontalGridLines(true)
-      .xAxis().ticks(20);
+      .renderHorizontalGridLines(true);
+
+    chart.xAxis().ticks(20);
+
+    return chart;
   });
 
   dc.renderAll();
@@ -149,17 +161,28 @@ function filter(group, f) {
   };
 }
 
-function createChart(names, classname, each) {
+function createChart(names, classname, render) {
   var dim = d3.select(root).selectAll('.' + classname)
       .data(names)
     .enter().append('div')
       .attr('class', classname);
 
-  dim.append('h4')
-    .text(function (d) { return d; });
+  dim.append('div')
+      .attr('class', 'title')
+      .text(function (d) { return d + ' '; })
+    .append('a')
+      .attr('href', 'javascript:')
+      .text('reset');
 
   dim.append('div')
-    .attr('id', function (d, i) { return 'chart' + Math.floor(Math.random() * 100); })
-    .attr('class', 'chart')
-    .each(each);
+      .attr('id', function (d, i) { return 'chart' + Math.floor(Math.random() * 100); })
+      .attr('class', 'chart')
+      .each(function (d) {
+        var chart = render.call(this, d);
+        d3.select(this.parentNode).select('a')
+            .on('click', function (d) {
+              chart.filterAll();
+              dc.redrawAll();
+            });
+      });
 }
