@@ -57,7 +57,9 @@ function update(data) {
       .minRadiusWithLabel(0)
       .maxBubbleRelativeSize('0.01')
       .renderHorizontalGridLines(true)
-      .renderVerticalGridLines(true);
+      .renderVerticalGridLines(true)
+      .xAxisLabel(xKey)
+      .yAxisLabel(yKey);
 
     return chart;
   });
