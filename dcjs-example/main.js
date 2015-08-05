@@ -132,7 +132,7 @@ function update(data) {
       .margins(margin)
       .dimension(dimension)
       .group(group)
-      .elasticY(false)
+      .elasticY(true)
       .centerBar(true)
       .gap(1)
       .round(rounding)
