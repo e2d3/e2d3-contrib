@@ -31,7 +31,7 @@ function update(data) {
     },
     {
       name: label[0],
-      scale: d3.scale.linear().range([0, height]),
+      scale: d3.scale.linear().range([height, 0]),
       type: Number
     },
     {
@@ -41,7 +41,7 @@ function update(data) {
     },
     {
       name: label[2],
-      scale: d3.scale.sqrt().range([height, 0]),
+      scale: d3.scale.linear().range([height, 0]),
       type: Number
     },
     {
