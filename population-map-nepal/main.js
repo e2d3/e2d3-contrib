@@ -67,11 +67,13 @@ d3.json(baseUrl + '/nepal_adm4.topojson', function (error, json) {
 });
 
 function update(data) {
-  function render(){
-    var map = data.toMap();
-    var values = map.values();
+  var map = data.toMap();
+  var headers = map.header;
+  labels = headers;
+  var values = map.values();
 
-    tsv = data.toList();
+  function render(){
+    var tsv = data.toList();
     tsv.forEach(function(d){
       d[data_prop] = +d[data_prop];
     });
@@ -82,7 +84,7 @@ function update(data) {
 
     svg.selectAll('.province')
       .attr('fill', function (d) {
-        var obj = tsv.filter(function(e){return e.Province==d.properties.name})[0];
+        var obj = tsv.filter(function(e){return e['District Name']==d.properties.NAME_3})[0];
         if (obj) {
           return color(obj[data_prop]);
         } else {
@@ -90,6 +92,7 @@ function update(data) {
         }
       });
   }
+  showSwitchButtons();
 
   d3.selectAll('.switch_radio').on('change', function(){
     data_prop = d3.select(this).attr('value');
