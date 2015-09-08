@@ -8,7 +8,7 @@
 //# require=jThree.Trackball,jThree.MMD
 
 jThree.goml('index.goml', function(j3) {
-	j3.MMD.play();
+	j3.MMD.play(true);
 	j3.Trackball();
 
 	reload();
