@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<scene>
-	    <mmd id="" model="model/miku/index.pmx" motion="motion/melt.vmd" style=""></mmd>
+	    <mmd id="" model="model/miku/index.pmx" motion="motion/run.vmd" style=""></mmd>
 
 			<camera style="cameraFar: 100000; position: 5 18 30; lookAtX: 5; lookAtY: 10;" />
 			<light type="Amb" style="lightColor: #222;" />
