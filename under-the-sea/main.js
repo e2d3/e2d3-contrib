@@ -1,4 +1,4 @@
-//# require=d3,Symbols
+//# require=d3,Symbols,jquery
 
 var margin = {
     top: 20,
@@ -180,28 +180,28 @@ function draw(m, data) {
 makeLabels(labels, initialMetrix);
 
 //label click
-jQuery(document).on('click', '.chart-label', function() {
-    jQuery('.chart-label').removeClass('active');
-    jQuery(this).addClass('active');
+$(document).on('click', '.chart-label', function() {
+    $('.chart-label').removeClass('active');
+    $(this).addClass('active');
 
-    initialMetrix = jQuery(this).attr('data-chart-label');
+    initialMetrix = $(this).attr('data-chart-label');
     console.log('label change : ' + initialMetrix);
     draw(initialMetrix, dataReserved);
 });
 
 function makeLabels(labels, value) {
-    jQuery('#chart-labels').remove();
-    var box = jQuery('<div>').attr('id', 'chart-labels');
-    jQuery(labels).each(function() {
-        var label = jQuery('<label>').addClass('chart-label').attr('data-chart-label', this).html(this);
+    $('#chart-labels').remove();
+    var box = $('<div>').attr('id', 'chart-labels');
+    $(labels).each(function() {
+        var label = $('<label>').addClass('chart-label').attr('data-chart-label', this).html(this);
         if (value == this) {
-            jQuery(label).addClass('active');
+            $(label).addClass('active');
         }
-        jQuery(box).append(label);
+        $(box).append(label);
     });
 
     if (labels) {
-        jQuery(root).append(box).hide().fadeIn();
+        $(root).append(box).hide().fadeIn();
     }
 }
 
