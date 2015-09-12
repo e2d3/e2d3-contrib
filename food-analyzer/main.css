@@ -1,20 +1,25 @@
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
+.imageBox {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+.hide {
+  display: none!important;
 }
-
-.node {
-  border: solid 1px white;
-  font: 10px sans-serif;
-  line-height: 12px;
-  overflow: hidden;
+#bigImageBox {
+    position: absolute;
+    top: 130px;
+    left: -300px;
+    padding: 20px;
+}
+#chartBox {
   position: absolute;
-  text-indent: 2px;
+  top: 130px;
+  right: 0;
+  padding: 20px;
+}
+#bigImageBox img {
+  transform: scaleX(-1);
+  filter: FlipH;
 }
