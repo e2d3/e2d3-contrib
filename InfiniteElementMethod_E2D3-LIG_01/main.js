@@ -1,21 +1,36 @@
+//# require=d3
+
+var main = d3.select(root)
+        .append("svg");
+
 function update(data) {
 
-var sales_data=data;
+    var sales_data = data;
 
-var width = 1100, height = 610, margin ={b:90, t:40, l:180, r:50};
+    var width = 1100,
+        height = 610,
+        margin = {
+            b: 90,
+            t: 40,
+            l: 180,
+            r: 50
+        };
 
-var svg = d3.select("body")
-	.append("svg").attr('width',width).attr('height',(height+margin.b+margin.t))
-	.append("g").attr("transform","translate("+ margin.l+","+margin.t+")");
+    var svg = main.attr('width', width).attr('height', (height + margin.b + margin.t))
+        .append("g").attr("transform", "translate(" + margin.l + "," + margin.t + ")");
 
-var data = [ 
-	{data:bP.partData(sales_data,2), id:'SalesAttempts', header:["通信属性","時間帯", "小金井市トラ連DC"]},
-];
+    var data = [{
+        data: bP.partData(sales_data, 2),
+        id: 'SalesAttempts',
+        header: ["通信属性", "時間帯", "小金井市トラ連DC"]
+    }, ];
 
-bP.draw(data, svg);
+    bP.draw(data, svg);
+
 
 
 }
+
 
 !function(){
 	var bP={};	
