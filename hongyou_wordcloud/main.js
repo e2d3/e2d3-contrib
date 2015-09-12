@@ -47,5 +47,6 @@ function update(data)
       .font("sans-serif")
       .fontSize(function(d) { return d.size; })
       .on("end", draw)
+      // .attr("transform","rotate(" + 10 + ")" );
       .start();
 };
