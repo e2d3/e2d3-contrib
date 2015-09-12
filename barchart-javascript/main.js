@@ -47,20 +47,21 @@ function update(data) {
 
   chart.selectAll('.axis').remove();
 
-//  chart.append('g')
-//      .attr('class', 'x axis')
-//      .attr('transform', 'translate(0,' + height + ')')
-//      .call(xAxis);
+  chart.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis);
 
-//  chart.append('g')
-//      .attr('class', 'y axis')
-//      .call(yAxis)
-//    .append('text')
-//      .attr('transform', 'rotate(-90)')
-//      .attr('y', 6)
-//      .attr('dy', '.71em')
-//      .style('text-anchor', 'end')
-//      .text(key);
+
+  chart.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+    .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 6)
+      .attr('dy', '.71em')
+      .style('text-anchor', 'end')
+      .text(key);
 
   rect = chart.selectAll('.bar').data(list);
 
