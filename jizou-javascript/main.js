@@ -52,7 +52,6 @@ function update(data) {
       .attr('transform', 'translate(0,' + height + ')')
       .call(xAxis);
 
-
   chart.append('g')
       .attr('class', 'y axis')
       .call(yAxis)
