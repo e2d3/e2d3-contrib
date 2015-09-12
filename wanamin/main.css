@@ -1,0 +1,44 @@
+﻿.chart {
+  display: block;
+  margin: auto;
+}
+
+text {
+  font-size: 11px;
+}
+
+rect {
+  fill: none;
+}
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis text{
+	fill: none;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+ stroke-width: 5.0px; 
+ 
+}
+
+.city text{
+	font-size: 20px;
+	font-weight: bold;
+}
+
+
