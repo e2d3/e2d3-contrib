@@ -36,7 +36,7 @@ function update(data) {
 	var bP={};	
 	var b=70, bb=230, height=500, buffMargin=1, minHeight=14;
 	var c1=[-150, 100], c2=[-50, 230], c3=[-10, 290]; //Column positions of labels.
-	var colors =[ "#00ff33","#3366CC","#ff96ff", "#DC3912",  "#FF9900","#109618", "#990099"];
+	var colors =[ "#00ff33","#3366CC","#ff96ff", "#DC3912",  "#FF9900","#109618", "#990099","#0000FF", "#FFFF00",  "#00FF00","#00FFFF", "#FF0000", "#FF00FF","#800000", "#808000",  "#008000","#008080", "#000080", "#800080","#000000", "#808080",  "#FF9900","#C0C0C0"];
 	
 	bP.partData = function(data,p){
 		var sData={};
