@@ -1,0 +1,64 @@
+svg {
+  font: 10px sans-serif;
+  position: static;
+  z-index: 1
+}
+
+#image_area{
+  display: block;
+  position: absolute;
+  z-index: 2;
+  height: 200px;
+  top: 0;
+  left: 0;
+}
+
+.background path {
+  fill: none;
+  stroke: none;
+  stroke-width: 20px;
+  pointer-events: stroke;
+}
+
+.foreground path {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.foreground .kawaii{
+  stroke: red !important;
+}
+
+.foreground .kawaikunai{
+  stroke: blue !important;
+}
+
+.axis .title {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.label {
+  -webkit-transition: fill 125ms linear;
+}
+
+.active .label:not(.inactive) {
+}
+
+.label.inactive {
+  fill: #ccc;
+}
+
+.foreground path.inactive {
+  stroke: #ccc;
+  stroke-opacity: .5;
+}
