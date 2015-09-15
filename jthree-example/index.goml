@@ -1,0 +1,17 @@
+<goml>
+	<head>
+		<geo id="geo1" type="Sphere" param="1 16 16" />
+		<mtl id="mtl1" type="MeshPhong" param="color: #a00; specular: #666;" />
+
+		<rdr frame="body" camera="camera:first" param="antialias: true; clearColor: #fff;"/>
+	</head>
+	<body>
+		<scene>
+	    <mmd id="" model="model/miku/index.pmx" motion="motion/run.vmd" style=""></mmd>
+
+			<camera style="cameraFar: 100000; position: 5 18 30; lookAtX: 5; lookAtY: 10;" />
+			<light type="Amb" style="lightColor: #222;" />
+			<light type="Dir" style="position: 1 3 5;" />
+		</scene>
+	</body>
+</goml>

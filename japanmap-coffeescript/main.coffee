@@ -1,4 +1,4 @@
-## require=d3,topojson
+## require=d3,topojson,jquery
 
 width = root.clientWidth
 height = root.clientHeight
@@ -10,7 +10,7 @@ svg = d3.select(root)
     .attr 'style', 'display: block; margin: auto;'
 projection = d3.geo.mercator()
   .center [136, 35]
-  .scale height * 2.0
+  .scale Math.min(width, height) * 2.0
   .translate [width / 2, height / 2]
 path = d3.geo.path()
   .projection(projection)
@@ -38,6 +38,8 @@ update = (data) ->
     .domain [d3.min(values), d3.max(values)]
     .range ['#ffffff', '#ff0000']
     .interpolate d3.interpolateLab
+
+  return false if svg.selectAll('.states').empty()
 
   svg.selectAll('.states')
     .attr 'fill', (d) ->

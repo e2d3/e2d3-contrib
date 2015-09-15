@@ -1,29 +1,8 @@
 //# require=d3
-function update(data) {
-  show(data.toList());
-}
-function e2d3Show(updateFlag) {
-    if (updateFlag) {
-        e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
-    } else {
-        e2d3.addChangeEvent(e2d3BindId, e2d3Update, function () {
-            e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
-        });
-    }
-
-}
-function e2d3Update(responce) {
-    console.log("Begin e2d3Update");
-    e2d3Show(true);
-}
-
-function show(data) {
-  d3.select(root).selectAll('*').remove();
-//    $("#e2d3-chart-area").empty();
 
 var margin = {top: 20, right: 80, bottom: 30, left: 40},
-    width = 800 - margin.left - margin.right,
-    height = 470 - margin.top - margin.bottom;
+    width = root.clientWidth - margin.left - margin.right,
+    height = root.clientHeight - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y%m%d").parse;
 
@@ -54,6 +33,8 @@ var svg = d3.select(root).append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+function update(data) {
+  data = data.toList();
 
   color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
 

@@ -3,26 +3,9 @@ function update(data) {
   show(data.toList());
 }
 
-function e2d3Show(updateFlag) {
-    if (updateFlag) {
-        e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
-    } else {
-        e2d3.addChangeEvent(e2d3BindId, e2d3Update, function () {
-            e2d3.bind2Json(e2d3BindId, { dimension: "nested" }, show);
-        });
-    }
-
-}
-function e2d3Update(responce) {
-    console.log("Begin e2d3Update");
-    e2d3Show(true);
-}
-
-
-
 function show(data) {
   d3.select(root).selectAll('*').remove();
-  
+
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.income; }
 function y(d) { return d.lifeExpectancy; }
@@ -31,8 +14,8 @@ function color(d) { return d.region; }
 function key(d) { return d.name; }
 // Chart dimensions.
 var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 29.5},
-    width = 770 - margin.right,
-    height = 460 - margin.top - margin.bottom;
+    width = root.clientWidth - margin.left - margin.right,
+    height = root.clientHeight - margin.top - margin.bottom;
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.log().domain([300, 1e5]).range([0, width]),
     yScale = d3.scale.linear().domain([10, 85]).range([height, 0]),

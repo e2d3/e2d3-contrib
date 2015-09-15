@@ -10,16 +10,16 @@ function update(data) {
 
 console.log("Begin e2d3Show.");
 
-var width = 500;
-var height = 500;
+var width = root.clientWidth;
+var height = root.clientHeight;
 
 var svg = d3.select("#e2d3-chart-area").append("svg")
   .attr("width", width)
   .attr("height", height);
 
 var projection = d3.geo.mercator()
-  .center([136, 38])
-  .scale(1200)
+  .center([136, 35])
+  .scale(Math.min(width, height) * 2.0)
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()

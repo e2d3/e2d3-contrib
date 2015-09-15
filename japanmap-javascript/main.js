@@ -1,4 +1,4 @@
-//# require=d3,topojson
+//# require=d3,topojson,jquery
 
 var width = root.clientWidth;
 var height = root.clientHeight;
@@ -9,7 +9,7 @@ var svg = d3.select(root).append('svg')
   .attr('style', 'display: block; margin: auto;');
 var projection = d3.geo.mercator()
   .center([136, 35])
-  .scale(height * 2.0)
+  .scale(Math.min(width, height) * 2.0)
   .translate([width / 2, height / 2]);
 var path = d3.geo.path()
   .projection(projection);
@@ -17,7 +17,7 @@ var path = d3.geo.path()
 svg.append('g')
   .attr('id', 'legend_group');
 
-d3.json(baseUrl + '/japan.topojson', function (error, json) {
+d3.json('japan.topojson', function (error, json) {
   svg.selectAll('.states')
     .data(topojson.feature(json, json.objects.japan).features)
   .enter().append('path')
@@ -40,6 +40,9 @@ function update(data) {
     .domain([d3.min(values), d3.max(values)])
     .range(['#ffffff', '#ff0000'])
     .interpolate(d3.interpolateLab);
+
+  if (svg.selectAll('.states').empty())
+    return false;
 
   svg.selectAll('.states')
     .attr('fill', function (d) {
