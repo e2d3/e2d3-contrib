@@ -19,13 +19,13 @@ jThree.goml('index.goml', function(j3) {
 function update(data) {
   var list = data.transpose().toList({header: ['name', 'value'], typed: true});
 
-  jThree('scene .value').remove();
+  jThree('scene mmd').remove();
 
   list.forEach(function (d, i) {
-    var newmesh = jThree('<mesh class="value" geo="#geo1" mtl="#mtl1"></mesh>');
-    newmesh.attr('id', d.name);
-    newmesh.css('positionX', i * 2 + 4);
-    newmesh.css('positionY', d.value);
-    jThree('scene').append(newmesh);
+    var mmd = jThree('<mmd id="" model="#miku" motion="#run" style=""></mmd>');
+    mmd.css('positionX', i * 2);
+    mmd.css('positionY', d.value);
+    mmd.css('scale', '0.2 0.2 0.2');
+    jThree('scene').append(mmd);
   });
 }
