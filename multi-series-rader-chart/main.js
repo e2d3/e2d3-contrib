@@ -75,11 +75,11 @@ var selectedRow = 0;
 var selectedCol = 0;
 var legendArray = [];
 var seriesArray = [];
-var metrics = ['下り速度（Mbps）', '上り速度（Mbps）', 'Ping（ms）']
+// var metrics = ['下り速度（Mbps）', '上り速度（Mbps）', 'Ping（ms）']
 
-var getPositionX = function (i) {
+var getPositionX = function (i, selectedCol) {
     // console.log(colHeaderLength + selectedCol + i * rowNestedNum);
-    return colHeaderLength + selectedCol + i * rowNestedNum;
+    return 2 + selectedCol + i * rowNestedNum;
 }
 
 var getPositionY = function (i) {
@@ -90,10 +90,10 @@ function getLength (array) {
     var count = 0;
     console.log(array);
     for (var i in array) {
-        count++;
-        if (count > colHeaderLength) {
-            legendArray.push(i);
-        }
+        // count++;
+        // if (count > colHeaderLength) {
+        //     legendArray.push(i);
+        // }
     }
     return count;
 }
@@ -102,14 +102,58 @@ var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
 
 function update(data) {
     console.log(data);
-    var metric = [];
     legendArray = [];
+    metrics = [];
+    seriesArray = [];
 
-    for (var i = 2; i <= 4; i++) {
-        console.log(data[1][i]);
-        metric.push(data[1][i])
-    }
-    metrics = metric;
+    var firstSeries = [];
+    // for (var i = 0; i < data.length; i++) {
+    //     if (data[i][0] == "グラフ") {
+    //         if (data[i][1] == "会社名") {
+    //             console.log(data[i][0]);
+    //             console.log(data[i][1]);
+    //             for (var j = 2; j < data[i].length; j++) {
+    //                 console.log(data[i][j]);
+    //                 firstSeries.push(data[i][j]);
+    //             }
+    //         }
+    //     }
+    // }
+
+    var datalist = d3.nest()
+        .key(function(d) { return d[0]; })
+        .entries(data.transpose());
+
+    var metricslist = d3.nest()
+        .key(function(d) { return d[1]; })
+        .entries(data.transpose());
+
+    console.log(datalist);
+
+    datalist.forEach(function (d) {
+        if (d.key != '系列') {
+            legendArray.push(d.key);
+            // // metrics.push(d.values);
+            // d.values.forEach(function (data) {
+            //     console.log(data);
+            // })
+        }
+    });
+
+    metricslist.forEach(function (d) {
+        if (d.key != '系列') {
+            metrics.push(d.key);
+            // // metrics.push(d.values);
+            // d.values.forEach(function (data) {
+            //     console.log(data);
+            // })
+        }
+    });
+
+    console.log(metrics);
+    console.log(legendArray);
+
+    // metrics = metric;
 
     var list = d3.nest()
         .key(function(d) { return d[0]; })
@@ -121,16 +165,22 @@ function update(data) {
     console.log(list);
     list.splice(0, 1);
     console.log(list);
-    list.reverse();
-    // console.log(list[0].values.length);
-    // console.log(list[0].values);
 
+    list.reverse();
+    // list = list.splice(0, 1);
+    
     for (var i = 0; i < list[0].values.length; i++) {
         console.log(list[0].values[i][1]);
         seriesArray.push(list[0].values[i][1]);
     }
 
     console.log(seriesArray);
+
+    rowNestedNum = list[0].values.length;
+
+    colHeaderLength = getLength(legend[0]) - colNestedNum;
+    console.log(colNestedNum);
+    console.log(legendArray);
 
     d3.select('#legend-area').selectAll('select').remove();
     d3.select('#legend-area').selectAll('div').remove();
@@ -142,7 +192,7 @@ function update(data) {
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
             console.log(selectedIndex);
             selectedRow = selectedIndex;
-            drawChart(list);
+            drawChart(list, selectedCol, selectedRow);
         })
         .selectAll('option')
         .data(seriesArray)
@@ -159,7 +209,7 @@ function update(data) {
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
             console.log(selectedIndex);
             selectedCol = selectedIndex;
-            drawChart(list);
+            drawChart(list, selectedCol, selectedRow);
         })
         .selectAll('option')
         .data(metrics)
@@ -170,11 +220,6 @@ function update(data) {
         });
 
 
-    rowNestedNum = list[0].values.length;
-
-    colHeaderLength = getLength(legend[0]) - colNestedNum;
-    console.log(colNestedNum);
-    console.log(legendArray);
 
     d3.select('#legend-area')
         .append('div')
@@ -225,7 +270,7 @@ function update(data) {
     //     console.log(legend);
     // }
 
-    drawChart(list);
+    drawChart(list, selectedCol, selectedRow);
 
     console.log("-------------");
 
@@ -241,7 +286,10 @@ function update(data) {
     .style("color", "gray");
 }
 
-function drawChart(list) {
+function drawChart(list, selectedCol, selectedRow) {
+    console.log(selectedCol);
+    console.log(selectedRow);
+    console.log(getPositionX(num, selectedCol));
     console.log(seriesArray[selectedCol]);
     console.log(metrics[selectedRow]);
 
@@ -251,7 +299,7 @@ function drawChart(list) {
 
     x.domain(list.map(function (d, i) {
         // console.log(d);
-        if (i > 0) {
+        if (i > 1) {
             // console.log(d.key);
             return d.key;
         }
@@ -263,16 +311,16 @@ function drawChart(list) {
     )]);
 
 
+    console.log(legendArray);
+
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-            // console.log(i.values);
-            if (i.values[selectedRow][getPositionX(num)] > 0) {
-                // console.log(getPositionY(selectedRow));
-                // console.log(i.values[selectedRow][getPositionX(num)]);
-                return parseInt(i.values[selectedRow][getPositionX(num)], 10);
+            console.log(i.values[selectedRow][getPositionX(num, selectedCol)]);
+            if (i.values[selectedRow][getPositionX(num, selectedCol)] > 0) {
+                return parseInt(i.values[selectedRow][getPositionX(num, selectedCol)], 10);
             }
         }));
-        // console.log(cfg.maxValue);
+        console.log(cfg.maxValue);
     }
     
     chart.selectAll('g').remove();
@@ -362,7 +410,7 @@ function drawChart(list) {
                 .data(z, function(j, i){
                     // console.log(num, selectedRow, getPositionX(num), j.values[selectedRow][getPositionX(num)]);
 
-                    var value = j.values[selectedRow][getPositionX(num)];
+                    var value = j.values[selectedRow][getPositionX(num, selectedCol)];
                     
                     dataValues.push([
                         cfg.w/2*(1-(parseFloat(Math.max(value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
