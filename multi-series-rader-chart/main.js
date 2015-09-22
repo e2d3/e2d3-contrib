@@ -67,16 +67,17 @@ var colHeaderLength = 2;
 var rowNestedNum = 3;
 var colNestedNum = 3;
 var selectedRow = 0;
-var selectedCol = 2;
+var selectedCol = 0;
 var legendArray = [];
 var seriesArray = [];
 
 var getPositionX = function (i) {
-    return colHeaderLength + selectedRow + i * colNestedNum;
+    // console.log(colHeaderLength + selectedCol + i * rowNestedNum);
+    return colHeaderLength + selectedCol + i * rowNestedNum;
 }
 
 var getPositionY = function (i) {
-    return selectedCol + i * rowNestedNum;
+    return selectedCol + i * colNestedNum;
 }
 
 function getLength (array) {
@@ -99,6 +100,7 @@ function update(data) {
         .key(function(d) { return d[0]; })
         .entries(data);
 
+    console.log(list[0]);
     var legend = data.toList();
     
     console.log(list);
@@ -116,6 +118,13 @@ function update(data) {
 
     d3.select('#legend-area')
         .append('select')
+        .on('change', function () {
+            var selectedIndex = d3.select(this).property('selectedIndex');
+            var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
+            console.log(selectedIndex);
+            selectedRow = selectedIndex;
+            drawChart(list);
+        })
         .selectAll('option')
         .data(seriesArray)
         .enter()
@@ -125,14 +134,35 @@ function update(data) {
         });
 
 
+
+
     rowNestedNum = list[0].values.length;
 
     rowNestedNum = getLength(legend[0]) - colNestedNum;
     console.log(colNestedNum);
     console.log(legendArray);
 
+    // for(var i = 0; i < legend.length; i++) {
+    //     console.log(legend);
+    // }
+
+    drawChart(list);
+
     console.log("-------------");
 
+    var copyRight = d3.select(root).append("div");
+
+    copyRight.style({
+        'height': '20px',
+        'text-align': 'left',
+        'padding-left': '10px',
+        'width': '100%'
+    })
+    .text("Presented by gooスマホ部")
+    .style("color", "gray");
+}
+
+function drawChart(list) {
     var key = 'value';
     var total = list.length;
 
@@ -152,24 +182,18 @@ function update(data) {
 
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-            if (i.values[getPositionY(0)][getPositionX(num)] > 0) {
-                return i.values[getPositionY(0)][getPositionX(num)];
+            console.log(i.values);
+            if (i.values[selectedRow][getPositionX(num)] > 0) {
+                // console.log(getPositionY(selectedRow));
+                console.log(i.values[selectedRow][getPositionX(num)]);
+                return i.values[selectedRow][getPositionX(num)];
             }
         }));
     }
     
+    chart.selectAll('g').remove();
     var g = chart.append('g');
 
-    var copyRight = d3.select(root).append("div");
-
-    copyRight.style({
-        'height': '20px',
-        'text-align': 'left',
-        'padding-left': '10px',
-        'width': '100%'
-    })
-    .text("Presented by gooスマホ部")
-    .style("color", "gray");
 
     for(var j=0; j<cfg.levels-1; j++){
         var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
@@ -252,7 +276,7 @@ function update(data) {
             var dataValues = [];
             g.selectAll(".nodes")
                 .data(z, function(j, i){
-                    var value = j.values[getPositionY(0)][getPositionX(num)];
+                    var value = j.values[selectedRow][getPositionX(num)];
                     
                     dataValues.push([
                         cfg.w/2*(1-(parseFloat(Math.max(value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
@@ -290,7 +314,6 @@ function update(data) {
                 })
                 // .on('mouseover', function (d){
                 //     z = "polygon."+d3.select(this).attr("class");
-
                 //     g.selectAll("polygon")
                 //         .transition(200)
                 //         .style("fill-opacity", 0.1);
@@ -306,4 +329,5 @@ function update(data) {
                 .style("fill-opacity", cfg.opacityArea);
         });
     }
+
 }
