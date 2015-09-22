@@ -2,7 +2,7 @@
 var margin = { top: 50, right: 30, bottom: 30, left: 100 };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
-var legendHeight = 60;
+var legendHeight = 20;
 
 var x = d3.scale.ordinal()
   .rangeRoundBands([0, width], .1)
@@ -41,8 +41,13 @@ var color = d3.scale.ordinal()
 var carrerColor = {
             'ドコモ': '#C10026',
             'au': '#E14100',
-            'ソフトバンク': '#A7ADB1'
+            'ソフトバンク': '#A7ADB1',
+            'A社': '#C10026',
+            'B社': '#E14100',
+            'C社': '#A7ADB1'
         };
+
+// var carrerColor 
 
 var cfg = {
     radius: 5,
@@ -70,6 +75,7 @@ var selectedRow = 0;
 var selectedCol = 0;
 var legendArray = [];
 var seriesArray = [];
+var metrics = ['下り速度（Mbps）', '上り速度（Mbps）', 'Ping（ms）']
 
 var getPositionX = function (i) {
     // console.log(colHeaderLength + selectedCol + i * rowNestedNum);
@@ -77,7 +83,7 @@ var getPositionX = function (i) {
 }
 
 var getPositionY = function (i) {
-    return selectedCol + i * colNestedNum;
+    return selectedRow + i * colNestedNum;
 }
 
 function getLength (array) {
@@ -95,7 +101,16 @@ function getLength (array) {
 var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
 
 function update(data) {
-    // console.log(data);
+    console.log(data);
+    var metric = [];
+    legendArray = [];
+
+    for (var i = 2; i <= 4; i++) {
+        console.log(data[1][i]);
+        metric.push(data[1][i])
+    }
+    metrics = metric;
+
     var list = d3.nest()
         .key(function(d) { return d[0]; })
         .entries(data);
@@ -106,6 +121,7 @@ function update(data) {
     console.log(list);
     list.splice(0, 1);
     console.log(list);
+    list.reverse();
     // console.log(list[0].values.length);
     // console.log(list[0].values);
 
@@ -115,6 +131,9 @@ function update(data) {
     }
 
     console.log(seriesArray);
+
+    d3.select('#legend-area').selectAll('select').remove();
+    d3.select('#legend-area').selectAll('div').remove();
 
     d3.select('#legend-area')
         .append('select')
@@ -133,14 +152,74 @@ function update(data) {
             return d;
         });
 
-
+    d3.select('#legend-area')
+        .append('select')
+        .on('change', function () {
+            var selectedIndex = d3.select(this).property('selectedIndex');
+            var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
+            console.log(selectedIndex);
+            selectedCol = selectedIndex;
+            drawChart(list);
+        })
+        .selectAll('option')
+        .data(metrics)
+        .enter()
+        .append('option')
+        .text(function (d) {
+            return d;
+        });
 
 
     rowNestedNum = list[0].values.length;
 
-    rowNestedNum = getLength(legend[0]) - colNestedNum;
+    colHeaderLength = getLength(legend[0]) - colNestedNum;
     console.log(colNestedNum);
     console.log(legendArray);
+
+    d3.select('#legend-area')
+        .append('div')
+        .selectAll('div')
+        .data(legendArray)
+        .enter()
+        .append('div')
+        .style({
+            'margin': '5px',
+            'clear': 'left'
+        })
+        .selectAll('div')
+        .data(function (d) {
+            return [{
+                    'key': 'color',
+                    'value': d
+                },
+                {
+                    'key': 'text',
+                    'value': d
+                }];
+        })
+        .enter()
+        .append('div')
+        .style({
+            'height': '20px',
+            'margin': '5px',
+            'width': '30px',
+            'float': 'left',
+            'background-color': function (d, i) {
+                console.log(d);
+                console.log(d.key);
+
+                if (d.key != 'text') {
+                    console.log(d.key);
+                    console.log(d.value);
+                    return carrerColor[d.value];
+                }
+            }
+        })
+        .text(function (d) {
+            if (d.key == 'text') {
+                return d.value;
+            }
+        });
 
     // for(var i = 0; i < legend.length; i++) {
     //     console.log(legend);
@@ -163,8 +242,12 @@ function update(data) {
 }
 
 function drawChart(list) {
+    console.log(seriesArray[selectedCol]);
+    console.log(metrics[selectedRow]);
+
     var key = 'value';
     var total = list.length;
+    cfg.maxValue = 0;
 
     x.domain(list.map(function (d, i) {
         // console.log(d);
@@ -182,13 +265,14 @@ function drawChart(list) {
 
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-            console.log(i.values);
+            // console.log(i.values);
             if (i.values[selectedRow][getPositionX(num)] > 0) {
                 // console.log(getPositionY(selectedRow));
-                console.log(i.values[selectedRow][getPositionX(num)]);
-                return i.values[selectedRow][getPositionX(num)];
+                // console.log(i.values[selectedRow][getPositionX(num)]);
+                return parseInt(i.values[selectedRow][getPositionX(num)], 10);
             }
         }));
+        // console.log(cfg.maxValue);
     }
     
     chart.selectAll('g').remove();
@@ -224,7 +308,7 @@ function drawChart(list) {
             .attr("class", "line")
             .style("stroke", "grey")
             .style("stroke-opacity", "0.8")
-            .style("stroke-width", "3px")
+            .style("stroke-width", "1px")
             .attr("transform", "translate(" + (cfg.w/2-levelFactor) + ", " + (cfg.h/2-levelFactor) + ")");
     }
 
@@ -249,7 +333,7 @@ function drawChart(list) {
         })
         .attr("class", "line")
         .style("stroke", "gray")
-        .style("stroke-width", "2px");
+        .style("stroke-width", "1px");
 
     // 系列の名前を出力
     axis.append("text")
@@ -260,10 +344,10 @@ function drawChart(list) {
             return d.key;
         })
         .style("font-family", "sans-serif")
-        .style("font-size", "10px")
+        .style("font-size", "14px")
         .attr("text-anchor", "middle")
         .attr("dy", "1.5em")
-        .attr("transform", function(d, i){return "translate(0, 00)"})
+        .attr("transform", function(d, i){return "translate(-10, -10)"})
         .attr("x", function(d, i){
             return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);
         })
@@ -276,6 +360,8 @@ function drawChart(list) {
             var dataValues = [];
             g.selectAll(".nodes")
                 .data(z, function(j, i){
+                    // console.log(num, selectedRow, getPositionX(num), j.values[selectedRow][getPositionX(num)]);
+
                     var value = j.values[selectedRow][getPositionX(num)];
                     
                     dataValues.push([
