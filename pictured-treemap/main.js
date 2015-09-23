@@ -30,7 +30,8 @@ var LD = d3.select(root).append("div")
             .style("margin","30px auto")
             .attr("id", "main_chart_area")
             .append('ul')
-            .attr('class','list-inline');
+            .attr('class','list-inline')
+            .style('width','100%');
 
 function update(org) {
   div.selectAll('.node').remove();
@@ -56,10 +57,14 @@ function update(org) {
     .enter()
     .append('li')
     .attr('class','labels')
-    .style("width",labelWidth-20 + "px")
+    .style({
+      "width": labelWidth-10 + "px",
+      "min-width": "106px",
+      'float': "left"
+    })
     .append('a')
     .style({
-      "padding": "20px 0",
+      "text-align": "center",
       "color"  : "#999999",
       "font-size": "48px"
     })
