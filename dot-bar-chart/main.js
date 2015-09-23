@@ -1,7 +1,7 @@
 //# require=d3
 
 var dim = { width: root.clientWidth, height: root.clientHeight };
-var margin = { top: 10, bottom: 50, left: 50, right: 10 };
+var margin = { top: 10, bottom: 50, left: 50, right: 20 };
 var inputHeight = 20;
 var numberFormat = d3.format('.0f');
 dim.graphWidth = dim.width - margin.left - margin.right;
@@ -127,10 +127,10 @@ function update(data) {
     buttons.append('text')
       .text(function (d) { return d; })
       .attr('x', function (d) { return inputScale.rangeBand() / 2; })
-      .attr('y', 18)
+      .attr('y', 16)
       .style('fill', function (d, i) { return (i === 0) ? '#FFF' : '#000'; })
       .style('text-anchor', 'middle')
-      .style('font', inputHeight + 'px "Lucida Grande", Helvetica, Arial, sans-serif');
+      .style('font', (inputHeight - 4) + 'px "Lucida Grande", Helvetica, Arial, sans-serif');
 
     var summax = d3.max(labels.map(function (d) { return sums[d]; }));
     var displaydata = d3.range(summax).map(function (d) { return []; });
