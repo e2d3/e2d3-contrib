@@ -1,1 +1,1 @@
-Zoomable Treemap====In information visualization and computing, treemapping is a method for displaying hierarchical data by using nested rectangles.
+Pictured Treemap====This is treemap widh background image. Image is set in background If is "image" column exist at last of header low and url for image source in last col of rows.## Data Format| Element | Label1 | Label2 | ... | image(option)            ||---------|--------|--------|-----|--------------------------||   Name  | Data   | Data   | ... | Url(image source)(option)|
