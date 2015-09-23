@@ -4,9 +4,11 @@ var labels = [];
 var selected = "2011";
 var margin = { top: 20, right: 100, bottom: 20, left: 100 },
     width = root.clientWidth - margin.left - margin.right,
-    height = 350;
+    height = 350,
+    term,
+    isImg = false;
 
-var color = d3.scale.category20c();
+var color = d3.scale.category10();
 
 var treemap = d3.layout.treemap()
     .size([width, height])
@@ -35,12 +37,19 @@ function update(org) {
   div.selectAll('.labels').remove();
 
   var list = org.toList();
-  labels = org[0].slice(1,6);
+  var header = list.header;
+  term = header[0];
+  if(header[header.length - 1] == 'image'){
+    isImg = true;
+  }
+  if(isImg){
+    labels = header.slice(1, header.length - 2);
+  }else{
+    labels = header.slice(1, header.length - 1);
+  }
 
   var labelCount = labels.length;
   var labelWidth = width/labelCount;
-  console.log(labels);
-  console.log(labelWidth);
 
   LD.selectAll('li')
     .data(labels)
@@ -61,7 +70,7 @@ function update(org) {
         div.selectAll(".node")
         .data(treemap.nodes)
         .call(position)
-        .text(function(d) { return d['Term']; });
+        .text(function(d) { return d[term]; });
     });
 
   var data  = { children: list };
@@ -80,22 +89,30 @@ function position() {
     .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
     .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; })
     .style("background-color", function(d) {
-          return color(d['Term']);
+          return color(d[term]);
       })
       .style("background-image", function(d){
-        console.log(d.jpg)
-         return 'url("' + baseUrl + '/images/' + d['jpg'] + '")'
+        if(isImg && d['image']){
+          var rgx = /^(http|https):/;
+          var url = d['image'];
+          if(rgx.test(d['image'])){
+            return 'url("' + d['image'] + '")';
+          }else{
+            return 'url("' + baseUrl + '/images/' + d['image'] + '")';
+          }
+        }
+        return '';
       })
       .style("background-size", "cover")
       .style("background-position","center")
       .style("line-height", function(d){
         return d.dy + "px";
       })
-      .text(function(d) { return d['Term']; })
+      .text(function(d) { return d[term]; })
     .duration(1000);
 }
 function colorPick() {
-  var array = ["‪#‎F39E8E‬","‪#‎FBD2DA‬","‪#‎FDCC92‬","‪#‎F9E282‬","‪#‎C7E571‬","‪#‎9EE7D0‬","‪#‎C0E4E2‬","‪#‎A5E7ED‬","‪#‎A7C7ED‬","‪#‎D3D2FF‬"];
+  var array = ["‪#ff1493","‪#14ff3c","‪#1463ff","‪#ffd814","‪#ff1414","‪#999999","‪#b3ffbf","‪#cc66ff","‪#80eaff","‪#ff8080"];
   var num = 1;
 
   var a = array;
@@ -108,7 +125,6 @@ function colorPick() {
     --l;
     t[i] = t[l] || a[l];
   }
-  console.log(r[0] + '//')
   return r[0];
 }
 
