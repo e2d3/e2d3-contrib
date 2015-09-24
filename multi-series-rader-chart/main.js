@@ -1,8 +1,15 @@
 //# require=d3
-var margin = { top: 50, right: 30, bottom: 30, left: 100 };
+function iframeResize(){
+    var PageHight = document.body.scrollHeight + 0; // ページの高さを取得
+    window.parent.document.getElementById('disp').style.height = PageHight + 'px'; // iframeの高さを変更
+}
+window.onload = iframeResize;
+
+var margin = { top: 50, right: 30, bottom: 30, left: 50 };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
-var legendHeight = 20;
+var legendHeight = 44;
+var selectButtonWidth = 100;
 
 var x = d3.scale.ordinal()
   .rangeRoundBands([0, width], .1)
@@ -187,6 +194,12 @@ function update(data) {
 
     d3.select('#legend-area')
         .append('select')
+        .style('height', function () {
+            return legendHeight + 'px';
+        })
+        .style('width', function () {
+            return selectButtonWidth + 'px';
+        })
         .on('change', function () {
             var selectedIndex = d3.select(this).property('selectedIndex');
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
@@ -198,12 +211,24 @@ function update(data) {
         .data(seriesArray)
         .enter()
         .append('option')
+        .style('height', function () {
+            return legendHeight + 'px';
+        })
+        .style('width', function () {
+            return selectButtonWidth + 'px';
+        })
         .text(function (d) {
             return d;
         });
 
     d3.select('#legend-area')
         .append('select')
+        .style('height', function () {
+            return legendHeight + 'px';
+        })
+        .style('width', function () {
+            return selectButtonWidth + 'px';
+        })
         .on('change', function () {
             var selectedIndex = d3.select(this).property('selectedIndex');
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
@@ -215,6 +240,12 @@ function update(data) {
         .data(metrics)
         .enter()
         .append('option')
+        .style('height', function () {
+            return legendHeight + 'px';
+        })
+        .style('width', function () {
+            return selectButtonWidth + 'px';
+        })
         .text(function (d) {
             return d;
         });
@@ -223,6 +254,7 @@ function update(data) {
 
     d3.select('#legend-area')
         .append('div')
+        .style('position', 'absolute')
         .selectAll('div')
         .data(legendArray)
         .enter()
@@ -245,8 +277,9 @@ function update(data) {
         .enter()
         .append('div')
         .style({
-            'height': '20px',
-            'margin': '5px',
+            'font-size': '12px',
+            'height': '15px',
+            'margin': '2px',
             'width': '30px',
             'float': 'left',
             'background-color': function (d, i) {
@@ -463,5 +496,6 @@ function drawChart(list, selectedCol, selectedRow) {
                 .style("fill-opacity", cfg.opacityArea);
         });
     }
-
 }
+
+
