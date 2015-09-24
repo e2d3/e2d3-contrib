@@ -1,6 +1,6 @@
 //# require=d3
 
-var margin = { top: 30, right: 40, bottom: 20, left: 210 },
+var margin = { top: 40, right: 40, bottom: 40, left: 210 },
     width = root.clientWidth - margin.left - margin.right,
     height = root.clientHeight - margin.top - margin.bottom;
 
@@ -120,4 +120,3 @@ function update(data) {
     }));
   }
 }
-

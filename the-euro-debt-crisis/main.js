@@ -1,5 +1,5 @@
 // Chart dimensions.
-var w = root.clientWidth / 2,
+var w = root.clientWidth / 2 - 16,
     h = root.clientHeight,
     r1 = Math.min(w, h) / 2 - 4,
     r0 = r1 - 20,
