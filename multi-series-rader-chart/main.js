@@ -6,11 +6,10 @@ function iframeResize(){
 
 window.onload = iframeResize;
 
-
-var margin = { top: 50, right: 30, bottom: 30, left: 50 };
+var legendHeight = 30;
+var margin = { top: 30, right: 30, bottom: 30, left: 50 };
 var width = root.clientWidth - margin.left - margin.right;
-var height = root.clientHeight - margin.top - margin.bottom;
-var legendHeight = 44;
+var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
 var selectButtonWidth = 100;
 
 var x = d3.scale.ordinal()
@@ -31,7 +30,6 @@ var legendArea  = base.append("div")
         'height': function() {
             return legendHeight + 'px';
         },
-        'border': 'solid 1px #222',
         'text-align': 'left',
         'padding-left': '10px',
         'width': '100%'
@@ -39,7 +37,7 @@ var legendArea  = base.append("div")
 
 var chartArea = base.append('svg')
     .attr('width',  width)
-    .attr('height', root.clientHeight - margin.bottom - legendHeight)
+    .attr('height', root.clientHeight - margin.top - margin.bottom - legendHeight)
 
 var chart = chartArea.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
