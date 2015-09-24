@@ -103,6 +103,8 @@ function update(data) {
         var dataValues = [];
         g.selectAll(".nodes")
             .data(z, function(j, i){
+                console.log(j);
+                
                 dataValues.push([
                     cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
                     cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))

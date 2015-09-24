@@ -99,7 +99,7 @@ function getLength (array) {
     var count = 0;
     console.log(array);
     for (var i in array) {
-        // count++;
+        count++;
         // if (count > colHeaderLength) {
         //     legendArray.push(i);
         // }
@@ -174,7 +174,6 @@ function update(data) {
     console.log(list);
     list.splice(0, 1);
     console.log(list);
-
     list.reverse();
     // list = list.splice(0, 1);
     
@@ -499,5 +498,3 @@ function drawChart(list, selectedCol, selectedRow) {
         });
     }
 }
-
-
