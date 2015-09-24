@@ -3,7 +3,9 @@ function iframeResize(){
     var PageHight = document.body.scrollHeight + 0; // ページの高さを取得
     window.parent.document.getElementById('disp').style.height = PageHight + 'px'; // iframeの高さを変更
 }
+
 window.onload = iframeResize;
+
 
 var margin = { top: 50, right: 30, bottom: 30, left: 50 };
 var width = root.clientWidth - margin.left - margin.right;
