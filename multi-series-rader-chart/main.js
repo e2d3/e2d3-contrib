@@ -12,7 +12,7 @@ var legendHeight = 30;
 var margin = { top: 30, right: 30, bottom: 30, left: mleft };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
-var selectButtonWidth = parseInt((root.clientWidth / 2) * 0.8);
+var selectButtonWidth = parseInt((root.clientWidth / 2) * 0.9);
 
 var x = d3.scale.ordinal()
   .rangeRoundBands([0, width], .1)
@@ -330,19 +330,17 @@ function update(data) {
 }
 
 function drawChart(list, selectedCol, selectedRow) {
-    // console.log(selectedCol);
-    // console.log(selectedRow);
-    // console.log(getPositionX(num, selectedCol));
-    // console.log(seriesArray[selectedCol]);
-    // console.log(metrics[selectedRow]);
+    
     d3.select('#legendName').remove();
     d3.select(root).append('div')
         .attr('id', 'legendName')
         .style({
-            'margin-top': '-80px',
+            'margin-top': function () {
+                return (-1 * legendHeight) + 'px';
+            },
             'margin-left': function () {
                 // return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
-                return (root.clientWidth - 100) + 'px';
+                return (root.clientWidth - (d3.min([root.clientHeight, root.clientWidth]) * 0.35) ) + 'px';
             },
             'float': 'left'
         })
@@ -350,6 +348,11 @@ function drawChart(list, selectedCol, selectedRow) {
         .data(legendArray)
         .enter()
         .append('div')
+        .style({
+            'width': function () {
+                return (d3.min([root.clientHeight, root.clientWidth]) * 0.4) + 'px';
+            }
+        })
         .selectAll('div')
         .data(function (d) {
             return [{
@@ -367,8 +370,12 @@ function drawChart(list, selectedCol, selectedRow) {
             'font-size': '12px',
             'height': '15px',
             'margin': '2px',
-            'width': function () {
-                return (d3.min([root.clientHeight, root.clientWidth]) * 0.15) + 'px';
+            'width': function (d) {
+                if (d.key != 'text') {
+                    return (d3.min([root.clientHeight, root.clientWidth]) * 0.05) + 'px';
+                } else {
+                    return (d3.min([root.clientHeight, root.clientWidth]) * 0.3) + 'px';
+                }
             },
             'float': 'left',
             'background-color': function (d, i) {
@@ -482,8 +489,6 @@ function drawChart(list, selectedCol, selectedRow) {
     axis.append("text")
         .attr("class", "legend")
         .text(function(d){
-            // ここで系列の名前出力
-            // console.log(d);
             return d.key;
         })
         .style("font-family", "sans-serif")
