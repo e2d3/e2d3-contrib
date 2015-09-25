@@ -12,7 +12,7 @@ var legendHeight = 30;
 var margin = { top: 30, right: 30, bottom: 30, left: mleft };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
-var selectButtonWidth = 160;
+var selectButtonWidth = parseInt((root.clientWidth / 2) * 0.8);
 
 var x = d3.scale.ordinal()
   .rangeRoundBands([0, width], .1)
@@ -38,7 +38,7 @@ var legendArea  = base.append("div")
     });
 
 var chartArea = base.append('svg')
-    .attr('width',  width)
+    .attr('width',  root.clientWidth)
     .attr('height', root.clientHeight - margin.top - margin.bottom - legendHeight)
 
 var chart = chartArea.append('g')
