@@ -61,8 +61,8 @@ var carrerColor = {
 
 var cfg = {
     radius: 5,
-    w: d3.min([height, width]) * 0.6,
-    h: d3.min([height, width]) * 0.6,
+    w: d3.min([root.clientHeight, root.clientWidth]) * 0.6,
+    h: d3.min([root.clientHeight, root.clientWidth]) * 0.6,
     factor: 1,
     factorLegend: .85,
     levels: 3,
@@ -264,7 +264,7 @@ function update(data) {
         .style({
             'margin-top': '-60px',
             'margin-left': function () {
-                return (d3.min([height, width]) * 0.6) + 'px';
+                return (d3.min([root.clientHeight, root.clientWidth]) * 0.4) + 'px';
             },
             'float': 'left'
         })
@@ -341,7 +341,7 @@ function drawChart(list, selectedCol, selectedRow) {
         .style({
             'margin-top': '-60px',
             'margin-left': function () {
-                return (d3.min([height, width]) + mleft * 1.2) + 'px';
+                return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
             },
             'float': 'left'
         })
@@ -367,7 +367,7 @@ function drawChart(list, selectedCol, selectedRow) {
             'height': '15px',
             'margin': '2px',
             'width': function () {
-                return (d3.min([height, width]) * 0.15) + 'px';
+                return (d3.min([root.clientHeight, root.clientWidth]) * 0.15) + 'px';
             },
             'float': 'left',
             'background-color': function (d, i) {
