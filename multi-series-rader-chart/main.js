@@ -59,8 +59,8 @@ var carrerColor = {
 
 var cfg = {
     radius: 5,
-    w: 300,
-    h: 300,
+    w: d3.min([height, width]) * 0.6,
+    h: d3.min([height, width]) * 0.6,
     factor: 1,
     factorLegend: .85,
     levels: 3,
@@ -261,7 +261,9 @@ function update(data) {
         .attr('id', 'legendName')
         .style({
             'margin-top': '-60px',
-            'margin-left': '450px',
+            'margin-left': function () {
+                return (d3.min([height, width]) * 0.6) + 'px';
+            },
             'float': 'left'
         })
         .selectAll('div')
