@@ -339,9 +339,10 @@ function drawChart(list, selectedCol, selectedRow) {
     d3.select(root).append('div')
         .attr('id', 'legendName')
         .style({
-            'margin-top': '-60px',
+            'margin-top': '-80px',
             'margin-left': function () {
-                return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
+                // return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
+                return (root.clientWidth - 100) + 'px';
             },
             'float': 'left'
         })
