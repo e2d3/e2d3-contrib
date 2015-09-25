@@ -6,7 +6,7 @@ function iframeResize(){
 
 window.onload = iframeResize;
 
-var mleft = d3.min([root.clientWidth, root.clientHeight]) * 0.25;
+var mleft = d3.min([root.clientWidth, root.clientHeight]) * 0.20;
 
 var legendHeight = 30;
 var margin = { top: 30, right: 30, bottom: 30, left: mleft };
@@ -488,7 +488,7 @@ function drawChart(list, selectedCol, selectedRow) {
         })
         .style("font-family", "sans-serif")
         .style("font-size", function (d) {
-            return mleft * 0.12;
+            return mleft * 0.1;
         })
         .attr("text-anchor", "middle")
         .attr("dy", "1.5em")
