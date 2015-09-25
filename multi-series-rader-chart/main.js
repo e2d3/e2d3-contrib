@@ -7,10 +7,10 @@ function iframeResize(){
 window.onload = iframeResize;
 
 var legendHeight = 30;
-var margin = { top: 30, right: 30, bottom: 30, left: 50 };
+var margin = { top: 30, right: 30, bottom: 30, left: 60 };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
-var selectButtonWidth = 100;
+var selectButtonWidth = 160;
 
 var x = d3.scale.ordinal()
   .rangeRoundBands([0, width], .1)
@@ -251,17 +251,16 @@ function update(data) {
 
 
 
-    d3.select('#legend-area')
-        .append('div')
-        .style('position', 'absolute')
+    d3.select(root).append('div')
+        // .style('position', 'absolute')
+        .style({
+            'margin': '5px',
+            'float': 'right'
+        })
         .selectAll('div')
         .data(legendArray)
         .enter()
         .append('div')
-        .style({
-            'margin': '5px',
-            'clear': 'left'
-        })
         .selectAll('div')
         .data(function (d) {
             return [{
@@ -312,7 +311,8 @@ function update(data) {
         'height': '20px',
         'text-align': 'left',
         'padding-left': '10px',
-        'width': '100%'
+        'width': '100%',
+        'clear': 'right'
     })
     .text("Presented by gooスマホ部")
     .style("color", "gray");
