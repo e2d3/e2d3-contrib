@@ -6,8 +6,10 @@ function iframeResize(){
 
 window.onload = iframeResize;
 
+var mleft = d3.min([root.clientWidth, root.clientHeight]) * 0.25;
+
 var legendHeight = 30;
-var margin = { top: 30, right: 30, bottom: 30, left: 80 };
+var margin = { top: 30, right: 30, bottom: 30, left: mleft };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
 var selectButtonWidth = 160;
@@ -338,7 +340,9 @@ function drawChart(list, selectedCol, selectedRow) {
         .attr('id', 'legendName')
         .style({
             'margin-top': '-60px',
-            'margin-left': '450px',
+            'margin-left': function () {
+                return (d3.min([height, width]) + mleft * 1.2) + 'px';
+            },
             'float': 'left'
         })
         .selectAll('div')
@@ -362,7 +366,9 @@ function drawChart(list, selectedCol, selectedRow) {
             'font-size': '12px',
             'height': '15px',
             'margin': '2px',
-            'width': '50px',
+            'width': function () {
+                return (d3.min([height, width]) * 0.15) + 'px';
+            },
             'float': 'left',
             'background-color': function (d, i) {
                 console.log(d);
@@ -480,10 +486,12 @@ function drawChart(list, selectedCol, selectedRow) {
             return d.key;
         })
         .style("font-family", "sans-serif")
-        .style("font-size", "14px")
+        .style("font-size", function (d) {
+            return mleft * 0.12;
+        })
         .attr("text-anchor", "middle")
         .attr("dy", "1.5em")
-        .attr("transform", function(d, i){return "translate(-10, -10)"})
+        .attr("transform", function(d, i){return "translate("+ (mleft * 0.08 + -10) +", -10)"})
         .attr("x", function(d, i){
             return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);
         })
