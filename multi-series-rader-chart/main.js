@@ -258,6 +258,7 @@ function update(data) {
     console.log(d3.select('#mainGroup').style('width'));
 
     d3.select(root).append('div')
+        .attr('id', 'legendName')
         .style({
             'margin-top': '-60px',
             'margin-left': '450px',
@@ -330,6 +331,53 @@ function drawChart(list, selectedCol, selectedRow) {
     // console.log(getPositionX(num, selectedCol));
     // console.log(seriesArray[selectedCol]);
     // console.log(metrics[selectedRow]);
+    d3.select('#legendName').remove();
+    d3.select(root).append('div')
+        .attr('id', 'legendName')
+        .style({
+            'margin-top': '-60px',
+            'margin-left': '450px',
+            'float': 'left'
+        })
+        .selectAll('div')
+        .data(legendArray)
+        .enter()
+        .append('div')
+        .selectAll('div')
+        .data(function (d) {
+            return [{
+                    'key': 'color',
+                    'value': d
+                },
+                {
+                    'key': 'text',
+                    'value': d
+                }];
+        })
+        .enter()
+        .append('div')
+        .style({
+            'font-size': '12px',
+            'height': '15px',
+            'margin': '2px',
+            'width': '50px',
+            'float': 'left',
+            'background-color': function (d, i) {
+                console.log(d);
+                console.log(d.key);
+
+                if (d.key != 'text') {
+                    console.log(d.key);
+                    console.log(d.value);
+                    return carrerColor[d.value];
+                }
+            }
+        })
+        .text(function (d) {
+            if (d.key == 'text') {
+                return d.value;
+            }
+        });
 
     var key = 'value';
     var total = list.length;
