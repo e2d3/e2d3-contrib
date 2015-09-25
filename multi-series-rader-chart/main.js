@@ -7,7 +7,7 @@ function iframeResize(){
 window.onload = iframeResize;
 
 var legendHeight = 30;
-var margin = { top: 30, right: 30, bottom: 30, left: 60 };
+var margin = { top: 30, right: 30, bottom: 30, left: 80 };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
 var selectButtonWidth = 160;
@@ -40,6 +40,7 @@ var chartArea = base.append('svg')
     .attr('height', root.clientHeight - margin.top - margin.bottom - legendHeight)
 
 var chart = chartArea.append('g')
+    .attr('id', 'mainGroup')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 var color = d3.scale.ordinal()
@@ -251,11 +252,16 @@ function update(data) {
 
 
 
+    console.log(base.selectAll('g'));
+    console.log(base.selectAll('g')[0][0]);
+    console.log(base.selectAll('g')[0][0].style);
+    console.log(d3.select('#mainGroup').style('width'));
+
     d3.select(root).append('div')
-        // .style('position', 'absolute')
         .style({
-            'margin': '5px',
-            'float': 'right'
+            'margin-top': '-60px',
+            'margin-left': '450px',
+            'float': 'left'
         })
         .selectAll('div')
         .data(legendArray)
@@ -312,18 +318,18 @@ function update(data) {
         'text-align': 'left',
         'padding-left': '10px',
         'width': '100%',
-        'clear': 'right'
+        'clear': 'left'
     })
     .text("Presented by gooスマホ部")
     .style("color", "gray");
 }
 
 function drawChart(list, selectedCol, selectedRow) {
-    console.log(selectedCol);
-    console.log(selectedRow);
-    console.log(getPositionX(num, selectedCol));
-    console.log(seriesArray[selectedCol]);
-    console.log(metrics[selectedRow]);
+    // console.log(selectedCol);
+    // console.log(selectedRow);
+    // console.log(getPositionX(num, selectedCol));
+    // console.log(seriesArray[selectedCol]);
+    // console.log(metrics[selectedRow]);
 
     var key = 'value';
     var total = list.length;
@@ -343,16 +349,16 @@ function drawChart(list, selectedCol, selectedRow) {
     )]);
 
 
-    console.log(legendArray);
+    // console.log(legendArray);
 
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-            console.log(i.values[selectedRow][getPositionX(num, selectedCol)]);
+            // console.log(i.values[selectedRow][getPositionX(num, selectedCol)]);
             if (i.values[selectedRow][getPositionX(num, selectedCol)] > 0) {
                 return parseInt(i.values[selectedRow][getPositionX(num, selectedCol)], 10);
             }
         }));
-        console.log(cfg.maxValue);
+        // console.log(cfg.maxValue);
     }
     
     chart.selectAll('g').remove();
