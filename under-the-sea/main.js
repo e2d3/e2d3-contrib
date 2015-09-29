@@ -74,7 +74,7 @@ function draw(m, data) {
     });
 
     var yMin = d3.min(data, function(d) {
-        return d[metrics]
+        return parseInt(d[metrics])
     });
 
     var xMax = data.length;
