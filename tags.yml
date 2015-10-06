@@ -9,6 +9,7 @@ recommended:
   - les-miserables
   - map-projection-distortions
   - multi-series-line-chart
+  - parallel-coordinates
   - population-map-iran
   - radial-reingold-tilford-tree
   - scatterplot-matrix-brushing
