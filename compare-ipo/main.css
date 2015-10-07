@@ -71,8 +71,8 @@
 .selection-window {
   position: absolute;
 
-  right: 16px;
-  top: 0px;
+  right: 8px;
+  top: 8px;
 
   font: 12px sans-serif;
   background-color: #fff;
