@@ -15,6 +15,7 @@
 
 .detail-window {
   position: absolute;
+  display: none;
 
   font: 12px sans-serif;
   background-color: #fff;

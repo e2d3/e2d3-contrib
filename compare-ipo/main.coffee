@@ -65,8 +65,7 @@ showDetailWindow = (d) ->
 hideDetailWindow = (d) ->
   w = d3.select(root).select('.detail-window')
   w.style
-    left: '-1000px'
-    top: '-1000px'
+    display: 'none'
 
 detailHeading = (d) ->
   v = d[valueheaders[0]] / 1000000000
