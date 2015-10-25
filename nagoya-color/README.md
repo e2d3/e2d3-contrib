@@ -1,1 +1,1 @@
-Japan Color====Paint any data to Nagoya wards.
+Nagoya Color====Paint any data to Nagoya wards.
