@@ -17,9 +17,10 @@ function update(data) {
   d3.select(root).selectAll("*").remove();
 
   data = data.toList();
+  var key = data.header[0];
 
   var domainByTrait = {},
-      traits = d3.keys(data[0]).filter(function(d) { return d !== "species"; }),
+      traits = d3.keys(data[0]).filter(function(d) { return d !== key; }),
       n = traits.length;
 
   var size = (canvasSize - padding * 2) / n;
@@ -102,7 +103,7 @@ function update(data) {
         .attr("cx", function(d) { return x(d[p.x]); })
         .attr("cy", function(d) { return y(d[p.y]); })
         .attr("r", 3)
-        .style("fill", function(d) { return color(d.species); });
+        .style("fill", function(d) { return color(d[key]); });
   }
 
   var brushCell;
