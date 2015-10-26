@@ -36,9 +36,10 @@ function update(data) {
   var key = map.header[2];
   var values = map.values(key);
 
+  if (!env.colors()) env.colors(['#ffffff', '#ff0000']);
   var color = d3.scale.linear()
-    .domain([d3.min(values), d3.max(values)])
-    .range(['#ffffff', '#ff0000'])
+    .domain(env.colorsDomain(0, d3.max(values)))
+    .range(env.colors())
     .interpolate(d3.interpolateLab);
 
   if (svg.selectAll('.states').empty())
