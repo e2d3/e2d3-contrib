@@ -10,8 +10,6 @@ var x = d3.scale.ordinal()
 var y = d3.scale.linear()
   .rangeRound([height, 0])
 
-var color = d3.scale.category10();
-
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient('bottom');
@@ -30,6 +28,9 @@ function update(data) {
   var list = data.transpose().toList({header: ['name', 'age'], typed: true});
 
   var key = 'age';
+
+  if (!env.colors()) env.colors(d3.scale.category10().range());
+  var color = d3.scale.ordinal().range(env.colors());
 
   x.domain(list.map(function (d) { return d.name; }));
   y.domain([0, d3.max(list.values('age'))]);

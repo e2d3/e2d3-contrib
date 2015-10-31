@@ -2,11 +2,27 @@
 
 var main = d3.select(root)
         .append("svg");
+var strTitle;
+var strColumn00;
+var strColumn01;
+var strColumn02;
 
 function update(data) {
 
-    var sales_data = data;
+strTitle    = data[0][0];
+strColumn00 = data[1][0];
+strColumn01 = data[1][1];
+strColumn02 = data[1][2];
 
+
+var sales_data = new Array();
+for (var i=2 ; i<=data.length -1 ; i++){
+    var arrTemp = new Array();
+    arrTemp.push(eval("data[" + i + "][0]"));
+    arrTemp.push(eval("data[" + i + "][1]"));
+    arrTemp.push(eval("data[" + i + "][2]"));
+    sales_data.push(arrTemp);
+}
     var width = 780,
         height = 510,
         margin = {
@@ -22,7 +38,7 @@ function update(data) {
     var data = [{
         data: bP.partData(sales_data, 2),
         id: 'SalesAttempts',
-        header: ["通信属性", "時間帯", "小金井市トラ連DC"]
+        header: [strColumn00, strColumn01, strTitle]
     }, ];
 
     bP.draw(data, svg);
@@ -195,7 +211,7 @@ function update(data) {
 			h.append("text").text(header[d]).attr("x", (c1[d]+5))
 				.attr("y", -5).style("fill","grey");
 			
-			h.append("text").text("通信量(MByte)").attr("x", (c2[d]-25))
+			h.append("text").text(strColumn02).attr("x", (c2[d]-25))
 				.attr("y", -5).style("fill","grey");
 			
 			h.append("line").attr("x1",c1[d]-10).attr("y1", -2)

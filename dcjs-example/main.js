@@ -2,12 +2,12 @@
 
 'use strict';
 
-var margin = { top: 20, right: 30, bottom: 30, left: 40 };
-
 var monthNames =  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function update(data) {
   d3.select(root).selectAll('*').remove();
+
+  var margin = { top: 20, right: 30, bottom: 30, left: 40 };
 
   var list = data.toList({ typed: true });
 
@@ -149,7 +149,7 @@ function update(data) {
 
   // Default transition duration is 750ms
   // teke shot after 1sec
-  setTimeout(onready, 1000);
+  setTimeout(env.ready, 1000);
   return false;
 }
 

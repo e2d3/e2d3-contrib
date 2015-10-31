@@ -21,18 +21,35 @@ function update(data) {
   svg.selectAll('*').remove();
 
   var label = data[0],
-      data = data.toList();
+      data = data.toList(),
+      dimensions = [],
+      dragging = {};
 
-  var dimensions = [
+  for (e in label) {
+      if (dimensions.length == 0) {
+          dimensions.push(
+            {
+              name: String(label[e]),
+              scale: d3.scale.ordinal().rangePoints([0, height]),
+              type: String
+            }    
+          )
+      }else{
+          dimensions.push(
+              {
+                name: label[e],
+                scale: d3.scale.linear().range([height, 0]),
+                type: Number
+              }
+          )
+      }
+  }
+
+  var dimensionss = [
     {
-      name: label[4],
+      name: String(label[0]),
       scale: d3.scale.ordinal().rangePoints([0, height]),
       type: String
-    },
-    {
-      name: label[0],
-      scale: d3.scale.linear().range([height, 0]),
-      type: Number
     },
     {
       name: label[1],
@@ -46,6 +63,11 @@ function update(data) {
     },
     {
       name: label[3],
+      scale: d3.scale.linear().range([height, 0]),
+      type: Number
+    },
+    {
+      name: label[4],
       scale: d3.scale.linear().range([height, 0]),
       type: Number
     }
@@ -93,6 +115,7 @@ function update(data) {
   // Rebind the axis data to simplify mouseover.
   svg.select(".axis").selectAll("text:not(.title)")
       .attr("class", "label")
+      .attr("id", function(d) { return d.name || d; } )
       .data(data, function(d) { return d.name || d; });
 
   var projection = svg.selectAll(".axis text,.background path,.foreground path")
@@ -101,7 +124,9 @@ function update(data) {
 
   function mouseover(d) {
     svg.classed("active", true);
-    projection.classed("inactive", function(p) { return p !== d; });
+    projection.classed("inactive", function(p) { 
+      return p !== d && p != d[label[0]]; 
+    });
     projection.filter(function(p) { return p === d; }).each(moveToFront);
   }
 

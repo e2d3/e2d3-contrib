@@ -9,6 +9,7 @@ recommended:
   - les-miserables
   - map-projection-distortions
   - multi-series-line-chart
+  - parallel-coordinates
   - population-map-iran
   - radial-reingold-tilford-tree
   - scatterplot-matrix-brushing
@@ -16,6 +17,7 @@ recommended:
   - the-euro-debt-crisis
   - treemap
   - under-the-sea
+  - virtual-tokyomarathon
   - wordcloud
 example:
   - barchart-javascript

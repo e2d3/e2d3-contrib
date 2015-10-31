@@ -1,4 +1,4 @@
-## require=d3,e2d3model
+## require=d3
 
 unit = 'JPY'
 selected = null
@@ -65,8 +65,7 @@ showDetailWindow = (d) ->
 hideDetailWindow = (d) ->
   w = d3.select(root).select('.detail-window')
   w.style
-    left: '-1000px'
-    top: '-1000px'
+    display: 'none'
 
 detailHeading = (d) ->
   v = d[valueheaders[0]] / 1000000000
@@ -132,9 +131,7 @@ createDetailWindow()
 createSelectionWindow()
 
 update = (data) ->
-  data = new e2d3model.ChartDataTable(data.filter(
-    (d) -> d[3] != 'NULL' && d[4] != 'NULL' && d[5] != 'NULL'
-  ))
+  data = data.filter (d) -> d[3] != 'NULL' && d[4] != 'NULL' && d[5] != 'NULL'
 
   targets = data.toList
     typed: true
@@ -181,7 +178,7 @@ update = (data) ->
       .attr y: '6px', dy: '.71em', transform: 'rotate(-90)'
       .text("In billions of #{unit}")
   else
-    svg.select('.y').transition().duration(duration).ease(ease).call(setupYAxis).each('end', onready)
+    svg.select('.y').transition().duration(duration).ease(ease).call(setupYAxis).each('end', env.ready)
 
   plot = svg.selectAll('.target')
     .data(targets)

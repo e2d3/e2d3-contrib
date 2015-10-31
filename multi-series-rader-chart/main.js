@@ -6,11 +6,13 @@ function iframeResize(){
 
 window.onload = iframeResize;
 
+var mleft = d3.min([root.clientWidth, root.clientHeight]) * 0.20;
+
 var legendHeight = 30;
-var margin = { top: 30, right: 30, bottom: 30, left: 50 };
+var margin = { top: 30, right: 30, bottom: 30, left: mleft };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom - legendHeight;
-var selectButtonWidth = 100;
+var selectButtonWidth = parseInt((root.clientWidth / 2) * 0.9);
 
 var x = d3.scale.ordinal()
   .rangeRoundBands([0, width], .1)
@@ -36,10 +38,11 @@ var legendArea  = base.append("div")
     });
 
 var chartArea = base.append('svg')
-    .attr('width',  width)
+    .attr('width',  root.clientWidth)
     .attr('height', root.clientHeight - margin.top - margin.bottom - legendHeight)
 
 var chart = chartArea.append('g')
+    .attr('id', 'mainGroup')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 var color = d3.scale.ordinal()
@@ -58,8 +61,8 @@ var carrerColor = {
 
 var cfg = {
     radius: 5,
-    w: 300,
-    h: 300,
+    w: d3.min([root.clientHeight, root.clientWidth]) * 0.6,
+    h: d3.min([root.clientHeight, root.clientWidth]) * 0.6,
     factor: 1,
     factorLegend: .85,
     levels: 3,
@@ -251,17 +254,24 @@ function update(data) {
 
 
 
-    d3.select('#legend-area')
-        .append('div')
-        .style('position', 'absolute')
+    console.log(base.selectAll('g'));
+    console.log(base.selectAll('g')[0][0]);
+    console.log(base.selectAll('g')[0][0].style);
+    console.log(d3.select('#mainGroup').style('width'));
+
+    d3.select(root).append('div')
+        .attr('id', 'legendName')
+        .style({
+            'margin-top': '-60px',
+            'margin-left': function () {
+                return (d3.min([root.clientHeight, root.clientWidth]) * 0.4) + 'px';
+            },
+            'float': 'left'
+        })
         .selectAll('div')
         .data(legendArray)
         .enter()
         .append('div')
-        .style({
-            'margin': '5px',
-            'clear': 'left'
-        })
         .selectAll('div')
         .data(function (d) {
             return [{
@@ -312,18 +322,78 @@ function update(data) {
         'height': '20px',
         'text-align': 'left',
         'padding-left': '10px',
-        'width': '100%'
+        'width': '100%',
+        'clear': 'left'
     })
     .text("Presented by gooスマホ部")
     .style("color", "gray");
 }
 
 function drawChart(list, selectedCol, selectedRow) {
-    console.log(selectedCol);
-    console.log(selectedRow);
-    console.log(getPositionX(num, selectedCol));
-    console.log(seriesArray[selectedCol]);
-    console.log(metrics[selectedRow]);
+    
+    d3.select('#legendName').remove();
+    d3.select(root).append('div')
+        .attr('id', 'legendName')
+        .style({
+            'margin-top': function () {
+                return (-1 * legendHeight) + 'px';
+            },
+            'margin-left': function () {
+                // return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
+                return (root.clientWidth - (d3.min([root.clientHeight, root.clientWidth]) * 0.35) ) + 'px';
+            },
+            'float': 'left'
+        })
+        .selectAll('div')
+        .data(legendArray)
+        .enter()
+        .append('div')
+        .style({
+            'width': function () {
+                return (d3.min([root.clientHeight, root.clientWidth]) * 0.4) + 'px';
+            }
+        })
+        .selectAll('div')
+        .data(function (d) {
+            return [{
+                    'key': 'color',
+                    'value': d
+                },
+                {
+                    'key': 'text',
+                    'value': d
+                }];
+        })
+        .enter()
+        .append('div')
+        .style({
+            'font-size': '12px',
+            'height': '15px',
+            'margin': '2px',
+            'width': function (d) {
+                if (d.key != 'text') {
+                    return (d3.min([root.clientHeight, root.clientWidth]) * 0.05) + 'px';
+                } else {
+                    return (d3.min([root.clientHeight, root.clientWidth]) * 0.3) + 'px';
+                }
+            },
+            'float': 'left',
+            'background-color': function (d, i) {
+                console.log(d);
+                console.log(d.key);
+
+                if (d.key != 'text') {
+                    console.log(d.key);
+                    console.log(d.value);
+                    return carrerColor[d.value];
+                }
+            }
+        })
+        .text(function (d) {
+            if (d.key == 'text') {
+                return d.value;
+            }
+        });
 
     var key = 'value';
     var total = list.length;
@@ -343,16 +413,16 @@ function drawChart(list, selectedCol, selectedRow) {
     )]);
 
 
-    console.log(legendArray);
+    // console.log(legendArray);
 
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-            console.log(i.values[selectedRow][getPositionX(num, selectedCol)]);
+            // console.log(i.values[selectedRow][getPositionX(num, selectedCol)]);
             if (i.values[selectedRow][getPositionX(num, selectedCol)] > 0) {
                 return parseInt(i.values[selectedRow][getPositionX(num, selectedCol)], 10);
             }
         }));
-        console.log(cfg.maxValue);
+        // console.log(cfg.maxValue);
     }
     
     chart.selectAll('g').remove();
@@ -419,15 +489,15 @@ function drawChart(list, selectedCol, selectedRow) {
     axis.append("text")
         .attr("class", "legend")
         .text(function(d){
-            // ここで系列の名前出力
-            // console.log(d);
             return d.key;
         })
         .style("font-family", "sans-serif")
-        .style("font-size", "14px")
+        .style("font-size", function (d) {
+            return mleft * 0.1;
+        })
         .attr("text-anchor", "middle")
         .attr("dy", "1.5em")
-        .attr("transform", function(d, i){return "translate(-10, -10)"})
+        .attr("transform", function(d, i){return "translate("+ (mleft * 0.08 + -10) +", -10)"})
         .attr("x", function(d, i){
             return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);
         })
