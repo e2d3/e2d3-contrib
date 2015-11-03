@@ -28,6 +28,7 @@ var svg = d3.select(root).append('svg')
 
 function update(data) {
   var list = data.toList({typed: true});
+  var key = list.header[0];
 
   var matrix = data.slice(1).map(function (d) {
     return d.slice(1).map(parseFloat);
@@ -53,7 +54,7 @@ function update(data) {
         .attr('r', 3.5)
         .attr('cx', function(d) { return x(d.pc1); })
         .attr('cy', function(d) { return y(d.pc2); })
-        .style('fill', function(d) { return color(d.species); });
+        .style('fill', function(d) { return color(d[key]); });
   }
 
   var dots = svg.selectAll('.dot').data(list);
