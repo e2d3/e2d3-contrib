@@ -1,0 +1,23 @@
+.dot {
+  stroke: #000;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.legend text {
+  font: 12px sans-serif;
+}
+
+.legend rect {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
