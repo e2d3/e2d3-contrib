@@ -11,6 +11,7 @@ recommended:
   - multi-series-line-chart
   - parallel-coordinates
   - population-map-iran
+  - principal-component-analysis
   - radial-reingold-tilford-tree
   - scatterplot-matrix-brushing
   - sequences-sumburst
