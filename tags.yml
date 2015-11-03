@@ -12,6 +12,7 @@ recommended:
   - parallel-coordinates
   - population-map-iran
   - principal-component-analysis
+  - principal-component-analysis-text
   - radial-reingold-tilford-tree
   - scatterplot-matrix-brushing
   - sequences-sumburst
