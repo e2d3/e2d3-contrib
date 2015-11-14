@@ -1,0 +1,19 @@
+.axis text {
+  font: 10px sans-serif;
+}
+
+select {
+	-webkit-appearance: menulist-button;
+	font-size: 14px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}

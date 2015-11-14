@@ -1,0 +1,13 @@
+name: Simple bar chart
+description:
+tags:
+  - bar
+  - example
+homepage: https://github.com/e2d3/e2d3-contrib
+bugs: https://github.com/e2d3/e2d3-contrib/issues
+license: Apache-2.0
+contributors:
+  - Hideyuki TAKEUCHI <chimerast@gmail.com>
+repository: e2d3/e2d3-contrib
+capabilities:
+  colors: true
