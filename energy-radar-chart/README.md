@@ -1,10 +1,8 @@
-Multi Series Rader Chart
+Energy Rader Chart
 ====
 
-Multi Series Rader Chart
+Energy Series Rader Chart
 
-
-Data is presented by gooスマホ部
 
 ## Data Format
 
