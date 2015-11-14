@@ -1,4 +1,4 @@
-Japan Color2
+Anjo Color
 ====
 
 Color Mapping any data on Japan map. You can use any data about states of japan you have.

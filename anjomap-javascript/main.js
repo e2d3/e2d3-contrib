@@ -17,7 +17,8 @@ var path = d3.geo.path()
 svg.append('g')
   .attr('id', 'legend_group');
 
-d3.json('japan.topojson', function (error, json) {
+//d3.json('japan.topojson', function (error, json) {
+  d3.json('anjo.topojson', function (error, json) {
   svg.selectAll('.states')
     .data(topojson.feature(json, json.objects.japan).features)
   .enter().append('path')
