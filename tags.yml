@@ -3,7 +3,6 @@ recommended:
   - bubble-chart
   - chained-transitions
   - compare-ipo
-  - dcjs-example
   - dot-bar-chart
   - japan-color
   - les-miserables
@@ -12,13 +11,16 @@ recommended:
   - parallel-coordinates
   - population-map-iran
   - radial-reingold-tilford-tree
-  - scatterplot-matrix-brushing
   - sequences-sumburst
   - the-euro-debt-crisis
   - treemap
   - under-the-sea
-  - virtual-tokyomarathon
   - wordcloud
+statistics:
+  - scatterplot-matrix-brushing
+  - principal-component-analysis
+  - principal-component-analysis-text
+  - dcjs-example
 example:
   - barchart-javascript
   - bubblechart
@@ -27,6 +29,11 @@ example:
   - jthree-example
   - piechart-javascript
   - react-javascript
+marathon:
+  - virtual-tokyomarathon
+  - virtual-toyamamarathon1
+  - virtual-toyamamarathon2
+  - virtual-tsukubamarathon
 hackathon:
   - InfiniteElementMethod_E2D3-LIG_03
   - curry
