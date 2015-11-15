@@ -1,7 +1,7 @@
 Anjo Color
 ====
 
-Color Mapping any data on Japan map. You can use any data about states of japan you have.
+Color Mapping any data on Anjo map. You can use any data about City of Anjo you have.
 
 ## Data Format
 

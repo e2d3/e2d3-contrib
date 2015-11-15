@@ -129,8 +129,10 @@ var tooltipData = tooltipInfo.append('g')
   .attr('transform', 'translate(0,28)');
 
 var projection = d3.geo.mercator()
-  .center([136.95,35.15])
-  .scale(Math.min(width, height) * 150)
+//  .center([136.95,35.15])
+  .center([137.08,34.95])
+//  .scale(Math.min(width, height) * 150)
+  .scale(Math.min(width, height) * 360)
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -138,11 +140,13 @@ var path = d3.geo.path()
 
 var topo = {};
 
-var placeName = 'nagoya';
+//var placeName = 'nagoya';
+var placeName = 'anjo';
 
 var topoSelection = null;
 
-d3.json(baseUrl + "/nagoya.topojson", function(error, o) {
+//d3.json(baseUrl + "/nagoya.topojson", function(error, o) {
+d3.json(baseUrl + "/anjo.topojson", function(error, o) {  
   topoSelection = mapLayer.selectAll(".states")
     .data(topojson.feature(o, o.objects[placeName]).features)
     .enter().append("path")
