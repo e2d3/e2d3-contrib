@@ -8,6 +8,8 @@ function update(data) {
  * Created by yuuu on 14/12/22.
  */
 
+// replace nam_ja→MOJI
+
 console.log("Begin e2d3Show.");
 
 var width = root.clientWidth;
@@ -18,8 +20,10 @@ var svg = d3.select("#e2d3-chart-area").append("svg")
   .attr("height", height);
 
 var projection = d3.geo.mercator()
-  .center([136, 35])
-  .scale(Math.min(width, height) * 2.0)
+//.center([136, 35])
+//.scale(Math.min(width, height) * 2.0)
+  .center([137.08,34.95])
+  .scale(Math.min(width, height) * 350.0)
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -123,8 +127,8 @@ function show(data) {
           var isActive = (label != initLabel) ? '' : 'active';
 
           inner += '<dt class="' + isActive + '">' + label + '</dt><dd class="' + isActive + '">';
-          if (data[d.properties.nam_ja] && data[d.properties.nam_ja][label]) {
-            inner += data[d.properties.nam_ja][label];
+          if (data[d.properties.MOJI] && data[d.properties.MOJI][label]) {
+            inner += data[d.properties.MOJI][label];
             noValue = false;
           } else {
             inner += '0';
@@ -135,7 +139,7 @@ function show(data) {
           return tooltip
             .style("top", (d3.event.pageY - 10) + "px")
             .style("left", (d3.event.pageX + 10) + "px")
-            .html('<h4>' + d.properties.nam_ja + '</h4><dl class="dl-horizontal">' + inner);
+            .html('<h4>' + d.properties.MOJI + '</h4><dl class="dl-horizontal">' + inner);
         }
       })
       .on('mouseout', function() {
@@ -143,7 +147,7 @@ function show(data) {
       })
       .transition()
       .attr("fill", function(d) {
-        return (data[d.properties.nam_ja] && data[d.properties.nam_ja][initLabel] && !isNaN(+data[d.properties.nam_ja][initLabel])) ? color(data[d.properties.nam_ja][initLabel], values, selectedColor) : "#ffffff";
+        return (data[d.properties.MOJI] && data[d.properties.MOJI][initLabel] && !isNaN(+data[d.properties.MOJI][initLabel])) ? color(data[d.properties.MOJI][initLabel], values, selectedColor) : "#ffffff";
       });
 
     if (!hasActive) {
@@ -169,8 +173,8 @@ function show(data) {
             var isActive = (label != initLabel) ? '' : 'active';
 
             inner += '<dl class="dl-horizontal"><dt class="' + isActive + '">' + label + '</dt><dd class="' + isActive + '">';
-            if (data[d.properties.nam_ja] && data[d.properties.nam_ja][label]) {
-              inner += data[d.properties.nam_ja][label];
+            if (data[d.properties.MOJI] && data[d.properties.MOJI][label]) {
+              inner += data[d.properties.MOJI][label];
               noValue = false;
             } else {
               inner += '0';
@@ -181,7 +185,7 @@ function show(data) {
             return tooltip
               .style("top", (d3.event.pageY - 10) + "px")
               .style("left", (d3.event.pageX + 10) + "px")
-              .html('<h4>' + d.properties.nam_ja + '</h4><dl class="dl-horizontal">' + inner);
+              .html('<h4>' + d.properties.MOJI + '</h4><dl class="dl-horizontal">' + inner);
           }
         })
         .on('mouseout', function() {
@@ -189,7 +193,7 @@ function show(data) {
         })
         .transition()
         .attr("fill", function(d) {
-          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][initLabel] && !isNaN(+data[d.properties.nam_ja][initLabel])) ? color(data[d.properties.nam_ja][initLabel], values, selectedColor) : "#ffffff";
+          return (data[d.properties.MOJI] && data[d.properties.MOJI][initLabel] && !isNaN(+data[d.properties.MOJI][initLabel])) ? color(data[d.properties.MOJI][initLabel], values, selectedColor) : "#ffffff";
         });
     });
     //change color
@@ -204,7 +208,7 @@ function show(data) {
         .data(topojson.feature(topo, topo.objects.anjo).features)
         .transition()
         .attr("fill", function(d) {
-          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][initLabel] && !isNaN(+data[d.properties.nam_ja][initLabel])) ? color(data[d.properties.nam_ja][initLabel], values, selectedColor) : "#ffffff"
+          return (data[d.properties.MOJI] && data[d.properties.MOJI][initLabel] && !isNaN(+data[d.properties.MOJI][initLabel])) ? color(data[d.properties.MOJI][initLabel], values, selectedColor) : "#ffffff"
         });
     });
   }
