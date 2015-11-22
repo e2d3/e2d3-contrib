@@ -9,7 +9,7 @@ function update(data) {
  */
 
 // replace nam_ja→MOJI
-
+
 console.log("Begin e2d3Show.");
 
 var width = root.clientWidth;
@@ -53,7 +53,7 @@ $(colorButtons).append([buttonBrue, buttonRed, buttonMix]);
 $('#e2d3-chart-area').append(colorButtons);
 
 //d3.json(baseUrl + "/japan.topojson", function(error, o) {
-d3.json(baseUrl + "/anjo.topojson", function(error, o) {
+d3.json(baseUrl + "/151122_anjo.topojson", function(error, o) {
   svg.selectAll(".states")
 //  .data(topojson.feature(o, o.objects.japan).features)
     .data(topojson.feature(o, o.objects.anjo).features)
