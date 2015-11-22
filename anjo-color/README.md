@@ -1,1 +1,1 @@
-Anjo Color====Paint any data to Anjo City.
+Anjo Color====Color Mapping any data on Anjo map. You can use any data about Machi of Anjo you have.## Data Format| Machi  | Data Label1 | Data Label2 | ... ||--------|-------------|-------------|-----|| Machi  | Data        | Data        | ... |

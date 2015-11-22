@@ -1,4 +1,4 @@
-//# require=d3,jquery,topojson
+//# require=d3,topojson,colorbrewer
 
 function update(data) {
   show(data.toMap({ typed: true }));
@@ -6,57 +6,151 @@ function update(data) {
 
 /**
  * Created by yuuu on 14/12/22.
- */
+ * Edited by osoken on 15/10/21.
+*/
 
-// replace nam_ja→MOJI
-
-console.log("Begin e2d3Show.");
+//変更点はtyxでマーク
+
+!(function(d3,colorbrewer)
+{
+  var colormenu ={};
+  var dispatcher = d3.dispatch('change');
+  var flatCB = d3.entries(colorbrewer).map(function(d){return d3.entries(d.value).map(function(dd){return {name:d.key+': '+dd.key, parette:dd.value};});}).reduce(function(a,b){return a.concat(b);});
+  var selected = flatCB[0];
+  var selection, display, selector;
+
+  colormenu.open = function()
+  {
+    selector.transition().style('height', '320px');
+  }
+  colormenu.close = function()
+  {
+    selector.transition().style('height', '0px');
+  }
+  colormenu.init = function(root)
+  {
+    selection = root.append('div');
+    display = selection.append('ul');
+    selector = selection.append('ul');
+    display.attr('class','clearfix')
+      .on('click',function()
+      {
+        d3.event.stopPropagation();
+        colormenu.open();
+      }).selectAll('li')
+      .data(selected.parette)
+      .enter().append('li').style({'width':'16px','height':'16px','background-color':function(d){return d;},'float':'left','display':'block'});
+    selector.on('mouseout', function()
+      {
+        dispatcher.change(selected);
+      })
+      .style('height', '0px')
+      .style('overflow-x', 'hidden')
+      .style('overflow-y', 'scroll');
+    selector.selectAll('li').data(flatCB).enter().append('li')
+      .on('mouseover', function(d)
+      {
+        dispatcher.change(d);
+      })
+      .on('click',function(d){
+        d3.event.stopPropagation();
+        selected = d;
+        colormenu.close();
+        display.selectAll('li').remove();
+        display.selectAll('li')
+          .data(selected.parette)
+          .enter().append('li').style({'width':'16px','height':'16px','background-color':function(d){return d;},'float':'left','display':'block'});
+        dispatcher.change(selected);
+      })
+      .append('ul').attr('class','clearfix').selectAll('li').data(function(d){return d.parette;})
+      .enter().append('li').style({'width':'16px','height':'16px','background-color':function(d){return d;},'float':'left','display':'block'});
+  }
+  colormenu.parette = function()
+  {
+    return selected;
+  }
+  colormenu.nColor = function()
+  {
+    return selected.parette.length;
+  }
+  colormenu.on = function(event, listener)
+  {
+    return dispatcher.on(event, listener);
+  };
+  if (typeof define === "function" && define.amd) define(colormenu); else if (typeof module === "object" && module.exports) module.exports = colormenu;
+  this.colormenu = colormenu;
+}(d3,colorbrewer));
+
 
 var width = root.clientWidth;
 var height = root.clientHeight;
+
+d3.select('#e2d3-chart-area')
+  .on('click', function()
+  {
+    colormenu.close();
+  });
 
 var svg = d3.select("#e2d3-chart-area").append("svg")
   .attr("width", width)
   .attr("height", height);
 
+var mapLayer = svg.append('g');
+var infoLayer = svg.append('g');
+
+var attrMenu = d3.select('#e2d3-chart-area').append('div')
+  .attr('id', 'attrMenu')
+  .attr('class', 'menu clearfix');
+
+var attrList = attrMenu.append('ul').attr('class', 'vertical');
+
+var colorMenu = d3.select('#e2d3-chart-area').append('div')
+  .attr('id', 'colorMenu')
+  .attr('class', 'menu clearfix');
+
+colormenu.init(colorMenu);
+
+var tooltip = infoLayer.append('g')
+  .attr('transform','translate(100,100)')
+  .attr('opacity',1.0);
+
+var tooltipRect = tooltip.append('rect')
+  .attr('stroke-width',1)
+  .attr('stroke','rgba(255,255,255,0.75)')
+  .attr('fill','rgba(255,255,255,0.75)');
+
+var tooltipInfo = tooltip.append('g');
+
+var tooltipTitle = tooltipInfo.append('text')
+  .attr('id', 'tooltiptitle')
+  .attr('text-anchor','middle')
+  .style('font-family','Meiryo')
+  .attr('font-size', 24);
+
+var tooltipData = tooltipInfo.append('g')
+  .attr('transform', 'translate(0,28)');
+
 var projection = d3.geo.mercator()
-//.center([136, 35])
-//.scale(Math.min(width, height) * 2.0)
-  .center([137.08,34.95])
-  .scale(Math.min(width, height) * 350.0)
+//  .center([136.95,35.15])                 //tyx 
+//  .scale(Math.min(width, height) * 150)   //tyx
+  .center([137.08,34.95])                   //tyx
+  .scale(Math.min(width, height) * 350.0)   //tyx
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
   .projection(projection);
-var tooltip = d3.select("body")
-  .append("div")
-  .style("position", "absolute")
-  .style("visibility", "hidden")
-  .attr("class", "chart-tooltip");
 
 var topo = {};
-var colorButtons = $('<div>').attr('id', 'chart-color-selector');
-var buttonBrue = $('<button>').addClass('btn red chart-color-selector-button').attr({
-  'data-color-min': '#FEFFD1',
-  'data-color-max': '#FF0000'
-});
-var buttonRed = $('<button>').addClass('btn blue chart-color-selector-button').attr({
-  'data-color-min': '#C9FDFF',
-  'data-color-max': '#0000FF'
-});
-var buttonMix = $('<button>').addClass('btn multi chart-color-selector-button').attr({
-  'data-color-min': '#0000FF',
-  'data-color-max': '#FF0000'
-});
 
-$(colorButtons).append([buttonBrue, buttonRed, buttonMix]);
-$('#e2d3-chart-area').append(colorButtons);
+//var placeName = 'nagoya';                 //tyx
+var placeName ='151122_anjo';               //tyx
 
-//d3.json(baseUrl + "/japan.topojson", function(error, o) {
-d3.json(baseUrl + "/151122_anjo.topojson", function(error, o) {
-  svg.selectAll(".states")
-//  .data(topojson.feature(o, o.objects.japan).features)
-    .data(topojson.feature(o, o.objects.anjo).features)
+var topoSelection = null;
+
+//d3.json(baseUrl + "/nagoya.topojson", function(error, o) {                 //tyx
+d3.json(baseUrl + "/151122_anjo.topojson", function(error, o) {              //tyx
+  topoSelection = mapLayer.selectAll(".states")
+    .data(topojson.feature(o, o.objects[placeName]).features)
     .enter().append("path")
     .attr("stroke", "gray")
     .attr("stroke-width", "0.5")
@@ -71,184 +165,77 @@ d3.json(baseUrl + "/151122_anjo.topojson", function(error, o) {
   reload();
 });
 
-function show(data) {
-  console.log('show');
-  if (data && topo.objects) {
-    //max and slider labels
+function show(data)
+{
+  if (data && topo.objects)
+  {
     var labels = data.header;
-    var values = []; // all of data;
-    data.keys.forEach(function(i) {
-      labels.forEach(function(k) {
-        var v = data[i][k];
-        values.push(v)
-      });
+
+    topo.objects[placeName].geometries.forEach(function(d)
+    {
+      d.properties.data = {};
+//    d.properties.data = data[d.properties.ward] || {};  //tyx
+      d.properties.data = data[d.properties.MOJI] || {};  //tyx
     });
-    //slider
-    var initLabel = '';
-    var hasActive = false;
-    $('.chart-label').each(function() {
-      if ($(this).hasClass('active')) {
-        initLabel = $(this).attr('data-chart-label');
-        if ($.inArray(initLabel, labels) === -1) {
-          initLabel = '';
-        } else {
-          hasActive = true;
-        }
-      }
-    });
-    //color
-    var colorSelector = $('.chart-color-selector-button');
-    var selectedColor = '';
-    $(colorSelector).each(function() {
-      if ($(this).hasClass('active')) {
-        selectedColor = this;
-      }
-    });
-    if (!selectedColor) {
-      selectedColor = colorSelector[0];
-      $(colorSelector[0]).addClass('active');
-    }
-
-    console.log('hasActive : ' + hasActive);
-    if (!initLabel) {
-      initLabel = labels[0];
-    }
-
-    svg.selectAll(".states")
-//    .data(topojson.feature(topo, topo.objects.japan).features)
-	  .data(topojson.feature(topo, topo.objects.anjo).features)
-      .on('mouseover', function() {
-        return tooltip.style("visibility", "visible");
-      })
-      .on('mousemove', function(d) {
-        var inner = '';
-        var noValue = true;
-        labels.forEach(function(label, i) {
-          var isActive = (label != initLabel) ? '' : 'active';
-
-          inner += '<dt class="' + isActive + '">' + label + '</dt><dd class="' + isActive + '">';
-          if (data[d.properties.MOJI] && data[d.properties.MOJI][label]) {
-            inner += data[d.properties.MOJI][label];
-            noValue = false;
-          } else {
-            inner += '0';
-          }
-          inner += '</dd>';
-        })
-        if (!noValue) {
-          return tooltip
-            .style("top", (d3.event.pageY - 10) + "px")
-            .style("left", (d3.event.pageX + 10) + "px")
-            .html('<h4>' + d.properties.MOJI + '</h4><dl class="dl-horizontal">' + inner);
-        }
-      })
-      .on('mouseout', function() {
-        return tooltip.style("visibility", "hidden");
-      })
-      .transition()
-      .attr("fill", function(d) {
-        return (data[d.properties.MOJI] && data[d.properties.MOJI][initLabel] && !isNaN(+data[d.properties.MOJI][initLabel])) ? color(data[d.properties.MOJI][initLabel], values, selectedColor) : "#ffffff";
-      });
-
-    if (!hasActive) {
-      makeLabels(labels, initLabel);
-    }
-    //onchange label
-    $(document).on('click', '.chart-label', function() {
-      $('.chart-label').removeClass('active');
-      $(this).addClass('active');
-
-      initLabel = $(this).attr('data-chart-label');
-      console.log('label change : ' + initLabel);
-      svg.selectAll(".states")
-//      .data(topojson.feature(topo, topo.objects.japan).features)
-        .data(topojson.feature(topo, topo.objects.anjo).features)
-        .on('mouseover', function() {
-          return tooltip.style("visibility", "visible");
-        })
-        .on('mousemove', function(d) {
-          var inner = '';
-          var noValue = true;
-          labels.forEach(function(label, i) {
-            var isActive = (label != initLabel) ? '' : 'active';
-
-            inner += '<dl class="dl-horizontal"><dt class="' + isActive + '">' + label + '</dt><dd class="' + isActive + '">';
-            if (data[d.properties.MOJI] && data[d.properties.MOJI][label]) {
-              inner += data[d.properties.MOJI][label];
-              noValue = false;
-            } else {
-              inner += '0';
-            }
-            inner += '</dd>';
-          })
-          if (!noValue) {
-            return tooltip
-              .style("top", (d3.event.pageY - 10) + "px")
-              .style("left", (d3.event.pageX + 10) + "px")
-              .html('<h4>' + d.properties.MOJI + '</h4><dl class="dl-horizontal">' + inner);
-          }
-        })
-        .on('mouseout', function() {
-          return tooltip.style("visibility", "hidden");
-        })
+    var discretizer = d3.scale.quantize().range(d3.range(colormenu.nColor()));
+    var attr = labels[0];
+    var refill = function(label,parette)
+    {
+      discretizer.range(d3.range(parette.length))
+        .domain(d3.extent(topo.objects[placeName].geometries, function(d){return d.properties.data[label];}));
+      mapLayer.selectAll('path')
         .transition()
-        .attr("fill", function(d) {
-          return (data[d.properties.MOJI] && data[d.properties.MOJI][initLabel] && !isNaN(+data[d.properties.MOJI][initLabel])) ? color(data[d.properties.MOJI][initLabel], values, selectedColor) : "#ffffff";
-        });
-    });
-    //change color
-    $(document).on('click', '.chart-color-selector-button', function() {
-      $('.chart-color-selector-button').removeClass('active');
-      $(this).addClass('active');
-      console.log('color change : ');
-      selectedColor = this;
-
-      svg.selectAll(".states")
-//      .data(topojson.feature(topo, topo.objects.japan).features)
-        .data(topojson.feature(topo, topo.objects.anjo).features)
-        .transition()
-        .attr("fill", function(d) {
-          return (data[d.properties.MOJI] && data[d.properties.MOJI][initLabel] && !isNaN(+data[d.properties.MOJI][initLabel])) ? color(data[d.properties.MOJI][initLabel], values, selectedColor) : "#ffffff"
-        });
-    });
-  }
-}
-
-function makeLabels(labels, value) {
-  $('#chart-labels').remove();
-  var box = $('<div>').attr('id', 'chart-labels');
-  $(labels).each(function() {
-    var label = $('<label>').addClass('chart-label').attr('data-chart-label', this).html(this);
-    if (value == this) {
-      $(label).addClass('active');
+        .attr('fill', function(d){return parette[discretizer(d.properties.data[attr])]});
     }
-    $(box).append(label);
-  });
-
-  if (labels) {
-    $('#e2d3-chart-area').append(box).hide().fadeIn();
+    attrList.selectAll('li').remove();
+    attrList.selectAll('li').data(labels).enter().append('li')
+        .append('a')
+        .attr('class', 'label-selector')
+        .style('background-color', function(d){return (attr==d)?'#000':'none';})
+        .attr('href', '#')
+        .text(function(d){return d;})
+        .on('click', function(d)
+        {
+          d3.event.preventDefault();
+          d3.selectAll('a.label-selector').style('background-color', '#FFF');
+          d3.select(this).style('background-color', '#000');
+          attr = d;
+          refill(d, colormenu.parette().parette);
+        });
+    topoSelection.on('mouseover', function(d)
+    {
+      tooltip.style('display','block');
+      tooltip.attr('transform','translate('+d3.event.pageX+','+(d3.event.pageY+40)+')');
+//    tooltipTitle.text(d.properties.prefecture+d.properties.city+d.properties.ward);   //tyx
+      tooltipTitle.text(d.properties.MOJI);                                             //tyx
+      tooltipData.selectAll('text').remove();
+      tooltipData.selectAll('text')
+        .data(d3.entries(d.properties.data))
+        .enter().append('text')
+        .text(function(d){return d.key+': '+d.value;})
+        .style('font-family','Meiryo')
+        .attr('font-size', 16)
+        .attr('y', function(d,i){return i*20;})
+        .attr('text-anchor','middle');
+      tooltipRect.attr(tooltipInfo.node().getBBox());
+      tooltip.attr('opacity', 1.0);
+    })
+    .on('mousemove', function(d)
+    {
+      tooltip.attr('transform','translate('+d3.event.pageX+','+(d3.event.pageY+40)+')');
+    })
+    .on('mouseout', function(d)
+    {
+      tooltip.attr('opacity', 0.0);
+      tooltip.style('display','none');
+    });
+    if (labels.length > 0)
+    {
+      refill(attr, colormenu.parette().parette);
+    }
+    colormenu.on('change', function(parette)
+    {
+      refill(attr, parette.parette);
+    });
   }
-}
-
-function color(d, values, selector) {
-  if (!selector) {
-    var colorSelector = $('.chart-color-selector-button');
-    selector = colorSelector[0];
-  }
-  var min = d3.min(values);
-  var max = d3.max(values);
-  var c;
-  if (!$(selector).hasClass('multi')) {
-    c = d3.scale.linear()
-      .domain([min, max])
-      .range([$(selector).attr('data-color-min'), $(selector).attr('data-color-max')])
-      .interpolate(d3.interpolateLab);
-  } else {
-    c = d3.scale.linear()
-      .domain([min, Math.floor((max - min) * 0.5), max])
-      .range([$(selector).attr('data-color-min'), '#FEFCEA', $(selector).attr('data-color-max')])
-      .interpolate(d3.interpolateLab);
-  }
-
-  return c(d);
 }
