@@ -7,9 +7,9 @@ function update(data) {
 /**
  * Created by yuuu on 14/12/22.
  * Edited by osoken on 15/10/21.
+ * Nagoya Colorを流用して作成 15/11/23 by yuzen tsuzuki(tyx)
+ *                                    変更点は"tyx"でマーク
 */
-
-//変更点はtyxでマーク
 
 !(function(d3,colorbrewer)
 {

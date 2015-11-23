@@ -1,1 +1,1 @@
-Anjo Color====Color Mapping any data on Anjo map. You can use any data about Machi of Anjo you have.## Data Format| Machi  | Data Label1 | Data Label2 | ... ||--------|-------------|-------------|-----|| Machi  | Data        | Data        | ... |
+Anjo Color====Color Mapping any data on Anjo map. You can use any data about Machi of Anjo you have.サンプルデータは「安城市世帯及び人口表（H27.10.31現在）」より## Data Format| Machi  | Data Label1 | Data Label2 | ... ||--------|-------------|-------------|-----|| Machi  | Data        | Data        | ... |
