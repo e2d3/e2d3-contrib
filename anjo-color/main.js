@@ -207,7 +207,7 @@ function show(data)
       tooltip.style('display','block');
       tooltip.attr('transform','translate('+d3.event.pageX+','+(d3.event.pageY+40)+')');
 //    tooltipTitle.text(d.properties.prefecture+d.properties.city+d.properties.ward);   //tyx
-      tooltipTitle.text(d.properties.MOJI);                                             //tyx
+      tooltipTitle.text(d.properties.GST_NAME +' '+ d.properties.MOJI);					//tyx
       tooltipData.selectAll('text').remove();
       tooltipData.selectAll('text')
         .data(d3.entries(d.properties.data))
