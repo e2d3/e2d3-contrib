@@ -94,6 +94,7 @@ var svg = d3.select("#e2d3-chart-area").append("svg")
   .attr("height", height);
 
 var mapLayer = svg.append('g');
+var riverLayer = svg.append('g');
 var infoLayer = svg.append('g');
 
 var attrMenu = d3.select('#e2d3-chart-area').append('div')
@@ -158,9 +159,10 @@ d3.json(baseUrl + "/takahashiriver.topojson", function(error, o) {
   d3.json(baseUrl + "/river.topojson", function(error, oo)
   {
     console.log(topojson.feature(oo, oo.objects['river']).features);
-    mapLayer.selectAll('.river')
+    riverLayer.selectAll('.river')
       .data(topojson.feature(oo, oo.objects['river']).features)
       .enter().append('path')
+      .attr('class','river')
       .attr("stroke", "gray")
       .attr("stroke-width", "2.5")
       .attr('fill', 'none')
@@ -203,7 +205,7 @@ function show(data)
     {
       discretizer.range(d3.range(parette.length))
         .domain(d3.extent(topo.objects[placeName].geometries, function(d){return d.properties.data[label];}));
-      mapLayer.selectAll('path')
+      mapLayer.selectAll('path.states')
         .transition()
         .attr('fill', function(d){return parette[discretizer(d.properties.data[attr])]});
     }
