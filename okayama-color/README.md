@@ -1,0 +1,1 @@
+Okayama Color====topojsonデータについて出典：国土数値情報（http://nlftp.mlit.go.jp/）（世界測地系緯度経度・Shape形式）を加工して作成csvデータについて出典：政府統計の総合窓口(e-Stat)（http://www.e-stat.go.jp/）　　「平成２２年国勢調査」（総務省）　　都道府県・市区町村別主要統計表（平成22年）
