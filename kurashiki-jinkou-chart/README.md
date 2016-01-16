@@ -1,1 +1,1 @@
-倉敷市推定人口chart====The motional bar chart which is made with dots.
+倉敷市推定人口chart====倉敷市の推定人口（単位：ドット/100人）
