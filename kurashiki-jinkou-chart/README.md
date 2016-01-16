@@ -1,0 +1,1 @@
+倉敷市推定人口chart====The motional bar chart which is made with dots.
