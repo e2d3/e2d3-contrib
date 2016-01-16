@@ -1,1 +1,0 @@
-Japan Color====Paint any data to japanese states.
