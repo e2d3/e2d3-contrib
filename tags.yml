@@ -31,6 +31,9 @@ example:
   - react-javascript
 marathon:
   - virtual-tokyomarathon
+  - virtual-koganeinewyear-roadrace
+  - virtual-frostbite-halfmarathon
+  - virtual-katsuta-marathon
   - virtual-toyamamarathon1
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
