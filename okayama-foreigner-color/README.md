@@ -1,1 +1,0 @@
-Okayama Foreigner Color====岡山県各市の在住外国人の状況。
