@@ -134,8 +134,8 @@ var tooltipData = tooltipInfo.append('g')
 var projection = d3.geo.mercator()
 //  .center([136.95,35.15])                 //tyx 
 //  .scale(Math.min(width, height) * 150)   //tyx
-  .center([137.29,35.05])                   //tyx
-  .scale(Math.min(width, height) * 85.0)    //tyx
+  .center([137.29,34.97])                   //tyx
+  .scale(Math.min(width, height) * 65.0)    //tyx
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -144,12 +144,12 @@ var path = d3.geo.path()
 var topo = {};
 
 //var placeName = 'nagoya';                 //tyx
-var placeName ='tyo_anj_oka_kar_chi_tak_hek_nis_miy_kou'	//tyx
+var placeName ='newnisimikawa'	//tyx
 
 var topoSelection = null;
 
 //d3.json(baseUrl + "/nagoya.topojson", function(error, o) {                 //tyx
-  d3.json(baseUrl + "/tyo_anj_oka_kar_chi_tak_hek_nis_miy_kou.topojson", function(error, o) {  //tyx
+  d3.json(baseUrl + "/newnisimikawa.topojson", function(error, o) {  //tyx
   topoSelection = mapLayer.selectAll(".states")
     .data(topojson.feature(o, o.objects[placeName]).features)
     .enter().append("path")
