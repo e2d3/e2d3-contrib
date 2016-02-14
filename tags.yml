@@ -1,6 +1,5 @@
 recommended:
   - bipartite-graph-simple
-  - bubble-chart
   - chained-transitions
   - compare-ipo
   - dot-bar-chart
@@ -47,3 +46,5 @@ hackathon:
   - plain-barchart-javascript
   - suimin-checker
   - wanamin
+tbd:
+  - bubble-chart
