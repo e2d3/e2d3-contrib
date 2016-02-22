@@ -45,6 +45,6 @@ hackathon:
   - piechart2-javascript
   - plain-barchart-javascript
   - suimin-checker
-  - wanamin
-tbd:
   - bubble-chart
+tbd:
+  - wanamin
