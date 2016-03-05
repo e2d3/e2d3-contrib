@@ -7,7 +7,7 @@ function update(data) {
 /**
  * Created by yuuu on 14/12/22.
  * Edited by osoken on 15/10/21.
- * Nagoya Colorを流用して作成 15/12/23 by yuzen tsuzuki(tyx)
+ * Nagoya Colorを流用して作成 16/01/25 by yuzen tsuzuki(tyx)
  *                                    変更点は"tyx"でマーク
 */
 
@@ -134,8 +134,8 @@ var tooltipData = tooltipInfo.append('g')
 var projection = d3.geo.mercator()
 //  .center([136.95,35.15])                 //tyx 
 //  .scale(Math.min(width, height) * 150)   //tyx
-  .center([137.29,34.97])                   //tyx
-  .scale(Math.min(width, height) * 65.0)    //tyx
+  .center([137.25,34.90])                   //tyx
+  .scale(Math.min(width, height) * 42.0)    //tyx
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -144,12 +144,12 @@ var path = d3.geo.path()
 var topo = {};
 
 //var placeName = 'nagoya';                 //tyx
-var placeName ='newnisimikawa'	//tyx
+var placeName ='aichi'						//tyx
 
 var topoSelection = null;
 
-//d3.json(baseUrl + "/nagoya.topojson", function(error, o) {                 //tyx
-  d3.json(baseUrl + "/newnisimikawa.topojson", function(error, o) {  //tyx
+//d3.json(baseUrl + "/nagoya.topojson", function(error, o) { //tyx
+  d3.json(baseUrl + "/aichi.topojson", function(error, o) {  //tyx
   topoSelection = mapLayer.selectAll(".states")
     .data(topojson.feature(o, o.objects[placeName]).features)
     .enter().append("path")
@@ -175,8 +175,8 @@ function show(data)
     topo.objects[placeName].geometries.forEach(function(d)
     {
       d.properties.data = {};
-//    d.properties.data = data[d.properties.ward] || {};  //tyx
-      d.properties.data = data[d.properties.GST_NAME] || {};  //tyx
+//    d.properties.data = data[d.properties.ward] || {};		//tyx
+      d.properties.data = data[d.properties.GST_NAME] || {};    //tyx
     });
     var discretizer = d3.scale.quantize().range(d3.range(colormenu.nColor()));
     var attr = labels[0];
@@ -208,7 +208,7 @@ function show(data)
       tooltip.style('display','block');
       tooltip.attr('transform','translate('+d3.event.pageX+','+(d3.event.pageY+40)+')');
 //    tooltipTitle.text(d.properties.prefecture+d.properties.city+d.properties.ward);   //tyx
-      tooltipTitle.text(d.properties.GST_NAME);	//tyx
+      tooltipTitle.text(d.properties.GST_NAME);											//tyx
       tooltipData.selectAll('text').remove();
       tooltipData.selectAll('text')
         .data(d3.entries(d.properties.data))
