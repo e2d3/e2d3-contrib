@@ -28,6 +28,8 @@ example:
   - jthree-example
   - piechart-javascript
   - react-javascript
+map:
+  - japan-color
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
