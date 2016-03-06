@@ -37,6 +37,7 @@ map:
   - nishimikawa-color
   - okayama-color
   - takahashigawa-color
+  - tokyomap-koganei
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -59,6 +60,9 @@ hackathon:
   - goal-tree
   - kurashiki-jinkou-chart
   - kurashiki-landmark-chart
+  - okayama-foreigner-chart
+  - text-chart
 tbd:
   - wanamin
   - bipartite-graph-simple
+  - topic-model
