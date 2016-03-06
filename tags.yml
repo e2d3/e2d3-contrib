@@ -30,6 +30,13 @@ example:
   - wordcloud
 map:
   - japan-color
+  - aichi-color
+  - anjo-color
+  - hiroshima-color
+  - nagoya-color
+  - nishimikawa-color
+  - okayama-color
+  - takahashigawa-color
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -48,6 +55,10 @@ hackathon:
   - plain-barchart-javascript
   - suimin-checker
   - bubble-chart
+  - takahashigawa-gesui
+  - goal-tree
+  - kurashiki-jinkou-chart
+  - kurashiki-landmark-chart
 tbd:
   - wanamin
   - bipartite-graph-simple
