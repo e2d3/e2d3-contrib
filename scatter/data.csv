@@ -1,4 +1,4 @@
-X,No1:exp(-x)sin(2*pi*1*x),No2:sin(2*pi*1*x)/x,No3:sin(2*pi*1*x)+cos(2*pi*1*x),300
+﻿X,No1:exp(-x)sin(2*pi*1*x),No2:sin(2*pi*1*x)/x,No3:sin(2*pi*1*x)+cos(2*pi*1*x),300
 Y,black,green,red,50
 0,0,0,10,
 0.1,53.16168894,58.75275257,13.96731707,

@@ -1,50 +1,40 @@
-//# require=d3
+ï»¿//# require=d3
 
-//	var svgEle = document.getElementById("myGraph");
+
 	var svgWidth = root.clientWidth;
 	var svgHeight = root.clientHeight;
-        var yohakuY =20;        //ƒOƒ‰ƒtã•”‚Ì—]”’‚Ì‚±‚Æ
- 	var offsetX = 55;	// XÀ•W‚ÌƒIƒtƒZƒbƒg
-        var offsetX1 = 10;      //@ƒOƒ‰ƒt‰E’[—]”’
-	var offsetY =45;	// YÀ•W‚ÌƒIƒtƒZƒbƒg
-        var yAxisHeight=svgHeight-offsetY-yohakuY;   //‰¡²‚Ì”ÍˆÍ
-        var xAxisWidth=svgWidth-offsetX-offsetX1;     //c²‚Ì”ÍˆÍ
+        var yohakuY =20;        //ã‚°ãƒ©ãƒ•ä¸Šéƒ¨ã®ä½™ç™½ã®ã“ã¨
+ 	var offsetX = 55;	// Xåº§æ¨™ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+        var offsetX1 = 10;      //ã€€ã‚°ãƒ©ãƒ•å³ç«¯ä½™ç™½
+	var offsetY =45;	// Yåº§æ¨™ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+        var yAxisHeight=svgHeight-offsetY-yohakuY;   //æ¨ªè»¸ã®ç¯„å›²
+        var xAxisWidth=svgWidth-offsetX-offsetX1;     //ç¸¦è»¸ã®ç¯„å›²
 	var svgElement = d3.select(root).append('svg')
                                         .attr('width', root.clientWidth)
                                         .attr('height', root.clientHeight);
 
 
-// #############################################
-
-
-
-d3.text("data.csv", function(error, text) {
-	var data = d3.csv.parseRows(text);  //CSVƒtƒ@ƒCƒ‹ƒf[ƒ^‚Ì“Ç‚İ‚İ
-	var dataSet=[];  //”z—ñdataset‚ğ’è‹`
-	var dSet=[];  //”z—ñdSet‚ğ’è‹`
+function update(data) {
+	var dataSet=[];  //é…åˆ—datasetã‚’å®šç¾©
+	var dSet=[];  //é…åˆ—dSetã‚’å®šç¾©
 	var dSetL=[];
-        var hanrei_X=200;       //–}—á‚ÌXˆÊ’u
-        var hanrei_Y=200;       //–}—á‚ÌYˆÊ’u
+        var hanrei_X=200;       //å‡¡ä¾‹ã®Xä½ç½®
+        var hanrei_Y=200;       //å‡¡ä¾‹ã®Yä½ç½®
         var k=0;
-
-
-
-
         var circleElements=[];
 
-
       // ####################################################
-      // csvƒf[ƒ^‚Ìs”‚Æ—ñ”‚ğ“Ç‚İ‚Ş
+      // csvãƒ‡ãƒ¼ã‚¿ã®è¡Œæ•°ã¨åˆ—æ•°ã‚’èª­ã¿è¾¼ã‚€
       // ####################################################
 
 
-	var nagasa=data.length;    //s”(data‚Ì”z—ñ[‚³)
-        var youso=data[0].length;  //—ñ”
+	var nagasa=data.length;    //è¡Œæ•°(dataã®é…åˆ—æ·±ã•)
+        var youso=data[0].length;  //åˆ—æ•°
 
         console.log(youso);
 
        // ####################################################
-      // 1‚ÌˆÊ‚ÅØ‚èÌ‚Ä‚ğs‚¤ŠÖ”
+      // 1ã®ä½ã§åˆ‡ã‚Šæ¨ã¦ã‚’è¡Œã†é–¢æ•°
       // ####################################################
 
 	function kirishute(num){
@@ -53,9 +43,8 @@ d3.text("data.csv", function(error, text) {
 		};
 
 
-
        // ####################################################
-      // 1‚ÌˆÊ‚ÅØ‚èÌ‚Ä‚ğs‚¤ŠÖ”
+      // 1ã®ä½ã§åˆ‡ã‚Šæ¨ã¦ã‚’è¡Œã†é–¢æ•°
       // ####################################################
 
  	function kiriage(num){
@@ -67,30 +56,25 @@ d3.text("data.csv", function(error, text) {
 
 
       // ####################################################
-      // Œn—ñ–¼AƒOƒ‰ƒt‚ÌFA–}—á‚ÌˆÊ’uAX,Y²‚Ìƒ‰ƒxƒ‹ ‚Ìİ’è’l‚ğæ“¾
+      // ç³»åˆ—åã€ã‚°ãƒ©ãƒ•ã®è‰²ã€å‡¡ä¾‹ã®ä½ç½®ã€X,Yè»¸ã®ãƒ©ãƒ™ãƒ« ã®è¨­å®šå€¤ã‚’å–å¾—
       // ####################################################
 
 	var label1=[];   
-	label1=data[0];  //ƒwƒbƒ_[Ši”[ 
+	label1=data[0];  //ãƒ˜ãƒƒãƒ€ãƒ¼æ ¼ç´ 
 
 	var iro=[];    
-        iro=data[1]; //ƒOƒ‰ƒt‚ÌüFİ’è‚ğæ“¾
+        iro=data[1]; //ã‚°ãƒ©ãƒ•ã®ç·šè‰²è¨­å®šã‚’å–å¾—
                     
-	var xlab=data[0][0];       //X²@ƒ‰ƒxƒ‹–¼
-	var ylab=data[1][0];       //Y²@ƒ‰ƒxƒ‹–¼
+	var xlab=data[0][0];       //Xè»¸ã€€ãƒ©ãƒ™ãƒ«å
+	var ylab=data[1][0];       //Yè»¸ã€€ãƒ©ãƒ™ãƒ«å
 
  
-        var hanrei_X=data[0][youso-1]*1;       //–}—á‚ÌXˆÊ’u
-        var hanrei_Y=data[1][youso-1]*1;       //–}—á‚ÌYˆÊ’u
+        var hanrei_X=data[0][youso-1]*1;       //å‡¡ä¾‹ã®Xä½ç½®
+        var hanrei_Y=data[1][youso-1]*1;       //å‡¡ä¾‹ã®Yä½ç½®
 
      
-
-
-
-
-
       // ####################################################
-      // Œn—ñ–¼AFî•ñ‚ğÈ‚«A”’lƒf[ƒ^‚Ì‚İ‚ğdataSet‚ÉŠi”[‚·‚é
+      // ç³»åˆ—åã€è‰²æƒ…å ±ã‚’çœãã€æ•°å€¤ãƒ‡ãƒ¼ã‚¿ã®ã¿ã‚’dataSetã«æ ¼ç´ã™ã‚‹
       // ####################################################
 
 	for(i=2;i<nagasa;i++){
@@ -100,7 +84,7 @@ d3.text("data.csv", function(error, text) {
 
 
       // ##########################################################
-      // Œn—ñ‚²‚Æ‚Éƒf[ƒ^‚ğ•ªŠ„‚·‚éB dSet:U•z}—p ,dSetL:’¼ü—p
+      // ç³»åˆ—ã”ã¨ã«ãƒ‡ãƒ¼ã‚¿ã‚’åˆ†å‰²ã™ã‚‹ã€‚ dSet:æ•£å¸ƒå›³ç”¨ ,dSetL:ç›´ç·šç”¨
       // ##########################################################
 
 	var d0=[];
@@ -128,14 +112,14 @@ d3.text("data.csv", function(error, text) {
 
 	}
 
-            // console.log(dSet);
+
 
       // ##########################################################
-      // ƒf[ƒ^‚ÌÅ‘å’l,Å¬’l‚ğ‹‚ß‚éB
+      // ãƒ‡ãƒ¼ã‚¿ã®æœ€å¤§å€¤,æœ€å°å€¤ã‚’æ±‚ã‚ã‚‹ã€‚
       // ##########################################################
 
-// XŒn—ñ,YŒn—ñ‚»‚ê‚¼‚ê@Å‘å’l,Å¬’l‚ª10ˆÈ‰º‚Å‚ ‚ê‚ÎAÅ‘å’lAÅ¬’l‚ğ‚»‚Ì‚Ü‚Üg‚¤B
- // XŒn—ñ,YŒn—ñ‚»‚ê‚¼‚ê@Å‘å’l,Å¬’l‚ª10ˆÈã‚Å‚ ‚ê‚ÎA1‚ÌˆÊ‚ÅØ‚èã‚°(@Å‘å’l) , 1‚ÌˆÊ‚ÅØ‚èÌ‚Ä(@Å¬’l)
+// Xç³»åˆ—,Yç³»åˆ—ãã‚Œãã‚Œã€€æœ€å¤§å€¤,æœ€å°å€¤ãŒ10ä»¥ä¸‹ã§ã‚ã‚Œã°ã€æœ€å¤§å€¤ã€æœ€å°å€¤ã‚’ãã®ã¾ã¾ä½¿ã†ã€‚
+ // Xç³»åˆ—,Yç³»åˆ—ãã‚Œãã‚Œã€€æœ€å¤§å€¤,æœ€å°å€¤ãŒ10ä»¥ä¸Šã§ã‚ã‚Œã°ã€1ã®ä½ã§åˆ‡ã‚Šä¸Šã’(@æœ€å¤§å€¤) , 1ã®ä½ã§åˆ‡ã‚Šæ¨ã¦(@æœ€å°å€¤)
 
 	function getMin(num){
         	 if(Math.abs(num)<10) {
@@ -157,13 +141,13 @@ d3.text("data.csv", function(error, text) {
 
                  };
 
-     TrdSet=d3.transpose(dSet); //transpose‚ğs‚í‚È‚¢‚ÆAd3.max, d3.min‚ªg‚¦‚È‚¢
+     TrdSet=d3.transpose(dSet); //transposeã‚’è¡Œã‚ãªã„ã¨ã€d3.max, d3.minãŒä½¿ãˆãªã„
 
  		var maxX  = d3.max(TrdSet[0]);
-                    maxX  = getMin(maxX);// XÀ•W’lÅ‘å
+                    maxX  = getMin(maxX);// Xåº§æ¨™å€¤æœ€å¤§
 
 		var maxY = d3.max(TrdSet[1]);
-                    maxY = getMax(maxY); // YÀ•W’lÅ‘å
+                    maxY = getMax(maxY); // Yåº§æ¨™å€¤æœ€å¤§
             
 
 		var minX = d3.min(TrdSet[0]);
@@ -174,25 +158,25 @@ d3.text("data.csv", function(error, text) {
 
 
       // ##########################################################
-      // ƒXƒP[ƒ‹İ’è’lŒvZ
+      // ã‚¹ã‚±ãƒ¼ãƒ«è¨­å®šå€¤è¨ˆç®—
       // ##########################################################
 
 
 
-		// ‰¡‚Ì–Ú·‚è‚ğ•\¦‚·‚é‚½‚ß‚ÉD3ƒXƒP[ƒ‹‚ğİ’è
-		var xScale = d3.scale.linear()  // ƒXƒP[ƒ‹‚ğİ’è
-			.domain([minX, maxX])   // Œ³‚ÌƒTƒCƒY
-			.range([0, xAxisWidth]) // ÀÛ‚Ìo—ÍƒTƒCƒY
+		// æ¨ªã®ç›®ç››ã‚Šã‚’è¡¨ç¤ºã™ã‚‹ãŸã‚ã«D3ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
+		var xScale = d3.scale.linear()  // ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
+			.domain([minX, maxX])   // å…ƒã®ã‚µã‚¤ã‚º
+			.range([0, xAxisWidth]) // å®Ÿéš›ã®å‡ºåŠ›ã‚µã‚¤ã‚º
 
 
-		// c‚Ì–Ú·‚è‚ğ•\¦‚·‚é‚½‚ß‚ÉD3ƒXƒP[ƒ‹‚ğİ’è
-		var yScale = d3.scale.linear()  // ƒXƒP[ƒ‹‚ğİ’è
-			.domain([minY, maxY])   // Œ³‚ÌƒTƒCƒY
-			.range([yAxisHeight,0]) // ÀÛ‚Ìo—ÍƒTƒCƒY
+		// ç¸¦ã®ç›®ç››ã‚Šã‚’è¡¨ç¤ºã™ã‚‹ãŸã‚ã«D3ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
+		var yScale = d3.scale.linear()  // ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
+			.domain([minY, maxY])   // å…ƒã®ã‚µã‚¤ã‚º
+			.range([yAxisHeight,0]) // å®Ÿéš›ã®å‡ºåŠ›ã‚µã‚¤ã‚º
 
 
       // ##########################################################
-      // U•z}ƒf[ƒ^‚ğƒvƒƒbƒg‚·‚éB
+      // æ•£å¸ƒå›³ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒ­ãƒƒãƒˆã™ã‚‹ã€‚
       // ##########################################################
 
 
@@ -206,8 +190,9 @@ d3.text("data.csv", function(error, text) {
                              .attr("d", d3.svg.symbol().type("circle").size(40))
                              .attr("fill",function(d) { return iro[d[2]]})
 
-      // ##########################################################
-      // ŠÖ” drawScale‚Ì’è‹`
+
+     // ##########################################################
+      // é–¢æ•° drawScaleã®å®šç¾©
       // ##########################################################
 
 
@@ -215,77 +200,77 @@ d3.text("data.csv", function(error, text) {
 
 
       // ##########################################################
-      // Y²‚Ì•`Êİ’è‚ğ‚·‚éB    Y²‚Ìƒ‰ƒxƒ‹•`Ê
+      // Yè»¸ã®æå†™è¨­å®šã‚’ã™ã‚‹ã€‚    Yè»¸ã®ãƒ©ãƒ™ãƒ«æå†™
       // ##########################################################
 
 
 	
-	svgElement.append("g")	                // g—v‘f‚ğ’Ç‰ÁB‚±‚ê‚ª–Ú·‚è‚ğ•\¦‚·‚é—v‘f‚É‚È‚é
-		   .attr("class", "axis")	// CSSƒNƒ‰ƒX‚ğw’è
-		   .attr("transform", "translate("+offsetX*1+", "+(svgHeight-yAxisHeight-1*offsetY)+")")    //²‚Ì•`ÊˆÊ’u‚Ìİ’è
+	svgElement.append("g")	                // gè¦ç´ ã‚’è¿½åŠ ã€‚ã“ã‚ŒãŒç›®ç››ã‚Šã‚’è¡¨ç¤ºã™ã‚‹è¦ç´ ã«ãªã‚‹
+		   .attr("class", "axis")	// CSSã‚¯ãƒ©ã‚¹ã‚’æŒ‡å®š
+		   .attr("transform", "translate("+offsetX*1+", "+(svgHeight-yAxisHeight-1*offsetY)+")")    //è»¸ã®æå†™ä½ç½®ã®è¨­å®š
 		   .call(
-		           d3.svg.axis()       //y²‚Ìİ’è
-			     .scale(yScale)    //ƒXƒP[ƒ‹‚ğ“K—p‚·‚é
-			     .orient("left")   //–Ú·‚è‚Ì•\¦ˆÊ’u‚ğ¶‘¤‚Éw’è
+		           d3.svg.axis()       //yè»¸ã®è¨­å®š
+			     .scale(yScale)    //ã‚¹ã‚±ãƒ¼ãƒ«ã‚’é©ç”¨ã™ã‚‹
+			     .orient("left")   //ç›®ç››ã‚Šã®è¡¨ç¤ºä½ç½®ã‚’å·¦å´ã«æŒ‡å®š
 			)
-                   .append("text")     //Y²‚Ìƒ‰ƒxƒ‹•`Ê
-                   .attr("dx", "-10em")   //yÀ•W
+                   .append("text")     //Yè»¸ã®ãƒ©ãƒ™ãƒ«æå†™
+                   .attr("dx", "-10em")   //yåº§æ¨™
                    .attr("dy", "-2.2em")
                    .attr("transform", "rotate(" + -90 + ")" )
                    .text(ylab);
 
       // ##########################################################
-      // X²‚Ì•`Êİ’è‚ğ‚·‚éB & X²‚Ìƒ‰ƒxƒ‹ˆÊ’uİ’è
+      // Xè»¸ã®æå†™è¨­å®šã‚’ã™ã‚‹ã€‚ & Xè»¸ã®ãƒ©ãƒ™ãƒ«ä½ç½®è¨­å®š
       // ##########################################################
 
 
-		// –Ú·‚è‚ğ•\¦  //XÀ•W•\¦
-		svgElement.append("g")	// g—v‘f‚ğ’Ç‰ÁB‚±‚ê‚ª–Ú·‚è‚ğ•\¦‚·‚é—v‘f‚É‚È‚é
-			.attr("class", "axis")	// CSSƒNƒ‰ƒX‚ğw’è
+		// ç›®ç››ã‚Šã‚’è¡¨ç¤º  //Xåº§æ¨™è¡¨ç¤º
+		svgElement.append("g")	// gè¦ç´ ã‚’è¿½åŠ ã€‚ã“ã‚ŒãŒç›®ç››ã‚Šã‚’è¡¨ç¤ºã™ã‚‹è¦ç´ ã«ãªã‚‹
+			.attr("class", "axis")	// CSSã‚¯ãƒ©ã‚¹ã‚’æŒ‡å®š
 			.attr("transform", "translate("+offsetX*1+", "+(svgHeight-offsetY)+")")
 			.call(
 				d3.svg.axis()
-				.scale(xScale)  //ƒXƒP[ƒ‹‚ğ“K—p‚·‚é
-				.orient("bottom") //–Ú·‚è‚Ì•\¦ˆÊ’u‚ğ¶‘¤‚Éw’è
+				.scale(xScale)  //ã‚¹ã‚±ãƒ¼ãƒ«ã‚’é©ç”¨ã™ã‚‹
+				.orient("bottom") //ç›®ç››ã‚Šã®è¡¨ç¤ºä½ç½®ã‚’å·¦å´ã«æŒ‡å®š
 			)      
-                        .append("text")     //XÀ•Wƒ‰ƒxƒ‹‚ğ•\¦
+                        .append("text")     //Xåº§æ¨™ãƒ©ãƒ™ãƒ«ã‚’è¡¨ç¤º
                         .attr("transform", "translate("+(svgWidth*0.4)+", "+(offsetY*0.75)+")")
                         .text(xlab);
 
       // ##########################################################
-      // –}—á•\¦ˆÊ’uİ’è
+      // å‡¡ä¾‹è¡¨ç¤ºä½ç½®è¨­å®š
       // ##########################################################
 
 	for(k=0;k<youso-2;k++){
 		svgElement.append("text")
 		   .attr("transform", "translate("+(hanrei_X)+", "+(hanrei_Y+20*k)+")")
-		   .text(label1[k+1])            //–}—á•¶š‚Ìİ’è
-  		   .attr("fill",iro[k+1]);       //ü‚ÌF‚ğİ’è
+		   .text(label1[k+1])            //å‡¡ä¾‹æ–‡å­—ã®è¨­å®š
+  		   .attr("fill",iro[k+1]);       //ç·šã®è‰²ã‚’è¨­å®š
 			}
 	
       // ##########################################################
-      // •â•üİ’è
+      // è£œåŠ©ç·šè¨­å®š
       // ##########################################################
 
 
 
-		divX=kirishute((maxX-minX)/5);   //X²•â•ü ŠÔŠuŒv
-		divY=kirishute((maxY-minY)/5);   //Y²•â•ü ŠÔŠuŒv
+		divX=kirishute((maxX-minX)/5);   //Xè»¸è£œåŠ©ç·š é–“éš”è¨ˆ
+		divY=kirishute((maxY-minY)/5);   //Yè»¸è£œåŠ©ç·š é–“éš”è¨ˆ
 		var grid = svgElement.append("g");
-		var rangeX = d3.range(minX, maxX, 20);   // ‰¡•ûŒü‚Æc•ûŒü‚ÌƒOƒŠƒbƒhŠÔŠu‚ğ©“®¶¬
+		var rangeX = d3.range(minX, maxX, 20);   // æ¨ªæ–¹å‘ã¨ç¸¦æ–¹å‘ã®ã‚°ãƒªãƒƒãƒ‰é–“éš”ã‚’è‡ªå‹•ç”Ÿæˆ
 		var rangeY = d3.range(minY, maxY, 20);
 
       // ##########################################################
-      // // …•½•ûŒü‚ÌƒOƒŠƒbƒh‚ğ•`Ê         
+      // // æ°´å¹³æ–¹å‘ã®ã‚°ãƒªãƒƒãƒ‰ã‚’æå†™         
       // ##########################################################		
 
 
-		grid.selectAll("line.y")	// line—v‘f‚ÌyƒNƒ‰ƒX‚ğ‘I‘ğ
-			.data(rangeY)	// c•ûŒü‚Ì”ÍˆÍ‚ğƒf[ƒ^ƒZƒbƒg‚Æ‚µ‚Äİ’è
+		grid.selectAll("line.y")	// lineè¦ç´ ã®yã‚¯ãƒ©ã‚¹ã‚’é¸æŠ
+			.data(rangeY)	// ç¸¦æ–¹å‘ã®ç¯„å›²ã‚’ãƒ‡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆã¨ã—ã¦è¨­å®š
 			.enter()
-			.append("line")	// line—v‘f‚ğ’Ç‰Á
-			.attr("class", "grid")	// CSSƒNƒ‰ƒX‚Ìgrid‚ğw’è
-			.attr("x1", offsetX)     // (x1,y1)-(x2,y2)‚ÌÀ•W’l‚ğİ’è
+			.append("line")	// lineè¦ç´ ã‚’è¿½åŠ 
+			.attr("class", "grid")	// CSSã‚¯ãƒ©ã‚¹ã®gridã‚’æŒ‡å®š
+			.attr("x1", offsetX)     // (x1,y1)-(x2,y2)ã®åº§æ¨™å€¤ã‚’è¨­å®š
 			.attr("y1", function(d, i){
 //				return svgHeight - yScale(d) + yohakuY-offsetY;
                                     return yohakuY+yScale(d);
@@ -297,17 +282,17 @@ d3.text("data.csv", function(error, text) {
 			});
 
       // ##########################################################
-      // // ‚’¼•ûŒü‚ÌƒOƒŠƒbƒh‚ğ•`Ê         
+      // // å‚ç›´æ–¹å‘ã®ã‚°ãƒªãƒƒãƒ‰ã‚’æå†™         
       // ##########################################################
 
 
 
-		grid.selectAll("line.x")	// line—v‘f‚ÌxƒNƒ‰ƒX‚ğ‘I‘ğ
-			.data(rangeX)	// ‰¡•ûŒü‚Ì”ÍˆÍ‚ğƒf[ƒ^ƒZƒbƒg‚Æ‚µ‚Äİ’è
+		grid.selectAll("line.x")	// lineè¦ç´ ã®xã‚¯ãƒ©ã‚¹ã‚’é¸æŠ
+			.data(rangeX)	// æ¨ªæ–¹å‘ã®ç¯„å›²ã‚’ãƒ‡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆã¨ã—ã¦è¨­å®š
 			.enter()
-			.append("line")	// line—v‘f‚ğ’Ç‰Á
-			.attr("class", "grid")	// CSSƒNƒ‰ƒX‚Ìgrid‚ğw’è
-			// (x1,y1)-(x2,y2)‚ÌÀ•W’l‚ğİ’è
+			.append("line")	// lineè¦ç´ ã‚’è¿½åŠ 
+			.attr("class", "grid")	// CSSã‚¯ãƒ©ã‚¹ã®gridã‚’æŒ‡å®š
+			// (x1,y1)-(x2,y2)ã®åº§æ¨™å€¤ã‚’è¨­å®š
 			.attr("x1", function(d, i){
 				return xScale(d) + offsetX;
 			})
@@ -319,7 +304,7 @@ d3.text("data.csv", function(error, text) {
 
 
       // ##########################################################
-      //   ƒf[ƒ^ŠÔ‚ğ’¼ü‚ÅŒ‹‚ÔB         
+      //   ãƒ‡ãƒ¼ã‚¿é–“ã‚’ç›´ç·šã§çµã¶ã€‚         
       // ##########################################################
 
 
@@ -327,7 +312,7 @@ d3.text("data.csv", function(error, text) {
 
 
             // ##########################################################
-            //  ƒf[ƒ^ŠÔ‚Éˆø‚©‚ê‚½ü‚ğƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä’è‹`‚·‚éB
+            //  ãƒ‡ãƒ¼ã‚¿é–“ã«å¼•ã‹ã‚ŒãŸç·šã‚’ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦å®šç¾©ã™ã‚‹ã€‚
             // ##########################################################
 
 
@@ -337,158 +322,48 @@ d3.text("data.csv", function(error, text) {
 	
 
             // ##########################################################
-            //  ŠeŒn—ñ‚²‚Æ‚Éü‚ğ•`Ê‚·‚éB
+            //  å„ç³»åˆ—ã”ã¨ã«ç·šã‚’æå†™ã™ã‚‹ã€‚
             // ##########################################################
 
 
 	for(k=0;k<youso-2;k++){
 		dSetL[k]=d3.transpose(dSetL[k]);
 
-		       var     line0=svgElement.append("path")            // ƒpƒX‚ğ’Ç‰Á
-					.attr("d", line(dSetL[k]))        // ”z—ñ‚ÌÀ•W‚ğ“n‚µ‚Äpath—v‘f‚Ìd‘®«‚Éİ’è
-					.attr("stroke", iro[k+1])         // ü‚ÌF‚ğw’è‚·‚éB
-					.attr("fill", "none")             // ü‚Ì“h‚è‚ğ–³‚µ‚É‚·‚é
-			                .attr("stroke-width",4)           // ü‚Ì‘¾‚³‚ğİ’èB
-			                .style("visibility", "visible")   // ü‚ğ•\¦ó‘Ô‚É‚·‚éB
-			                .attr("class",dSetL[k][0][2])      // Œn—ñî•ñ‚ğ‚½‚¹‚½‚¢‚¾‚¯B class‚Ì–{—ˆ‚Ìg‚¢•û‚Æ‚Íˆá‚¤
-					.on("click",function(){                                               // ü‚Ìã‚ÌƒJ[ƒ\ƒ‹‚ªƒ‰ƒCƒ“ã‚©‚çŠO‚ê‚½‚Æ‚«
-						var iro_state=d3.select(this).attr("stroke");                    // ü‚ÌFî•ñ‚ğæ“¾B
+		       var     line0=svgElement.append("path")            // ãƒ‘ã‚¹ã‚’è¿½åŠ 
+					.attr("d", line(dSetL[k]))        // é…åˆ—ã®åº§æ¨™ã‚’æ¸¡ã—ã¦pathè¦ç´ ã®då±æ€§ã«è¨­å®š
+					.attr("stroke", iro[k+1])         // ç·šã®è‰²ã‚’æŒ‡å®šã™ã‚‹ã€‚
+					.attr("fill", "none")             // ç·šã®å¡—ã‚Šã‚’ç„¡ã—ã«ã™ã‚‹
+			                .attr("stroke-width",4)           // ç·šã®å¤ªã•ã‚’è¨­å®šã€‚
+			                .style("visibility", "visible")   // ç·šã‚’è¡¨ç¤ºçŠ¶æ…‹ã«ã™ã‚‹ã€‚
+			                .attr("class",dSetL[k][0][2])      // ç³»åˆ—æƒ…å ±ã‚’æŒãŸã›ãŸã„ã ã‘ã€‚ classã®æœ¬æ¥ã®ä½¿ã„æ–¹ã¨ã¯é•ã†
+					.on("click",function(){                                               // ç·šã®ä¸Šã®ã‚«ãƒ¼ã‚½ãƒ«ãŒãƒ©ã‚¤ãƒ³ä¸Šã‹ã‚‰å¤–ã‚ŒãŸã¨ã
+						var iro_state=d3.select(this).attr("stroke");                    // ç·šã®è‰²æƒ…å ±ã‚’å–å¾—ã€‚
  			                	var keiretsu_line= d3.select(this).attr("class"); 
-							if(iro_state== "#fbf1f4"){                               // ü‚ÌF‚ªŠDF‚È‚ç‚Î
-								d3.select(this).attr("stroke", iro[keiretsu_line])     // ü‚ÌŒn—ñ‚²‚Æ‚É’è‚ß‚½F‚É•ÏX‚·‚éB
+							if(iro_state== "#fbf1f4"){                               // ç·šã®è‰²ãŒç°è‰²ãªã‚‰ã°
+								d3.select(this).attr("stroke", iro[keiretsu_line])     // ç·šã®ç³»åˆ—ã”ã¨ã«å®šã‚ãŸè‰²ã«å¤‰æ›´ã™ã‚‹ã€‚
 										}
-							else if(iro_state==iro[keiretsu_line]){                 //    ü‚ÌŒn—ñ‚²‚Æ‚É’è‚ß‚½F‚È‚ç‚Î
-								d3.select(this).attr("stroke", "#fbf1f4");     // ü‚ÌF‚ğŠDF‚É‚·‚éB
+							else if(iro_state==iro[keiretsu_line]){                 //    ç·šã®ç³»åˆ—ã”ã¨ã«å®šã‚ãŸè‰²ãªã‚‰ã°
+								d3.select(this).attr("stroke", "#fbf1f4");     // ç·šã®è‰²ã‚’ç°è‰²ã«ã™ã‚‹ã€‚
 											      }                
-								 }); //mouseoutƒCƒxƒ“ƒgI‚í‚è
+								 }); //mouseoutã‚¤ãƒ™ãƒ³ãƒˆçµ‚ã‚ã‚Š
 
-			     }; //for•¶‚ÌI‚í‚è  
-
-
+			     }; //foræ–‡ã®çµ‚ã‚ã‚Š  
 
 
 
 
 
 
-};   //drawScale()ŠÖ”‚ÌI‚í‚è
+
+
+};   //drawScale()é–¢æ•°ã®çµ‚ã‚ã‚Š
 
 
             // ##########################################################
-            // ƒOƒ‰ƒt‘S‘Ì‚Ì•`Ê‚ğs‚¤B
+            // ã‚°ãƒ©ãƒ•å…¨ä½“ã®æå†™ã‚’è¡Œã†ã€‚
             // ##########################################################
 
 	drawScale();
 
 
-
-});   // d3.txtŠÖ”‚ÌI‚í‚è
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // ##########################################################
-            // ˆÈ‰º‚Í—]•ª‚ÈƒR[ƒh
-            // ##########################################################
-
-
-// var tooltip1 = d3.select("body")
-//	.append("div")
-//	.style("position", "absolute")
-//	.style("z-index", "100")
-//	.style("visibility", "hidden")
-//	.text("a simple tooltip");
-
-
-//	var circleElements = svg
-//		.selectAll("circle")	// circle—v‘f‚ğ’Ç‰Á
-//		.data(dSet)	// ƒf[ƒ^ƒZƒbƒg‚ğ—v‘f‚Éİ’è
-//	circleElements
-//		.enter()
-//		.append("circle")	// ƒf[ƒ^‚Ì”‚¾‚¯circle—v‘f‚ª’Ç‰Á‚³‚ê‚é
-//		.attr("class", "mark")	// CSSƒNƒ‰ƒX‚ğw’è
-//		.attr("cx", function(d, i){
-//			return xScale(d[0]*1) + offsetX;	// Å‰‚Ì—v‘f‚ğXÀ•W‚É‚·‚é
-//		})
-//		.attr("cy", function(d, i){
-//			return yScale(d[1]*1)+yohakuY;	// 2”Ô–Ú‚Ì—v‘f‚ğYÀ•W‚É‚·‚é
-//		})
-//		.attr("r", 5)	// ”¼Œa‚ğw’è‚·‚é
-//		.attr("opacity",1.0)
-//         .attr("fill",d[2]);
-
-
-//function mouse11(){
-//circleElements.attr("fill", "#fbf1f4");
-//	}
-//function mouse12(){
-//circleElements.attr("fill", iro);
-//	}
-
-
-
-          //(4) ƒc[ƒ‹ƒ`ƒbƒv‚ğ¶¬
-	//var tooltip = d3.select("body")
-	//	.append("div")
-	//	.attr("class", "tip")
-// ƒc[ƒ‹ƒ`ƒbƒv‚ÉŠÔ•\¦
-        // circleElements
-	//	.on("mouseover", function(d){
-	//		var x = parseInt(xScale(d[0]*1));	// ‰~‚ÌXÀ•W’l
-	//		var y = parseInt(yScale(d[1]*1)+yohakuY);	// ‰~‚ÌYÀ•W’l
-	//		var data = d3.select(this).datum();
-          //            console.log(data);
-// —v‘f‚Ìƒf[ƒ^‚ğ“Ç‚İo‚·
-//	var t=parseInt(data[2]);
-            //        var t="aaaa";
-	//		tooltip
-	//			.style("left", offsetX+x+"px")
-	//			.style("top", y+offsetY+ "px")
-	//			.style("visibility", "visible")	// ƒc[ƒ‹ƒ`ƒbƒv‚ğ•\¦‚·‚é
-	//			.text(t)
-	//	})
-	//	.on("mouseout", function(){
-	//		tooltip.style("visibility", "hidden")	// ƒc[ƒ‹ƒ`ƒbƒv‚ğ”ñ•\¦‚É‚·‚é
-          //
-	//	});
-//     	svgWidth = parseFloat(svgWidth);	// ’l‚Í’PˆÊ•t‚«‚È‚Ì‚Å’PˆÊ‚ğíœ‚·‚é
-//	svgHeight = parseFloat(svgHeight);	// ’l‚Í’PˆÊ•t‚«‚È‚Ì‚Å’PˆÊ‚ğíœ‚·‚é
-        
-//	var svg = d3.select("#myGraph");	// SVG—v‘f‚ğw’è
-
-// #############################################
-
-//var margin = { top: 20, right: 30, bottom: 30, left: 40 };       //ƒOƒ‰ƒt‚ª•\¦‚³‚ê‚È‚¢üˆÍ‚Ì—]”’‚Ì‚±‚Æ
-//var margin = { top: 0, right: 0, bottom: 0, left: 0 };
-//var  width = root.clientWidth - margin.left - margin.right;      //root.clientWidth •\¦‰æ–Ê‚ÌWidth
-//var  height = root.clientHeight - margin.top - margin.bottom;    //root.clientHeight •\¦‰æ–Ê‚ÌWidth
-
-//var x = d3.scale.ordinal() //x²‚Ìİ’è
-//  .rangeRoundBands([0, width], .1)//root.clientHeight •\¦‰æ–Ê‚ÌWidth(®”‚É‚·‚é)
-
-//var y = d3.scale.linear()//y²‚Ìİ’è
-//  .rangeRound([height, 0])//height , 0 ‚Ì‡”Ô‚ÅŒ´“_0‚ª‰º‘¤‚É‚È‚éB
-
-//var color = d3.scale.category10();//–_ƒOƒ‰ƒt‚ÌFİ’è
-
-//var xAxis = d3.svg.axis()//x²€–Ú•\¦İ’è
-  //  .scale(x)
-    //.orient('bottom');
-//var yAxis = d3.svg.axis()//y²”’l•\¦İ’è
-  //  .scale(y)
-  //  .orient('left')
-
-//var chart = d3.select(root).append('svg')
-  //  .attr('width', root.clientWidth)
-  //  .attr('height', root.clientHeight)
- // .append('g')
-   // .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+};
