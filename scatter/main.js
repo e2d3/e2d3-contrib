@@ -1,4 +1,4 @@
-﻿//# require=d3
+//# require=d3
 
 
 	var svgWidth = root.clientWidth;
@@ -9,9 +9,8 @@
 	var offsetY =45;	// Y座標のオフセット
         var yAxisHeight=svgHeight-offsetY-yohakuY;   //横軸の範囲
         var xAxisWidth=svgWidth-offsetX-offsetX1;     //縦軸の範囲
-	var svgElement = d3.select(root).append('svg')
-                                        .attr('width', root.clientWidth)
-                                        .attr('height', root.clientHeight);
+
+
 
 
 function update(data) {
@@ -22,14 +21,51 @@ function update(data) {
         var hanrei_Y=200;       //凡例のY位置
         var k=0;
         var circleElements=[];
-
-      // ####################################################
+var data1=[];
+      //#########################################################
       // csvデータの行数と列数を読み込む
       // ####################################################
 
 
 	var nagasa=data.length;    //行数(dataの配列深さ)
         var youso=data[0].length;  //列数
+
+        console.log(nagasa);
+
+
+
+      // ####################################################
+      // 空行の削除
+      // ####################################################
+
+
+	for(i=0;i<nagasa;i++){
+		if(data[i][0]==""){console.log("AAA");}
+		else{
+	data1[i]=data[i];
+	}
+};
+
+
+
+      // ####################################################
+      // 画面の初期化 + svgオブジェクトの作成
+      // ####################################################
+
+
+        d3.selectAll("svg").remove();
+	var svgElement = d3.select(root).append('svg')
+                                        .attr('width', root.clientWidth)
+                                        .attr('height', root.clientHeight);
+
+
+      // ####################################################
+      // csvデータの行数と列数を読み込む
+      // ####################################################
+
+
+	var nagasa=data1.length;    //行数(dataの配列深さ)
+        var youso=data1[0].length;  //列数
 
         console.log(youso);
 
@@ -60,25 +96,26 @@ function update(data) {
       // ####################################################
 
 	var label1=[];   
-	label1=data[0];  //ヘッダー格納 
+	label1=data1[0];  //ヘッダー格納 
 
 	var iro=[];    
-        iro=data[1]; //グラフの線色設定を取得
+        iro=data1[1]; //グラフの線色設定を取得
                     
-	var xlab=data[0][0];       //X軸　ラベル名
-	var ylab=data[1][0];       //Y軸　ラベル名
+	var xlab=data1[0][0];       //X軸　ラベル名
+	var ylab=data1[1][0];       //Y軸　ラベル名
 
  
-        var hanrei_X=data[0][youso-1]*1;       //凡例のX位置
-        var hanrei_Y=data[1][youso-1]*1;       //凡例のY位置
+        var hanrei_X=data1[0][youso-1]*1;       //凡例のX位置
+        var hanrei_Y=data1[1][youso-1]*1;       //凡例のY位置
 
      
       // ####################################################
       // 系列名、色情報を省き、数値データのみをdataSetに格納する
       // ####################################################
 
+
 	for(i=2;i<nagasa;i++){
-	dataSet[i-2]=data[i];
+	dataSet[i-2]=data1[i];
 	};
 
 
@@ -247,6 +284,22 @@ function update(data) {
 		   .text(label1[k+1])            //凡例文字の設定
   		   .attr("fill",iro[k+1]);       //線の色を設定
 			}
+      // ##########################################################
+      // 機能の説明
+      // ##########################################################
+
+
+		svgElement.append("text")
+		   .attr("transform", "translate("+(xAxisWidth/3)+", "+(yohakuY)+")")
+		   .text("★折れ線をクリックすると色が薄くなります。再クリックで元に戻る★")            //凡例文字の設定
+  		   .attr("fill","black");       //線の色を設定
+
+
+
+
+
+
+
 	
       // ##########################################################
       // 補助線設定
@@ -364,6 +417,7 @@ function update(data) {
             // ##########################################################
 
 	drawScale();
+
 
 
 };
