@@ -1,21 +1,15 @@
 recommended:
-  - bipartite-graph-simple
-  - bubble-chart
   - chained-transitions
   - compare-ipo
   - dot-bar-chart
   - japan-color
   - les-miserables
   - map-projection-distortions
-  - multi-series-line-chart
   - parallel-coordinates
   - population-map-iran
-  - radial-reingold-tilford-tree
   - sequences-sumburst
-  - the-euro-debt-crisis
-  - treemap
   - under-the-sea
-  - wordcloud
+  - nagoya-wind
 statistics:
   - scatterplot-matrix-brushing
   - principal-component-analysis
@@ -29,8 +23,26 @@ example:
   - jthree-example
   - piechart-javascript
   - react-javascript
+  - multi-series-line-chart
+  - radial-reingold-tilford-tree
+  - the-euro-debt-crisis
+  - treemap
+  - wordcloud
+map:
+  - japan-color
+  - aichi-color
+  - anjo-color
+  - hiroshima-color
+  - nagoya-color
+  - nishimikawa-color
+  - okayama-color
+  - takahashigawa-color
+  - tokyomap-koganei
 marathon:
   - virtual-tokyomarathon
+  - virtual-koganeinewyear-roadrace
+  - virtual-frostbite-halfmarathon
+  - virtual-katsuta-marathon
   - virtual-toyamamarathon1
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
@@ -43,4 +55,14 @@ hackathon:
   - piechart2-javascript
   - plain-barchart-javascript
   - suimin-checker
+  - bubble-chart
+  - takahashigawa-gesui
+  - goal-tree
+  - kurashiki-jinkou-chart
+  - kurashiki-landmark-chart
+  - okayama-foreigner-chart
+  - text-chart
+tbd:
   - wanamin
+  - bipartite-graph-simple
+  - topic-model
