@@ -35,22 +35,26 @@ var LD = d3.select(root).append("div")
 
 function update(org) {
   div.selectAll('.node').remove();
-  div.selectAll('.labels').remove();
+  LD.selectAll('.labels').remove();
 
   var list = org.toList();
   var header = list.header;
+  if (!header.some(function(value) { return value == selected; })) {
+      selected = header[1];
+  }
   term = header[0];
   if(header[header.length - 1] == 'image'){
     isImg = true;
   }
   if(isImg){
-    labels = header.slice(1, header.length - 2);
-  }else{
     labels = header.slice(1, header.length - 1);
+  }else{
+    labels = header.slice(1, header.length);
   }
 
   var labelCount = labels.length;
   var labelWidth = width/labelCount;
+  var fontSize = (labelWidth*0.3 < 12) ? '12px' : labelWidth*0.3+'px';
 
   LD.selectAll('li')
     .data(labels)
@@ -59,23 +63,27 @@ function update(org) {
     .attr('class','labels')
     .style({
       "width": labelWidth-10 + "px",
-      "min-width": "106px",
       'float': "left"
     })
     .append('a')
     .style({
       "text-align": "center",
       "color"  : "#999999",
-      "font-size": "48px"
+      "font-size": fontSize
     })
     .text(function(d){
       return d;
     }).on("click", function(d){
+        LD.selectAll('li a').classed('active', false);
         selected = this.innerText;
+        d3.select(this).classed('active', true);
         div.selectAll(".node")
         .data(treemap.nodes)
         .call(position)
         .text(function(d) { return d[term]; });
+    })
+    .classed('active', function(d){
+        if(d == selected) return 'active';
     });
 
   var data  = { children: list };
