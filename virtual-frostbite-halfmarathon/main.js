@@ -250,6 +250,10 @@ var str = "M449,977 L455,974 L461,967 L460,925 L393,935 L414,1025 L415,1064 L426
 	});
 
 for (var j=1 ; j<data.length  ; j++){
+	if (data[j][0] == "" || data[j][1] == "" || data[j][2] == "" || data[j][3] == "" || data[j][4] == "") {
+		continue;
+	}
+
 	eval("drawArea.selectAll('#id" + j  + "')")
 	.transition()
 	// x秒かけて一周させる
