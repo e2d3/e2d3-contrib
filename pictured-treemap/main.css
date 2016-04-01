@@ -27,4 +27,8 @@ body {
 .list-inline>li>a {
     cursor: pointer;
     width: 100%;
+    background-color: white;
+}
+.list-inline>li>a.active {
+  background-color: #eeeeee;
 }
