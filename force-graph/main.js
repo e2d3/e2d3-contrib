@@ -31,11 +31,19 @@ function update(data) {
     nodes = select_nodes(data);
     links = select_links(data);
 
+    // nodesの整形
     nodes.sort(function(a, b) {
         if (a.id < b.id) return -1;
         if (a.id > b.id) return 1;
         return 0;
     });
+    console.log(nodes);
+
+    // linksの整形
+    var links2 = removeSorceLinks(links);
+    var links3 = removeTargetLinks(links2);
+
+    links = links3;
 
     var force = d3.layout.force()
         .nodes(nodes)
@@ -93,4 +101,30 @@ function update(data) {
         label.attr({x:function(d){return d.x-7;},
             y: function(d){return d.y+7;}});
     });
+}
+
+function removeSorceLinks(links) {
+    var newLinks = [];
+    for (var i = 0; i < links.length; i++) {
+        for (var n = 0; n < nodes.length; n++) {
+            if (nodes[n].id == links[i].source) {
+                newLinks.push({source: links[i].source, target: links[i].target});
+                break;
+            }
+        }
+    }
+    return newLinks;
+}
+
+function removeTargetLinks(links) {
+    var newLinks = [];
+    for (var i = 0; i < links.length; i++) {
+        for (var n = 0; n < nodes.length; n++) {
+            if (nodes[n].id == links[i].target) {
+                newLinks.push({source: links[i].source, target: links[i].target});
+                break;
+            }
+        }
+    }
+    return newLinks;
 }
