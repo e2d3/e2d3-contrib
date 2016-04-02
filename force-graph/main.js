@@ -31,6 +31,12 @@ function update(data) {
     nodes = select_nodes(data);
     links = select_links(data);
 
+    nodes.sort(function(a, b) {
+        if (a.id < b.id) return -1;
+        if (a.id > b.id) return 1;
+        return 0;
+    });
+
     var force = d3.layout.force()
         .nodes(nodes)
         .links(links)
