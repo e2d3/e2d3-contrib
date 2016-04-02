@@ -1,5 +1,5 @@
 name: Pictured Treemap
-description: 画像を利用できるツリーマップです。背景画像を利用したい場合は、最終列のラベルヘッダーに「image」というセルを用いてください。画像はURLを指定できます。[en]This is treemap widh background image. Image is set in background If is "image" column exist at last of header low and url for image source in last col of rows.
+description: 画像を利用できるツリーマップです。背景画像を利用したい場合は、最終列のラベルヘッダーに「image」というセルを用いてください。画像はURLを指定できます。※このグラフはSVG、PNGで保存はできません。[en]This is treemap widh background image. Image is set in background If is "image" column exist at last of header low and url for image source in last col of rows. *this graph is not available to save as Image(SVG,PNG).
 tags:
   - treemap
   - picuture
