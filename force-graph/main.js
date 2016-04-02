@@ -6,7 +6,7 @@ var h = root.clientHeight - margin.top - margin.bottom;
 
 function select_nodes(data){
     var res = [];
-    for(var i=0; i<data.length; i++){
+    for(var i=1; i<data.length; i++){
         if(data[i][0]=="node"){
             res.push({id:parseInt(data[i][1]),label:data[i][2]});
         }
@@ -16,7 +16,7 @@ function select_nodes(data){
 
 function select_links(data){
     var res = [];
-    for(var i=0; i<data.length; i++){
+    for(var i=1; i<data.length; i++){
         console.log(data[i]);
         if(data[i][0]=="link"){
             res.push({source:parseInt(data[i][1]),target:parseInt(data[i][2])});
