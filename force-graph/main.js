@@ -37,12 +37,10 @@ function update(data) {
         if (a.id > b.id) return 1;
         return 0;
     });
-    console.log(nodes);
 
     // linksの整形
     var links2 = removeSorceLinks(links);
     var links3 = removeTargetLinks(links2);
-
     links = links3;
 
     var force = d3.layout.force()
