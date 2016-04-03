@@ -113,10 +113,12 @@ function showSwitchButtonsBox() {
 
 function changeSwitchButtons() {
 
+  // FIXME should NOT be used '' to initialize
+  d3.select('#switch_box').html('');
   d3.select('#switch_box').selectAll('.switch_button')
     .data(labels).enter()
       .append('div')
-        .attr('class', 'switch')
+        .attr('class', 'switch_button')
         .html(function(d, i){
           return '<input type="radio" id="switch_radio_'+i+'" name="switch_radio" class="switch_radio" value="'+d+'"'+(i==0?' checked':'')+' />'
                 +'<label class="switch_label" for="switch_radio_'+i+'">'+d+'</label>'
