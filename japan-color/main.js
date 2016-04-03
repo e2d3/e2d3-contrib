@@ -42,7 +42,7 @@ $(colorButtons).append([buttonBrue, buttonRed, buttonMix]);
 $('#e2d3-chart-area').append(colorButtons);
 
 d3.json(baseUrl + "/japan.topojson", function(error, o) {
-  svg.selectAll(".states")
+  svg.selectAll(".prefecture")
     .data(topojson.feature(o, o.objects.japan).features)
     .enter().append("path")
     .attr("stroke", "gray")
@@ -50,7 +50,7 @@ d3.json(baseUrl + "/japan.topojson", function(error, o) {
     .attr("id", function(d) {
       return "state_" + d.properties.id;
     })
-    .attr("class", 'states')
+    .attr("class", 'prefecture')
     .attr("fill", "#fff")
     .attr("d", path);
   topo = o;
@@ -102,7 +102,7 @@ function show(data) {
     }
     makeLabels(labels, selectedLabel);
 
-    svg.selectAll(".states")
+    svg.selectAll(".prefecture")
       .data(topojson.feature(topo, topo.objects.japan).features)
       .on('mouseover', function() {
         return tooltip.style("visibility", "visible");
@@ -143,7 +143,7 @@ function show(data) {
 
       selectedLabel = $(this).attr('data-chart-label');
       console.log('label change : ' + selectedLabel);
-      svg.selectAll(".states")
+      svg.selectAll(".prefecture")
         .data(topojson.feature(topo, topo.objects.japan).features)
         .on('mouseover', function() {
           return tooltip.style("visibility", "visible");
@@ -185,7 +185,7 @@ function show(data) {
       console.log('color change : ');
       selectedColor = this;
 
-      svg.selectAll(".states")
+      svg.selectAll(".prefecture")
         .data(topojson.feature(topo, topo.objects.japan).features)
         .transition()
         .attr("fill", function(d) {
