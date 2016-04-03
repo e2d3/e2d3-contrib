@@ -1,9 +1,8 @@
-name: Principal Component Analysis
+name: jThree example
 description:
 tags:
-  - scatter
-  - pca
-  - experimental
+  - 3d
+  - example
 homepage: https://github.com/e2d3/e2d3-contrib
 bugs: https://github.com/e2d3/e2d3-contrib/issues
 license: Apache-2.0
@@ -11,4 +10,4 @@ contributors:
   - Hideyuki TAKEUCHI <chimerast@gmail.com>
 repository: e2d3/e2d3-contrib
 capabilities:
-  selectColorThemes: true
+  saveImages: false

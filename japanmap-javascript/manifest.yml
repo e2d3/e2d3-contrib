@@ -11,4 +11,4 @@ contributors:
   - Hideyuki TAKEUCHI <chimerast@gmail.com>
 repository: e2d3/e2d3-contrib
 capabilities:
-  colors: true
+  selectColorThemes: true

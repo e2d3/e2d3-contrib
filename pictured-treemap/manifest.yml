@@ -10,4 +10,4 @@ contributors:
   - Hipsrinoky
 repository: e2d3/e2d3-contrib
 capabilities:
-  colors: false
+  selectColorThemes: false
