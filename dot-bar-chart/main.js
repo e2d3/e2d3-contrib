@@ -1,7 +1,7 @@
 //# require=d3
 
 var dim = { width: root.clientWidth, height: root.clientHeight };
-var margin = { top: 10, bottom: 50, left: 50, right: 20 };
+var margin = { top: 30, bottom: 50, left: 50, right: 20 };
 var inputHeight = 20;
 var numberFormat = d3.format('.0f');
 dim.graphWidth = dim.width - margin.left - margin.right;
@@ -93,12 +93,39 @@ function update(data) {
 
     var max = d3.max(labels.map(function (d) { return d3.max(data[d]); }));
 
+    var denominator = Math.ceil(max / 1000);
+    if (denominator != 1)
+    {
+      var legend = axisLayer.append('g')
+        .attr('class', 'legend')
+        .attr('transform', 'translate(-20,-10)');
+      legend.append('circle')
+        .attr({r: radius, fill: '#888', stroke: 'none'});
+      legend.append('text')
+        .attr({x: 5, y: 4, 'font-size': 12, 'font-family': '"Lucida Grande", Helvetica, Arial, sans-serif'})
+        .text('=' + denominator);
+
+      labels.forEach(function (label) {
+          var r = [];
+          parties.forEach(function (party) {
+            r.push(Math.ceil(+json[label][party]/denominator));
+          });
+          data[label] = r;
+          sums[label] = d3.sum(data[label]);
+      });
+
+      max = d3.max(labels.map(function (d) { return d3.max(data[d]); }));
+    }
+    else
+    {
+      axisLayer.select('g.legend').remove();
+    }
 
     var nrow = Math.ceil(dim.graphHeight / (2 * (radius + mar)));
     barWidth = Math.ceil(max / nrow);
     yScale.domain(d3.range(nrow));
     yAxis.tickValues(d3.range(nrow).filter(function (d) { return d % 10 === 0; }));
-    yAxis.tickFormat(function (d) { return (d * barWidth); });
+    yAxis.tickFormat(function (d) { return (d * barWidth)*denominator; });
     xScale.domain(parties.map(function (d, i) { return i; }));
     xAxis.tickFormat(function (d) { return parties[d]; });
     xAxisObj.call(xAxis);
