@@ -1,6 +1,6 @@
 //# require=d3,topojson
 var labels = ['Population', 'Share of Population', 'Population Average Annul Growth', 'Internet Rate', 'Unemployment Rate', 'Economic Participation Rate', 'Contribution of GDP'];
-
+labels = [];
 var width = root.clientWidth;
 var height = root.clientHeight;
 
@@ -66,6 +66,10 @@ d3.json(baseUrl + '/ir.topojson', function (error, json) {
 });
 
 function update(data) {
+  // about labels and rows
+  labels = data[0].slice(2);
+  changeSwitchButtons();
+
   function render(){
     var map = data.toMap();
     var values = map.values();
@@ -97,15 +101,19 @@ function update(data) {
   render();
 
 }
-showSwitchButtons();
-function showSwitchButtons() {
+showSwitchButtonsBox();
+function showSwitchButtonsBox() {
 
   var switch_box = d3.select(root)
     .append('div')
       .attr('id', 'switch_box')
       .attr('style', 'position:absolute;top:0');
+  changeSwitchButtons();
+}
 
-  switch_box.selectAll('.switch_button')
+function changeSwitchButtons() {
+
+  d3.select('#switch_box').selectAll('.switch_button')
     .data(labels).enter()
       .append('div')
         .attr('class', 'switch')
