@@ -1,15 +1,26 @@
 recommended:
-  - chained-transitions
+  - InfiniteElementMethod_E2D3-LIG_03
   - compare-ipo
   - dot-bar-chart
-  - japan-color
-  - les-miserables
-  - map-projection-distortions
   - parallel-coordinates
-  - population-map-iran
   - sequences-sumburst
-  - under-the-sea
   - nagoya-wind
+  - scatter
+  - foot-race
+  - pictured-treemap
+  - food-analyzer
+  - radial-reingold-tilford-tree
+  - bubble-chart
+  - bipartite-graph-simple
+  - force-graph
+  - japan-color
+  - map-projection-distortions
+  - population-map-iran
+  - under-the-sea
+  - leaflet-voronoi
+  - jthree-example
+  - multi-series-radar-chart
+  - wordcloud
 statistics:
   - scatterplot-matrix-brushing
   - principal-component-analysis
@@ -18,18 +29,11 @@ statistics:
 example:
   - barchart-javascript
   - bubblechart
-  - force-graph
-  - japanmap-javascript
-  - jthree-example
   - piechart-javascript
   - react-javascript
   - multi-series-line-chart
-  - radial-reingold-tilford-tree
-  - the-euro-debt-crisis
-  - treemap
-  - wordcloud
 map:
-  - japan-color
+  - japanmap-javascript
   - aichi-color
   - anjo-color
   - hiroshima-color
@@ -47,15 +51,11 @@ marathon:
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
 hackathon:
-  - InfiniteElementMethod_E2D3-LIG_03
   - curry
-  - food-analyzer
-  - foot-race
   - jizou-javascript
   - piechart2-javascript
   - plain-barchart-javascript
   - suimin-checker
-  - bubble-chart
   - takahashigawa-gesui
   - goal-tree
   - kurashiki-jinkou-chart
@@ -64,5 +64,8 @@ hackathon:
   - text-chart
 tbd:
   - wanamin
-  - bipartite-graph-simple
   - topic-model
+  - chained-transitions
+  - les-miserables
+  - the-euro-debt-crisis
+  - treemap
