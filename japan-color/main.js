@@ -1,17 +1,10 @@
 //# require=d3,jquery,topojson
-
-function update(data) {
-  show(data.toMap({ typed: true }));
-}
-
 /**
  * Created by yuuu on 14/12/22.
  */
-
-console.log("Begin e2d3Show.");
-
 var width = root.clientWidth;
 var height = root.clientHeight;
+var selectedLabel = 'セブンイレブン';
 
 var svg = d3.select("#e2d3-chart-area").append("svg")
   .attr("width", width)
@@ -65,30 +58,31 @@ d3.json(baseUrl + "/japan.topojson", function(error, o) {
   reload();
 });
 
+function update(data) {
+  show(data.toMap({ typed: true }));
+}
+
 function show(data) {
   console.log('show');
   if (data && topo.objects) {
     //max and slider labels
     var labels = data.header;
     var values = []; // all of data;
-    data.keys.forEach(function(i) {
-      labels.forEach(function(k) {
-        var v = data[i][k];
-        values.push(v)
+    data.keys.forEach(function(d) {
+      labels.forEach(function(dd, i) {
+        if(dd){
+          var v = data[d][dd];
+          values.push(v);
+        }else{
+          labels.splice(i, 1);
+        }
       });
     });
     //slider
-    var initLabel = '';
+    var isSelected = false;
     var hasActive = false;
     $('.chart-label').each(function() {
-      if ($(this).hasClass('active')) {
-        initLabel = $(this).attr('data-chart-label');
-        if ($.inArray(initLabel, labels) === -1) {
-          initLabel = '';
-        } else {
-          hasActive = true;
-        }
-      }
+      if($(this).attr('data-chart-label') == selectedLabel) isSelected = true;
     });
     //color
     var colorSelector = $('.chart-color-selector-button');
@@ -103,10 +97,10 @@ function show(data) {
       $(colorSelector[0]).addClass('active');
     }
 
-    console.log('hasActive : ' + hasActive);
-    if (!initLabel) {
-      initLabel = labels[0];
+    if (!isSelected) {
+      selectedLabel = labels[0];
     }
+    makeLabels(labels, selectedLabel);
 
     svg.selectAll(".states")
       .data(topojson.feature(topo, topo.objects.japan).features)
@@ -117,7 +111,7 @@ function show(data) {
         var inner = '';
         var noValue = true;
         labels.forEach(function(label, i) {
-          var isActive = (label != initLabel) ? '' : 'active';
+          var isActive = (label != selectedLabel) ? '' : 'active';
 
           inner += '<dt class="' + isActive + '">' + label + '</dt><dd class="' + isActive + '">';
           if (data[d.properties.nam_ja] && data[d.properties.nam_ja][label]) {
@@ -140,19 +134,15 @@ function show(data) {
       })
       .transition()
       .attr("fill", function(d) {
-        return (data[d.properties.nam_ja] && data[d.properties.nam_ja][initLabel] && !isNaN(+data[d.properties.nam_ja][initLabel])) ? color(data[d.properties.nam_ja][initLabel], values, selectedColor) : "#ffffff";
+        return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values, selectedColor) : "#ffffff";
       });
-
-    if (!hasActive) {
-      makeLabels(labels, initLabel);
-    }
     //onchange label
     $(document).on('click', '.chart-label', function() {
       $('.chart-label').removeClass('active');
       $(this).addClass('active');
 
-      initLabel = $(this).attr('data-chart-label');
-      console.log('label change : ' + initLabel);
+      selectedLabel = $(this).attr('data-chart-label');
+      console.log('label change : ' + selectedLabel);
       svg.selectAll(".states")
         .data(topojson.feature(topo, topo.objects.japan).features)
         .on('mouseover', function() {
@@ -162,7 +152,7 @@ function show(data) {
           var inner = '';
           var noValue = true;
           labels.forEach(function(label, i) {
-            var isActive = (label != initLabel) ? '' : 'active';
+            var isActive = (label != selectedLabel) ? '' : 'active';
 
             inner += '<dl class="dl-horizontal"><dt class="' + isActive + '">' + label + '</dt><dd class="' + isActive + '">';
             if (data[d.properties.nam_ja] && data[d.properties.nam_ja][label]) {
@@ -185,7 +175,7 @@ function show(data) {
         })
         .transition()
         .attr("fill", function(d) {
-          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][initLabel] && !isNaN(+data[d.properties.nam_ja][initLabel])) ? color(data[d.properties.nam_ja][initLabel], values, selectedColor) : "#ffffff";
+          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values, selectedColor) : "#ffffff";
         });
     });
     //change color
@@ -199,7 +189,7 @@ function show(data) {
         .data(topojson.feature(topo, topo.objects.japan).features)
         .transition()
         .attr("fill", function(d) {
-          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][initLabel] && !isNaN(+data[d.properties.nam_ja][initLabel])) ? color(data[d.properties.nam_ja][initLabel], values, selectedColor) : "#ffffff"
+          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values, selectedColor) : "#ffffff"
         });
     });
   }
