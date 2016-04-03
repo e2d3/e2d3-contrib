@@ -2,6 +2,9 @@
 
 unit = 'JPY'
 selected = null
+dateheader = null
+nameheader = null
+categoryheader = null
 valueheaders = []
 logscale = false
 duration = 2000
@@ -47,10 +50,10 @@ showDetailWindow = (d) ->
 
   pos =
     x:
-      if x(xvalue(d.date)) < width / 2
-        margin.left + x(xvalue(d.date)) + r(rvalue(d[selected])) + 10
+      if x(xvalue(d[dateheader])) < width / 2
+        margin.left + x(xvalue(d[dateheader])) + r(rvalue(d[selected])) + 10
       else
-        margin.left + x(xvalue(d.date)) - r(rvalue(d[selected])) - 10 - w.node().offsetWidth
+        margin.left + x(xvalue(d[dateheader])) - r(rvalue(d[selected])) - 10 - w.node().offsetWidth
     y:
       margin.top + y(yvalue(d[selected])) - (w.node().offsetHeight / 2)
 
@@ -69,9 +72,9 @@ hideDetailWindow = (d) ->
 
 detailHeading = (d) ->
   v = d[valueheaders[0]] / 1000000000
-  html = "<span class=\"date\">#{d3.time.format('%Y-%m-%d')(d.date)}</span>"
-  html += "<br /><b>#{d.name}</b>"
-  html += "<br />#{d.category}"
+  html = "<span class=\"date\">#{d3.time.format('%Y-%m-%d')(d[dateheader])}</span>"
+  html += "<br /><b>#{d[nameheader]}</b>"
+  html += "<br />#{d[categoryheader]}"
   html += "<br />value at I.P.O. #{(d3.format(',.0f'))(v)} billions #{unit}"
 
 detailBody = (d) ->
@@ -136,7 +139,10 @@ update = (data) ->
   targets = data.toList
     typed: true
 
-  valueheaders = targets.header.filter (h) -> h != 'date' && h != 'name' && h != 'category'
+  dateheader = targets.header[0]
+  nameheader = targets.header[1]
+  categoryheader = targets.header[2]
+  valueheaders = targets.header.filter (h, i) -> i >= 3
 
   if !~valueheaders.indexOf(selected)
     selectData(0, true)
@@ -145,7 +151,7 @@ update = (data) ->
 
   max = d3.max(targets, (d) -> d3.max(valueheaders, (h) -> d[h]))
 
-  x.domain(d3.extent(targets, (d) -> xvalue(d.date)))
+  x.domain(d3.extent(targets, (d) -> xvalue(d[dateheader])))
   y.domain([1, yvalue(max)])
   r.domain([1, rvalue(max)])
   color.domain(x.domain())
@@ -188,9 +194,9 @@ update = (data) ->
       .attr
         class: 'target'
         r: (d) -> r(rvalue(d[selected]))
-        cx: (d) -> x(xvalue(d.date))
+        cx: (d) -> x(xvalue(d[dateheader]))
         cy: (d) -> y(yvalue(d[selected]))
-        fill: (d) -> color(xvalue(d.date))
+        fill: (d) -> color(xvalue(d[dateheader]))
         'fill-opacity': 0.7
         stroke: 'black'
         'stroke-width': 0
