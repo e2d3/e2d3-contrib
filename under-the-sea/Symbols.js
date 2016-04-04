@@ -100,7 +100,7 @@ define(function() {
                 rotate: "none"
             })
             .append('mpath')
-            .attr('xlink:href', "#path1");
+            .attr('xlink:href', "../../../../../../frame.html#path1");
     };
 
     //利用
