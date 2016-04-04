@@ -109,7 +109,7 @@ define(function() {
         return sel.append('use')
             .attr({
                 // 'xmlns:xlink': "http://www.w3.org/1999/xlink",
-                'xlink:href': '#' + id
+                'xlink:href': '../../../../../../frame.html#' + id
             });
     };
 
