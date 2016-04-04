@@ -3,8 +3,6 @@ Force Graph
 
 Force Graph
 
-※nodeのidは、0から連番(順不同)で採番する必要があります。
-
 ## Data Format Sample
 
 | 'node' or 'link' | id(node) or source(link) | label(node) or target(link) |
