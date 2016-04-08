@@ -111,25 +111,11 @@ function getLength (array) {
 var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
 
 function update(data) {
-    console.log(data);
     legendArray = [];
     metrics = [];
     seriesArray = [];
 
     var firstSeries = [];
-    // for (var i = 0; i < data.length; i++) {
-    //     if (data[i][0] == "グラフ") {
-    //         if (data[i][1] == "会社名") {
-    //             console.log(data[i][0]);
-    //             console.log(data[i][1]);
-    //             for (var j = 2; j < data[i].length; j++) {
-    //                 console.log(data[i][j]);
-    //                 firstSeries.push(data[i][j]);
-    //             }
-    //         }
-    //     }
-    // }
-
     var datalist = d3.nest()
         .key(function(d) { return d[0]; })
         .entries(data.transpose());
@@ -143,40 +129,24 @@ function update(data) {
     datalist.forEach(function (d) {
         if (d.key != '系列') {
             legendArray.push(d.key);
-            // // metrics.push(d.values);
-            // d.values.forEach(function (data) {
-            //     console.log(data);
-            // })
         }
     });
 
     metricslist.forEach(function (d) {
         if (d.key != '系列') {
             metrics.push(d.key);
-            // // metrics.push(d.values);
-            // d.values.forEach(function (data) {
-            //     console.log(data);
-            // })
         }
     });
-
-    console.log(metrics);
-    console.log(legendArray);
-
-    // metrics = metric;
 
     var list = d3.nest()
         .key(function(d) { return d[0]; })
         .entries(data);
 
-    console.log(list[0]);
     var legend = data.toList();
     
     console.log(list);
     list.splice(0, 1);
-    console.log(list);
     list.reverse();
-    // list = list.splice(0, 1);
     
     for (var i = 0; i < list[0].values.length; i++) {
         console.log(list[0].values[i][1]);
