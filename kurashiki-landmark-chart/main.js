@@ -1,19 +1,24 @@
 //# require=d3
 
-var main = d3.select(root)
-        .append("svg");
+var main = d3.select(root).append("svg");
 var strTitle;
 var strColumn00;
 var strColumn01;
 var strColumn02;
 
+
 function update(data) {
+d3.selectAll("svg").remove();
+var main = d3.select(root).append("svg");
+
+iniprocess();
+
+var sales_data = [data];
 
 strTitle    = data[0][0];
 strColumn00 = data[1][0];
 strColumn01 = data[1][1];
 strColumn02 = data[1][2];
-
 
 var sales_data = new Array();
 for (var i=2 ; i<=data.length -1 ; i++){
@@ -43,15 +48,24 @@ for (var i=2 ; i<=data.length -1 ; i++){
 
     bP.draw(data, svg);
 
-
-
 }
 
+iniprocess();
 
-!function(){
+function iniprocess(){
 	var bP={};	
-	var b=70, bb=230, height=500, buffMargin=1, minHeight=14;
-	var c1=[-150, 100], c2=[-50, 230], c3=[-10, 290]; //Column positions of labels.
+	var b=70, bb=230, height=500, buffMargin=0.2, minHeight=14;
+	
+	var cx1 = -250;
+	var cy1 = 100;
+	var cx2 = -38;
+	var cy2 = 230;
+	var cx3 = -10;
+	var cy3 = 290;
+	
+	var c1=[cx1, cy1]; //Column positions of label1.
+	var c2=[cx2, cy2]; //Column positions of label2.
+	var c3=[cx3, cy3]; //Column positions of label3.
 	var colors =[ "#00ff33","#3366CC","#ff96ff", "#DC3912",  "#FF9900","#109618", "#990099","#0000FF", "#FFFF00",  "#00FF00","#00FFFF", "#FF0000", "#FF00FF","#800000", "#808000",  "#008000","#008080", "#000080", "#800080","#000000", "#808080",  "#FF9900","#C0C0C0"];
 	
 	bP.partData = function(data,p){
@@ -303,7 +317,7 @@ for (var i=2 ; i<=data.length -1 ; i++){
 			var selectedBar = d3.select("#"+k.id).select(".part"+m).select(".mainbars")
 				.selectAll(".mainbar").filter(function(d,i){ return (i==s);});
 			
-			selectedBar.select(".mainrect").style("stroke-opacity",1);			
+			selectedBar.select(".mainrect").style("stroke-opacity",1);
 			selectedBar.select(".barlabel").style('font-weight','bold');
 			selectedBar.select(".barvalue").style('font-weight','bold');
 			selectedBar.select(".barpercent").style('font-weight','bold');
@@ -321,8 +335,8 @@ for (var i=2 ; i<=data.length -1 ; i++){
 			selectedBar.select(".barlabel").style('font-weight','normal');
 			selectedBar.select(".barvalue").style('font-weight','normal');
 			selectedBar.select(".barpercent").style('font-weight','normal');
-		});		
+		});
 	}
 	
 	this.bP = bP;
-}();
+};
