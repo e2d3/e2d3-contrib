@@ -107,7 +107,7 @@ function update(data) {
     seriesArray = [];
 
     var firstSeries = [];
-    var list = data.toList();
+    // var list = data.toList();
     var header = d3.keys(data.transpose().toMap()).filter(function(key) { return key !== '系列';})
     
     var metricslist = d3.nest()
@@ -374,9 +374,6 @@ function drawChart(list, selectedCol, selectedRow) {
         }
     )]);
 
-
-    // console.log(legendArray);
-
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
             if (i.values[selectedRow][getPositionX(num, selectedCol)] > 0) {
@@ -463,13 +460,16 @@ function drawChart(list, selectedCol, selectedRow) {
             return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);
         });
 
-    console.log(total);
     for (var num = 0; num < legendArray.length; num++) {
+        console.log(list);
         list.forEach(function(y, x, z){
             var dataValues = [];
+            // console.log(z);
             g.selectAll(".nodes")
                 .data(z, function(j, i){
-                    var value = 1;
+                    // console.log(j);
+                    // console.log(num);
+                    // console.log(selectedCol);
                     var value = j.values[selectedRow][getPositionX(num, selectedCol)];
                     if (j.values[selectedRow][getPositionX(num, selectedCol)] === undefined) {
                         console.log("---undefined---")
@@ -487,8 +487,6 @@ function drawChart(list, selectedCol, selectedRow) {
                 });
 
             dataValues.push(dataValues[0]);
-            
-            // console.log(dataValues);
             g.selectAll(".area")
                 .data([dataValues])
                 .enter()
@@ -499,8 +497,6 @@ function drawChart(list, selectedCol, selectedRow) {
                     return num * 2 + ", " + num * 2;
                 })
                 .style("stroke", function(j, i){
-                    console.log(legendArray[num]);
-                    console.log(carrerColor[legendArray[num]]);
                     if (carrerColor[legendArray[num]]) {
                         return carrerColor[legendArray[num]];
                     } else {
@@ -522,20 +518,6 @@ function drawChart(list, selectedCol, selectedRow) {
                         return color(legendArray[num]);
                     }
                 })
-                // .on('mouseover', function (d){
-                //     z = "polygon."+d3.select(this).attr("class");
-                //     g.selectAll("polygon")
-                //         .transition(200)
-                //         .style("fill-opacity", 0.1);
-                //     g.selectAll(z)
-                //         .transition(200)
-                //         .style("fill-opacity", .7);
-                // })
-                // .on('mouseout', function(){
-                //     g.selectAll("polygon")
-                //         .transition(200)
-                //         .style("fill-opacity", cfg.opacityArea);
-                // })
                 .style("fill-opacity", cfg.opacityArea);
         });
     }
