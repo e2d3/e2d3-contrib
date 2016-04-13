@@ -143,7 +143,7 @@
 	cursor: pointer;
 }
 
-img[id^="picture"], #pict-box {
+img[id^="picture"], #sub-pict-box {
 	vertical-align: top;
 }
 

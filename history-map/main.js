@@ -83,7 +83,8 @@ function createContents(spot, data, spotName) {
       })
 
     var pictMargin = 20;
-    var pictContainerWidth = (root.clientWidth - (modalPadding * 2) - pictMargin) * 0.5;
+    // var pictContainerWidth = (root.clientWidth - (modalPadding * 2) - pictMargin) * 0.5;
+    var pictContainerWidth = root.clientWidth - (modalPadding * 2);
     var pictContainerHeight = root.clientHeight - document.getElementById('spot').clientHeight - document.getElementById('description').clientHeight - document.getElementById('address').clientHeight - 50 - (modalPadding * 2);
 
     var mainPictBox = modalContent
@@ -97,7 +98,7 @@ function createContents(spot, data, spotName) {
               .attr('id', 'picture1')
               .attr('src', spot[PICT1_LABEL])
               .style({
-                  'max-width': pictContainerWidth + 'px',
+                  'max-width': (pictContainerWidth - pictMargin) / 2 + 'px',
                   'max-height': pictContainerHeight + 'px',
                   'margin-right': pictMargin + 'px',
               })
@@ -119,7 +120,7 @@ function createContents(spot, data, spotName) {
               .attr('id', 'picture2')
               .attr('src', spot[PICT2_LABEL])
               .style({
-                  'max-width': pictContainerWidth + 'px',
+                  'max-width': (pictContainerWidth - pictMargin) / 2  + 'px',
                   'max-height': pictContainerHeight + 'px'
               })
               .on('click', function() {
@@ -138,12 +139,36 @@ function createContents(spot, data, spotName) {
 
         var pictBox = modalContent
           .append('div')
-          .attr('id', 'pict-box')
+          .attr('id', 'sub-pict-box')
 
-        showPicture3(pictBox);
-        showPicture4(pictBox);
+        pictBox
+          .append('img')
+          .attr('id', 'picture3')
+          .attr('src', spot[PICT3_LABEL])
+          .style({
+              'max-width': (pictContainerWidth - pictMargin) / 2 + 'px',
+              'max-height': pictContainerHeight + 'px',
+              'margin-right': pictMargin + 'px',
+              'margin-top': pictMargin + 'px'
+          })
+          .on('click', function() {
+              createPictPreview(spot[PICT3_LABEL]);
+          })
 
-        if (isPictHeightsMax(results)) {
+        pictBox
+          .append('img')
+          .attr('id', 'picture4')
+          .attr('src', spot[PICT4_LABEL])
+          .style({
+              'max-width': (pictContainerWidth - pictMargin) / 2 + 'px',
+              'max-height': pictContainerHeight + 'px',
+              'margin-top': pictMargin + 'px'
+          })
+          .on('click', function() {
+              createPictPreview(spot[PICT4_LABEL]);
+          })
+
+        if (is2PictHeightsMax(results, pictContainerHeight)) {
             d3.select('#main-pict-box')
               .style({
                   'margin-right': '20px',
@@ -151,23 +176,19 @@ function createContents(spot, data, spotName) {
               })
 
             d3.select('#picture1')
-              .style('max-width', pictContainerWidth * 0.75 + 'px')
+              .style('max-width', (pictContainerWidth * 0.75) / 2 - pictMargin + 'px')
 
             d3.select('#picture2')
-              .style('max-width', pictContainerWidth * 0.75 + 'px')
+              .style('max-width', (pictContainerWidth * 0.75) / 2 - pictMargin + 'px')
 
-            d3.select('#pict-box')
+            d3.select('#sub-pict-box')
               .style('display', 'inline-block')
-
-            var pict1Height = parseInt(d3.select('#picture1').style('height'));
-            var pict2Height = parseInt(d3.select('#picture2').style('height'));
-            var mainPictHeight = pict1Height > pict2Height ? pict1Height : pict2Height;
 
             d3.select('#picture3')
               .style({
                   'display': 'block',
-                  'max-width': root.clientWidth - (pictContainerWidth * 0.75 + modalPadding + pictMargin) * 2 + 'px',// 式違う
-                  'max-height': (mainPictHeight - 20) / 2 + 'px',
+                  'max-width': pictContainerWidth * 0.25 + 'px',
+                  'max-height': (pictContainerHeight - 20) / 2 + 'px',
                   'margin-top': 0,
                   'margin-right': 0
               })
@@ -175,8 +196,8 @@ function createContents(spot, data, spotName) {
             d3.select('#picture4')
               .style({
                   'display': 'block',
-                  'max-width': root.clientWidth - (pictContainerWidth * 0.75 + modalPadding + pictMargin) * 2 + 'px',// 式違う
-                  'max-height': (mainPictHeight - 20) / 2 + 'px',
+                  'max-width': pictContainerWidth * 0.25 + 'px',
+                  'max-height': (pictContainerHeight - 20) / 2 + 'px',
                   'margin-right': 0
               })
 
@@ -188,48 +209,12 @@ function createContents(spot, data, spotName) {
               .style('max-height', pictContainerHeight * 0.75 + 'px')
 
             d3.select('#picture3')
-              .style('max-height', root.clientHeight - pictContainerHeight * 0.75 - pictMargin - 200 + 'px') // ここ式違う
+              .style('max-height', (pictContainerHeight - pictMargin) * 0.25 + 'px')
 
             d3.select('#picture4')
-              .style('max-height', root.clientHeight - pictContainerHeight * 0.75 - pictMargin - 200 + 'px') // ここ式違う
+              .style('max-height', (pictContainerHeight - pictMargin) * 0.25 + 'px')
         }
     })
-
-    var showPicture3 = function(pictBox) {
-        pictBox
-          .append('img')
-          .attr('id', 'picture3')
-          .attr('src', spot[PICT3_LABEL])
-          .style({
-              'max-width': pictContainerWidth + 'px',
-              'max-height': pictContainerHeight + 'px',
-              'margin-right': pictMargin + 'px',
-              'margin-top': pictMargin + 'px'
-          })
-          .on('click', function() {
-              createPictPreview(spot[PICT3_LABEL]);
-          })
-    }
-
-    var showPicture4 = function(pictBox) {
-        pictBox
-          .append('img')
-          .attr('id', 'picture4')
-          .attr('src', spot[PICT4_LABEL])
-          .style({
-              'max-width': pictContainerWidth + 'px',
-              'max-height': pictContainerHeight + 'px',
-              'margin-top': pictMargin + 'px'
-          })
-          .on('click', function() {
-              createPictPreview(spot[PICT4_LABEL]);
-          })
-    }
-
-    var isPictHeightsMax = function(pictArray) {
-        return pictArray[0].height == parseInt(pictContainerHeight) 
-            && pictArray[1].height == parseInt(pictContainerHeight);
-    }
 
     modalContent
       .append('div')
@@ -255,6 +240,11 @@ var getPictSize = function(self) {
     pictSize.width = parseInt(d3.select(self).style('width'));
     pictSize.height = parseInt(d3.select(self).style('height'));
     return pictSize;          
+}
+
+var is2PictHeightsMax = function(pictArray, pictContainerHeight) {
+    return pictArray[0].height == parseInt(pictContainerHeight) 
+        && pictArray[1].height == parseInt(pictContainerHeight);
 }
 
 function createPictPreview(picture) {
@@ -287,38 +277,50 @@ function createPictPreview(picture) {
               )
 
           if (width == parseInt(root.clientWidth) - 40) {
-              d3.select('#preview-area')
-                .style({
-                    'width': root.clientWidth - 40 + 'px',
-                    'height': height + 30 + 'px',
-                    'top': (root.clientHeight - height - 20) / 2 + 'px'
-                })
-
-              d3.select('#pict-preview')
-                .style({
-                    'top': (root.clientHeight - height) / 2 + 10 + 'px'
-                })
+              setFullWidthPictPreview(height);
 
           } else {
-              d3.select('#preview-area')
-                .style({
-                    'width': width + 'px',
-                    'height': root.clientHeight - 20 + 'px',
-                    'left': (root.clientWidth - width - 20) / 2 + 'px'
-                })
-
-              d3.select('#pict-preview')
-                .style({
-                    'left': (root.clientWidth - width) / 2 + 'px'
-                })
+              setFullHeightPictPreview(width);
           }
       })
       .on('click', function() {
-          d3.select('#preview-area')
-            .remove()
-          d3.select('#pict-preview')
-            .remove()
-          d3.select('#pict-overlay')
-            .remove()
+          removePictPreview();
       })
+}
+
+var setFullWidthPictPreview = function(height) {
+    d3.select('#preview-area')
+      .style({
+          'width': root.clientWidth - 40 + 'px',
+          'height': height + 30 + 'px',
+          'top': (root.clientHeight - height - 20) / 2 + 'px'
+      })
+
+    d3.select('#pict-preview')
+      .style({
+          'top': (root.clientHeight - height) / 2 + 10 + 'px'
+      })
+}
+
+var setFullHeightPictPreview = function(width) {
+    d3.select('#preview-area')
+      .style({
+          'width': width + 'px',
+          'height': root.clientHeight - 20 + 'px',
+          'left': (root.clientWidth - width - 20) / 2 + 'px'
+      })
+
+    d3.select('#pict-preview')
+      .style({
+          'left': (root.clientWidth - width) / 2 + 'px'
+      })
+}
+
+var removePictPreview = function() {
+    d3.select('#preview-area')
+      .remove()
+    d3.select('#pict-preview')
+      .remove()
+    d3.select('#pict-overlay')
+      .remove()
 }
