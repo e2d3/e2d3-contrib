@@ -33,6 +33,7 @@ example:
   - react-javascript
   - multi-series-line-chart
 map:
+  - history-map
   - japanmap-javascript
   - aichi-color
   - anjo-color
@@ -69,4 +70,3 @@ tbd:
   - les-miserables
   - the-euro-debt-crisis
   - treemap
-  - history-map
