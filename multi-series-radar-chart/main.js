@@ -125,8 +125,6 @@ function update(data) {
     list.forEach(function (d) { 
         d.values.forEach(function (dd) {
             dd.forEach(function (ddd, i) {
-                // console.log(data[0][i]);
-                // console.log(data[1][i]);
                 if (dd[data[0][i]]) {
                     dd[data[0][i]][data[1][i]] = ddd;
                 } else {
@@ -212,57 +210,11 @@ function update(data) {
             return d;
         });
 
-
-
-    d3.select(root).append('div')
-        .attr('id', 'legendName')
-        .style({
-            'margin-top': '-60px',
-            'margin-left': function () {
-                return (d3.min([root.clientHeight, root.clientWidth]) * 0.4) + 'px';
-            },
-            'float': 'left'
-        })
-        .selectAll('div')
-        .data(legendArray)
-        .enter()
-        .append('div')
-        .selectAll('div')
-        .data(function (d) {
-            return [{
-                    'key': 'color',
-                    'value': d
-                },
-                {
-                    'key': 'text',
-                    'value': d
-                }];
-        })
-        .enter()
-        .append('div')
-        .style({
-            'font-size': '12px',
-            'height': '15px',
-            'margin': '2px',
-            'width': '30px',
-            'float': 'left',
-            'background-color': function (d, i) {
-                if (d.key != 'text') {
-                    if (carrerColor[d.value] !== undefined) {
-                        return carrerColor[d.value];
-                    } else {
-                        return color(d.value);
-                    }
-                }
-            }
-        })
-        .text(function (d) {
-            if (d.key == 'text') {
-                return d.value;
-            }
-        });
     drawChart(list, lineData, selectedCol, selectedRow);
-    var copyRight = d3.select(root).append("div");
+    d3.select('#copy-right').remove();
+    var copyRight = d3.select(root)
+        .append("div")
+        .attr('id', 'copy-right');
 
     copyRight.style({
         'height': '20px',
