@@ -76,10 +76,8 @@ var selectedRow = 0;
 var selectedCol = 0;
 var legendArray = [];
 var seriesArray = [];
-// var metrics = ['下り速度（Mbps）', '上り速度（Mbps）', 'Ping（ms）']
 
 var getPositionX = function (i, selectedCol) {
-    // console.log(colHeaderLength + selectedCol + i * rowNestedNum);
     return 2 + selectedCol + i * rowNestedNum;
 }
 
@@ -89,12 +87,8 @@ var getPositionY = function (i) {
 
 function getLength (array) {
     var count = 0;
-    console.log(array);
     for (var i in array) {
         count++;
-        // if (count > colHeaderLength) {
-        //     legendArray.push(i);
-        // }
     }
     return count;
 }
@@ -107,7 +101,6 @@ function update(data) {
     seriesArray = [];
 
     var firstSeries = [];
-    // var list = data.toList();
     var header = d3.keys(data.transpose().toMap()).filter(function(key) { return key !== '系列';})
     
     var metricslist = d3.nest()
@@ -120,8 +113,6 @@ function update(data) {
     if (!env.colors()) env.colors(d3.scale.category10().range());
     var color = d3.scale.ordinal().range(env.colors());
     color.domain(header.map(function (d) { return d; }))
-    console.log(color('A社'));
-
     metricslist.forEach(function (d) {
         if (d.key != '系列') {
             metrics.push(d.key);
@@ -131,20 +122,33 @@ function update(data) {
     var list = d3.nest()
         .key(function(d) { return d[0]; })
         .entries(data);
-
+    list.forEach(function (d) { 
+        d.values.forEach(function (dd) {
+            dd.forEach(function (ddd, i) {
+                // console.log(data[0][i]);
+                // console.log(data[1][i]);
+                if (dd[data[0][i]]) {
+                    dd[data[0][i]][data[1][i]] = ddd;
+                } else {
+                    dd[data[0][i]] = {
+                        [data[1][i]]: ddd
+                    }
+                }
+            })
+        })
+    });
     var legend = data.toList();
-    
-    console.log(list);
+    var dataTree = d3.nest()
+        .key(function(d) { return d[0]; })
+        .key(function(d) { return d[1]; })
+        .entries(data.transpose());
+    var lineData = dataTree.splice(1, header.length);
     list.splice(0, 1);
     list.reverse();
     
     for (var i = 0; i < list[0].values.length; i++) {
-        console.log(list[0].values[i][1]);
         seriesArray.push(list[0].values[i][1]);
     }
-
-    console.log(seriesArray);
-
     rowNestedNum = list[0].values.length;
 
     colHeaderLength = getLength(legend[0]) - colNestedNum;
@@ -162,7 +166,6 @@ function update(data) {
         .on('change', function () {
             var selectedIndex = d3.select(this).property('selectedIndex');
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
-            console.log(selectedIndex);
             selectedRow = selectedIndex;
             drawChart(list, selectedCol, selectedRow);
         })
@@ -193,7 +196,7 @@ function update(data) {
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
             console.log(selectedIndex);
             selectedCol = selectedIndex;
-            drawChart(list, selectedCol, selectedRow);
+            drawChart(list, lineData, selectedCol, selectedRow);
         })
         .selectAll('option')
         .data(metrics)
@@ -244,12 +247,7 @@ function update(data) {
             'width': '30px',
             'float': 'left',
             'background-color': function (d, i) {
-                console.log(d);
-                console.log(d.key);
-
                 if (d.key != 'text') {
-                    console.log(d.key);
-                    console.log(d.value);
                     if (carrerColor[d.value] !== undefined) {
                         return carrerColor[d.value];
                     } else {
@@ -263,15 +261,7 @@ function update(data) {
                 return d.value;
             }
         });
-
-    // for(var i = 0; i < legend.length; i++) {
-    //     console.log(legend);
-    // }
-
-    drawChart(list, selectedCol, selectedRow);
-
-    console.log("-------------");
-
+    drawChart(list, lineData, selectedCol, selectedRow);
     var copyRight = d3.select(root).append("div");
 
     copyRight.style({
@@ -285,7 +275,7 @@ function update(data) {
     .style("color", "gray");
 }
 
-function drawChart(list, selectedCol, selectedRow) {
+function drawChart(list, lineData, selectedCol, selectedRow) {
     
     d3.select('#legendName').remove();
     d3.select(root).append('div')
@@ -295,7 +285,6 @@ function drawChart(list, selectedCol, selectedRow) {
                 return (-1 * legendHeight) + 'px';
             },
             'margin-left': function () {
-                // return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
                 return (root.clientWidth - (d3.min([root.clientHeight, root.clientWidth]) * 0.35) ) + 'px';
             },
             'float': 'left'
@@ -335,14 +324,7 @@ function drawChart(list, selectedCol, selectedRow) {
             },
             'float': 'left',
             'background-color': function (d, i) {
-                // console.log(d);
-                // console.log(d.key);
-
                 if (d.key != 'text') {
-                    // console.log(d);
-                    // console.log(d.key);
-                    console.log(d.value);
-                    console.log(color(d.value));
                     if (carrerColor[d.value]) {
                         return carrerColor[d.value];
                     } else {
@@ -362,14 +344,11 @@ function drawChart(list, selectedCol, selectedRow) {
     cfg.maxValue = 0;
 
     x.domain(list.map(function (d, i) {
-        console.log(d);
         if (i > 1) {
-            console.log(d.key);
             return d.key;
         }
     }));
     y.domain([0, d3.max(function (d) {
-            console.log(d);
             return list.values('axis');
         }
     )]);
@@ -404,12 +383,10 @@ function drawChart(list, selectedCol, selectedRow) {
             })
             .attr("x2", function(d, i){
                 var x2 = levelFactor*(1-cfg.factor*Math.sin((i+1)*cfg.radians/total));
-                // console.log('x2 = ', x2);
                 return x2;
             })
             .attr("y2", function(d, i){
                 var y2 = levelFactor*(1-cfg.factor*Math.cos((i+1)*cfg.radians/total));
-                // console.log('y2 = ', y2);
                 return y2;
             })
             .attr("class", "line")
@@ -461,21 +438,14 @@ function drawChart(list, selectedCol, selectedRow) {
         });
 
     for (var num = 0; num < legendArray.length; num++) {
-        console.log(list);
-        list.forEach(function(y, x, z){
+        list.forEach(function(y, x, z){            
             var dataValues = [];
-            // console.log(z);
             g.selectAll(".nodes")
                 .data(z, function(j, i){
-                    // console.log(j);
-                    // console.log(num);
-                    // console.log(selectedCol);
-                    var value = j.values[selectedRow][getPositionX(num, selectedCol)];
-                    if (j.values[selectedRow][getPositionX(num, selectedCol)] === undefined) {
-                        console.log("---undefined---")
+                    var value = j.values[selectedRow][legendArray[num]][metrics[selectedCol]];
+                    if (value === undefined) {
                         value = 1;
                     }
-
                     if (!cfg.maxValue) {
                         cfg.maxValue = 1;
                     }
@@ -508,7 +478,6 @@ function drawChart(list, selectedCol, selectedRow) {
                     for(var pti=0;pti<d.length;pti++){
                         str=str+d[pti][0]+","+d[pti][1]+" ";
                     }
-                    // console.log(str)
                     return str;
                 })
                 .style("fill", function(j, i){
