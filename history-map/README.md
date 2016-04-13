@@ -1,10 +1,10 @@
-Simple Bar Chart
+History Map Chart
 ====
 
-Simple Bar Chart
+History Map Chart
 
 ## Data Format
 
-| Data Label1 | Data Label2 | ... |
-|-------------|-------------|-----|
-| Data        | Data        | ... |
+| Spot Name | Address | Description | Latitude | Longitude | Old Picture | Now Picture | Sub Picture | Sub Picture |
+|-----------|---------|-------------|----------|-----------|-------------|-------------|-------------|-------------|
+| String    | String  | String      | Number   | Number    | Picture URL | Picture URL | Picture URL | Picture URL |
