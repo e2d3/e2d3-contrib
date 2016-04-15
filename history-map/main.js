@@ -21,13 +21,15 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 }).addTo(mapLayer);
 
 function update(data) {
-    const SPOT_NAME_LABEL = data[0][0];
-    const LAT_LABEL = data[0][3];
-    const LNG_LABEL = data[0][4];
+    const AREA_LABEL = data[0][0];
+    const SPOT_NAME_LABEL = data[0][1];
+    const LAT_LABEL = data[0][4];
+    const LNG_LABEL = data[0][5];
 
     var listData = data.toList();
 
     listData.forEach(function(spot) {
+
         var marker = L.marker([spot[LAT_LABEL], spot[LNG_LABEL]])
           .addTo(mapLayer)
           .bindPopup(spot[SPOT_NAME_LABEL]);
@@ -45,13 +47,13 @@ function update(data) {
 }
 
 function createContents(spot, data, spotName) {
-    const DESCRIPTION_LABEL = data[0][1];
-    const ERA_LABEL = data[0][5];
-    const ADDRESS_LABEL = data[0][2];
-    const PICT1_LABEL = data[0][6];
-    const PICT2_LABEL = data[0][7];
-    const PICT3_LABEL = data[0][8];
-    const PICT4_LABEL = data[0][9];
+    const DESCRIPTION_LABEL = data[0][2];
+    const ERA_LABEL = data[0][6];
+    const ADDRESS_LABEL = data[0][3];
+    const PICT1_LABEL = data[0][7];
+    const PICT2_LABEL = data[0][8];
+    const PICT3_LABEL = data[0][9];
+    const PICT4_LABEL = data[0][10];
 
     var modalPadding = root.clientHeight / 20;
 
@@ -93,7 +95,6 @@ function createContents(spot, data, spotName) {
       })
 
     var pictMargin = 20;
-    // var pictContainerWidth = (root.clientWidth - (modalPadding * 2) - pictMargin) * 0.5;
     var pictContainerWidth = root.clientWidth - (modalPadding * 2);
     var pictContainerHeight = root.clientHeight - document.getElementById('spot').clientHeight - document.getElementById('description').clientHeight - document.getElementById('address').clientHeight - 50 - (modalPadding * 2);
 

@@ -1,4 +1,4 @@
-/* custom */
+/* ----- custom ----- */
 
 #modal-content {
 	background: none;
@@ -285,6 +285,8 @@ img[id^="picture"], #sub-pict-box {
 	}
 }
 
+
+/* ----- leaflet.css ----- */
 
 /* required styles */
 
