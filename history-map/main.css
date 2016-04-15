@@ -135,8 +135,13 @@
 	font-weight: bold;
 }
 
+#era {
+	font-size: 80%;
+}
+
 #description {
 	margin-bottom: 20px;
+	font-weight: normal;
 }
 
 .leaflet-popup-content, img[id^="picture"], #pict-preview {

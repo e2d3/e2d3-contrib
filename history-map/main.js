@@ -45,12 +45,13 @@ function update(data) {
 }
 
 function createContents(spot, data, spotName) {
-    const ADDRESS_LABEL = data[0][1];
-    const DESCRIPTION_LABEL = data[0][2];
-    const PICT1_LABEL = data[0][5];
-    const PICT2_LABEL = data[0][6];
-    const PICT3_LABEL = data[0][7];
-    const PICT4_LABEL = data[0][8];
+    const DESCRIPTION_LABEL = data[0][1];
+    const ERA_LABEL = data[0][5];
+    const ADDRESS_LABEL = data[0][2];
+    const PICT1_LABEL = data[0][6];
+    const PICT2_LABEL = data[0][7];
+    const PICT3_LABEL = data[0][8];
+    const PICT4_LABEL = data[0][9];
 
     var modalPadding = root.clientHeight / 20;
 
@@ -67,6 +68,15 @@ function createContents(spot, data, spotName) {
       .append('div')
       .attr('id', 'spot')
       .text(spot[spotName])
+      .append('span')
+      .attr('id', 'era')
+      .text(function() {
+          var eraText = '';
+          if (spot[ERA_LABEL] !== '') {
+              eraText = '（' + spot[ERA_LABEL] + '）';
+          }
+          return eraText;
+      })
 
     modalContent
       .append('div')

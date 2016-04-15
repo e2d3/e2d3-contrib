@@ -5,6 +5,6 @@ History Map Chart
 
 ## Data Format
 
-| Spot Name | Address | Description | Latitude | Longitude | Old Picture | Now Picture | Sub Picture | Sub Picture |
-|-----------|---------|-------------|----------|-----------|-------------|-------------|-------------|-------------|
-| String    | String  | String      | Number   | Number    | Picture URL | Picture URL | Picture URL | Picture URL |
+| Spot Name | Description | Address | Latitude | Longitude | Era    | Old Picture | Now Picture | Sub Picture | Sub Picture |
+|-----------|-------------|---------|----------|-----------|--------|-------------|-------------|-------------|-------------|
+| String    | String      | String  | Number   | Number    | String | Picture URL | Picture URL | Picture URL | Picture URL |
