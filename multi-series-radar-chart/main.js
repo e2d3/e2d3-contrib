@@ -45,20 +45,11 @@ var chart = chartArea.append('g')
     .attr('id', 'mainGroup')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-var color = d3.scale.ordinal()
-    .range(["#d6616b", "#3182bd", "transparent"]);
-
 var carrerColor = {
             'ドコモ': '#C10026',
             'au': '#E14100',
             'ソフトバンク': '#A7ADB1',
-            'A社': '#C10026',
-            'B社': '#E14100',
-            'C社': '#A7ADB1'
         };
-
-// var carrerColor 
-
 var cfg = {
     radius: 5,
     w: d3.min([root.clientHeight, root.clientWidth]) * 0.6,
@@ -85,10 +76,8 @@ var selectedRow = 0;
 var selectedCol = 0;
 var legendArray = [];
 var seriesArray = [];
-// var metrics = ['下り速度（Mbps）', '上り速度（Mbps）', 'Ping（ms）']
 
 var getPositionX = function (i, selectedCol) {
-    // console.log(colHeaderLength + selectedCol + i * rowNestedNum);
     return 2 + selectedCol + i * rowNestedNum;
 }
 
@@ -98,12 +87,8 @@ var getPositionY = function (i) {
 
 function getLength (array) {
     var count = 0;
-    console.log(array);
     for (var i in array) {
         count++;
-        // if (count > colHeaderLength) {
-        //     legendArray.push(i);
-        // }
     }
     return count;
 }
@@ -111,86 +96,60 @@ function getLength (array) {
 var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
 
 function update(data) {
-    console.log(data);
     legendArray = [];
     metrics = [];
     seriesArray = [];
 
     var firstSeries = [];
-    // for (var i = 0; i < data.length; i++) {
-    //     if (data[i][0] == "グラフ") {
-    //         if (data[i][1] == "会社名") {
-    //             console.log(data[i][0]);
-    //             console.log(data[i][1]);
-    //             for (var j = 2; j < data[i].length; j++) {
-    //                 console.log(data[i][j]);
-    //                 firstSeries.push(data[i][j]);
-    //             }
-    //         }
-    //     }
-    // }
-
-    var datalist = d3.nest()
-        .key(function(d) { return d[0]; })
-        .entries(data.transpose());
-
+    var header = d3.keys(data.transpose().toMap()).filter(function(key) { return key !== '系列';})
+    
     var metricslist = d3.nest()
         .key(function(d) { return d[1]; })
         .entries(data.transpose());
 
-    console.log(datalist);
-
-    datalist.forEach(function (d) {
-        if (d.key != '系列') {
-            legendArray.push(d.key);
-            // // metrics.push(d.values);
-            // d.values.forEach(function (data) {
-            //     console.log(data);
-            // })
-        }
+    header.forEach(function (d) {
+        legendArray.push(d);
     });
-
+    if (!env.colors()) env.colors(d3.scale.category10().range());
+    var color = d3.scale.ordinal().range(env.colors());
+    color.domain(header.map(function (d) { return d; }))
     metricslist.forEach(function (d) {
         if (d.key != '系列') {
             metrics.push(d.key);
-            // // metrics.push(d.values);
-            // d.values.forEach(function (data) {
-            //     console.log(data);
-            // })
         }
     });
-
-    console.log(metrics);
-    console.log(legendArray);
-
-    // metrics = metric;
 
     var list = d3.nest()
         .key(function(d) { return d[0]; })
         .entries(data);
-
-    console.log(list[0]);
+    list.forEach(function (d) { 
+        d.values.forEach(function (dd) {
+            dd.forEach(function (ddd, i) {
+                if (dd[data[0][i]]) {
+                    dd[data[0][i]][data[1][i]] = ddd;
+                } else {
+                    dd[data[0][i]] = {
+                        [data[1][i]]: ddd
+                    }
+                }
+            })
+        })
+    });
     var legend = data.toList();
-    
-    console.log(list);
+    var dataTree = d3.nest()
+        .key(function(d) { return d[0]; })
+        .key(function(d) { return d[1]; })
+        .entries(data.transpose());
+    var lineData = dataTree.splice(1, header.length);
     list.splice(0, 1);
-    console.log(list);
     list.reverse();
-    // list = list.splice(0, 1);
     
     for (var i = 0; i < list[0].values.length; i++) {
-        console.log(list[0].values[i][1]);
         seriesArray.push(list[0].values[i][1]);
     }
-
-    console.log(seriesArray);
-
     rowNestedNum = list[0].values.length;
 
     colHeaderLength = getLength(legend[0]) - colNestedNum;
-    console.log(colNestedNum);
-    console.log(legendArray);
-
     d3.select('#legend-area').selectAll('select').remove();
     d3.select('#legend-area').selectAll('div').remove();
 
@@ -205,7 +164,6 @@ function update(data) {
         .on('change', function () {
             var selectedIndex = d3.select(this).property('selectedIndex');
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
-            console.log(selectedIndex);
             selectedRow = selectedIndex;
             drawChart(list, selectedCol, selectedRow);
         })
@@ -236,7 +194,7 @@ function update(data) {
             var data = d3.select(this).selectAll('option')[0][selectedIndex].__data__;
             console.log(selectedIndex);
             selectedCol = selectedIndex;
-            drawChart(list, selectedCol, selectedRow);
+            drawChart(list, lineData, selectedCol, selectedRow);
         })
         .selectAll('option')
         .data(metrics)
@@ -252,71 +210,11 @@ function update(data) {
             return d;
         });
 
-
-
-    console.log(base.selectAll('g'));
-    console.log(base.selectAll('g')[0][0]);
-    console.log(base.selectAll('g')[0][0].style);
-    console.log(d3.select('#mainGroup').style('width'));
-
-    d3.select(root).append('div')
-        .attr('id', 'legendName')
-        .style({
-            'margin-top': '-60px',
-            'margin-left': function () {
-                return (d3.min([root.clientHeight, root.clientWidth]) * 0.4) + 'px';
-            },
-            'float': 'left'
-        })
-        .selectAll('div')
-        .data(legendArray)
-        .enter()
-        .append('div')
-        .selectAll('div')
-        .data(function (d) {
-            return [{
-                    'key': 'color',
-                    'value': d
-                },
-                {
-                    'key': 'text',
-                    'value': d
-                }];
-        })
-        .enter()
-        .append('div')
-        .style({
-            'font-size': '12px',
-            'height': '15px',
-            'margin': '2px',
-            'width': '30px',
-            'float': 'left',
-            'background-color': function (d, i) {
-                console.log(d);
-                console.log(d.key);
-
-                if (d.key != 'text') {
-                    console.log(d.key);
-                    console.log(d.value);
-                    return carrerColor[d.value];
-                }
-            }
-        })
-        .text(function (d) {
-            if (d.key == 'text') {
-                return d.value;
-            }
-        });
-
-    // for(var i = 0; i < legend.length; i++) {
-    //     console.log(legend);
-    // }
-
-    drawChart(list, selectedCol, selectedRow);
-
-    console.log("-------------");
-
-    var copyRight = d3.select(root).append("div");
+    drawChart(list, lineData, selectedCol, selectedRow);
+    d3.select('#copy-right').remove();
+    var copyRight = d3.select(root)
+        .append("div")
+        .attr('id', 'copy-right');
 
     copyRight.style({
         'height': '20px',
@@ -329,7 +227,7 @@ function update(data) {
     .style("color", "gray");
 }
 
-function drawChart(list, selectedCol, selectedRow) {
+function drawChart(list, lineData, selectedCol, selectedRow) {
     
     d3.select('#legendName').remove();
     d3.select(root).append('div')
@@ -339,7 +237,6 @@ function drawChart(list, selectedCol, selectedRow) {
                 return (-1 * legendHeight) + 'px';
             },
             'margin-left': function () {
-                // return (d3.min([root.clientHeight, root.clientWidth])* 0.8) + 'px';
                 return (root.clientWidth - (d3.min([root.clientHeight, root.clientWidth]) * 0.35) ) + 'px';
             },
             'float': 'left'
@@ -379,13 +276,12 @@ function drawChart(list, selectedCol, selectedRow) {
             },
             'float': 'left',
             'background-color': function (d, i) {
-                console.log(d);
-                console.log(d.key);
-
                 if (d.key != 'text') {
-                    console.log(d.key);
-                    console.log(d.value);
-                    return carrerColor[d.value];
+                    if (carrerColor[d.value]) {
+                        return carrerColor[d.value];
+                    } else {
+                        return color(d.value);
+                    }
                 }
             }
         })
@@ -400,29 +296,23 @@ function drawChart(list, selectedCol, selectedRow) {
     cfg.maxValue = 0;
 
     x.domain(list.map(function (d, i) {
-        // console.log(d);
         if (i > 1) {
-            // console.log(d.key);
             return d.key;
         }
     }));
     y.domain([0, d3.max(function (d) {
-            // console.log(d);
             return list.values('axis');
         }
     )]);
 
-
-    // console.log(legendArray);
-
     for (var num = 0; num < legendArray.length; num++) {
         cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-            // console.log(i.values[selectedRow][getPositionX(num, selectedCol)]);
             if (i.values[selectedRow][getPositionX(num, selectedCol)] > 0) {
                 return parseInt(i.values[selectedRow][getPositionX(num, selectedCol)], 10);
+            } else {
+                return 1;
             }
         }));
-        // console.log(cfg.maxValue);
     }
     
     chart.selectAll('g').remove();
@@ -437,22 +327,18 @@ function drawChart(list, selectedCol, selectedRow) {
             .append("svg:line")
             .attr("x1", function(d, i){
                 var x1 = levelFactor*(1-cfg.factor*Math.sin(i*cfg.radians/total));
-                // console.log('x1 = ', x1);
                 return x1; 
             })
             .attr("y1", function(d, i){
                 var y1 = levelFactor*(1-cfg.factor*Math.cos(i*cfg.radians/total));
-                // console.log('y1 = ', y1);
                 return y1; 
             })
             .attr("x2", function(d, i){
                 var x2 = levelFactor*(1-cfg.factor*Math.sin((i+1)*cfg.radians/total));
-                // console.log('x2 = ', x2);
                 return x2;
             })
             .attr("y2", function(d, i){
                 var y2 = levelFactor*(1-cfg.factor*Math.cos((i+1)*cfg.radians/total));
-                // console.log('y2 = ', y2);
                 return y2;
             })
             .attr("class", "line")
@@ -473,12 +359,10 @@ function drawChart(list, selectedCol, selectedRow) {
         .attr("y1", cfg.h/2)
         .attr("x2", function(d, i){
             var x2 = cfg.w/2*(1-cfg.factor*Math.sin(i*cfg.radians/total));
-            // console.log("x2 = ", x2);
             return x2;
         })
         .attr("y2", function(d, i){
             var y2 = cfg.w/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));
-            // console.log("x2 = ", y2);
             return cfg.h/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));
         })
         .attr("class", "line")
@@ -506,13 +390,17 @@ function drawChart(list, selectedCol, selectedRow) {
         });
 
     for (var num = 0; num < legendArray.length; num++) {
-        list.forEach(function(y, x, z){
+        list.forEach(function(y, x, z){            
             var dataValues = [];
             g.selectAll(".nodes")
                 .data(z, function(j, i){
-                    // console.log(num, selectedRow, getPositionX(num), j.values[selectedRow][getPositionX(num)]);
-
-                    var value = j.values[selectedRow][getPositionX(num, selectedCol)];
+                    var value = j.values[selectedRow][legendArray[num]][metrics[selectedCol]];
+                    if (value === undefined) {
+                        value = 1;
+                    }
+                    if (!cfg.maxValue) {
+                        cfg.maxValue = 1;
+                    }
                     
                     dataValues.push([
                         cfg.w/2*(1-(parseFloat(Math.max(value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
@@ -521,7 +409,6 @@ function drawChart(list, selectedCol, selectedRow) {
                 });
 
             dataValues.push(dataValues[0]);
-            
             g.selectAll(".area")
                 .data([dataValues])
                 .enter()
@@ -532,9 +419,11 @@ function drawChart(list, selectedCol, selectedRow) {
                     return num * 2 + ", " + num * 2;
                 })
                 .style("stroke", function(j, i){
-                    // console.log(num);
-                    // console.log(legendArray[num]);
-                    return carrerColor[legendArray[num]];
+                    if (carrerColor[legendArray[num]]) {
+                        return carrerColor[legendArray[num]];
+                    } else {
+                        return color(legendArray[num]);
+                    }
                 })
                 .attr("points",function(d) {
                     var str="";
@@ -544,24 +433,12 @@ function drawChart(list, selectedCol, selectedRow) {
                     return str;
                 })
                 .style("fill", function(j, i){
-                    // console.log(num);
-                    // console.log(legendArray[num]);
-                    return carrerColor[legendArray[num]];
+                    if (carrerColor[legendArray[num]] !== undefined) {
+                        return carrerColor[legendArray[num]];
+                    } else {
+                        return color(legendArray[num]);
+                    }
                 })
-                // .on('mouseover', function (d){
-                //     z = "polygon."+d3.select(this).attr("class");
-                //     g.selectAll("polygon")
-                //         .transition(200)
-                //         .style("fill-opacity", 0.1);
-                //     g.selectAll(z)
-                //         .transition(200)
-                //         .style("fill-opacity", .7);
-                // })
-                // .on('mouseout', function(){
-                //     g.selectAll("polygon")
-                //         .transition(200)
-                //         .style("fill-opacity", cfg.opacityArea);
-                // })
                 .style("fill-opacity", cfg.opacityArea);
         });
     }
