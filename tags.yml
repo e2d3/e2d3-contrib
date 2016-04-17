@@ -14,7 +14,6 @@ recommended:
   - bipartite-graph-simple
   - force-graph
   - japan-color
-  - map-projection-distortions
   - population-map-iran
   - under-the-sea
   - leaflet-voronoi
