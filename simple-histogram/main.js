@@ -1,11 +1,8 @@
 //# require=d3
-
 var margin = { top: 20, right: 30, bottom: 30, left: 40 };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
 
-// var x = d3.scale.ordinal()
-//   .rangeRoundBands([0, width], .1)
 var x = d3.scale.linear()
     .range([0, width]);
 
@@ -21,11 +18,6 @@ var chart = d3.select(root).append('svg')
 function update(data) {
   var list = data.transpose();
   var header = data.header;
-  console.log(header);
-  console.log(list);
-  console.log(data);
-  // console.log(header[1]);
-  // console.log(list[header[1]])
   var key = list[1][0];
   target = list[1];
   target.splice(0, 1)
@@ -42,9 +34,6 @@ function update(data) {
   var list = d3.layout.histogram()
       .bins(x.ticks(100))
       (values);
-  console.log(list);
-  console.log(d3.max(list, function (d) { return d.y;}));
-  // y.domain([0, d3.max(list, function (d) { console.log(d.y); return d.y;})]);
   var y = d3.scale.linear()
     .domain([0, d3.max(list, function(d) { return d.y; })])
     .range([height, 0]);
