@@ -32,7 +32,7 @@ function update(data) {
 
         var marker = L.marker([spot[LAT_LABEL], spot[LNG_LABEL]])
           .addTo(mapLayer)
-          .bindPopup(spot[SPOT_NAME_LABEL]);
+          .bindPopup(spot[SPOT_NAME_LABEL] + '<img class="camera-icon" src="images/icon-camera.png" />');
 
         marker.on('click', function() {
             d3.select('.leaflet-popup-content').on('click', function() {

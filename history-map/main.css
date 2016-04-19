@@ -285,6 +285,11 @@ img[id^="picture"], #sub-pict-box {
 	}
 }
 
+.camera-icon {
+	height: 20px;
+	margin-bottom: -5px;
+	margin-left: 2px;
+}
 
 /* ----- leaflet.css ----- */
 
