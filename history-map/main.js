@@ -33,6 +33,11 @@ function update(data) {
     const LAT_LABEL = data[0][4];
     const LNG_LABEL = data[0][5];
 
+    d3.selectAll('.leaflet-marker-icon')
+      .remove()
+    d3.selectAll('.leaflet-marker-shadow')
+      .remove()
+
     var listData = data.toList();
 
     listData.forEach(function(spot) {
