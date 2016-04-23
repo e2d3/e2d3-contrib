@@ -60,6 +60,7 @@ function createContents(spot, data, spotName) {
     const PICT4_LABEL = data[0][10];
 
     var modalPadding = root.clientHeight / 20;
+    var pictContainerWidth = root.clientWidth - (modalPadding * 2);
 
     var modalContent = d3.select(root)
       .append('div')
@@ -72,8 +73,23 @@ function createContents(spot, data, spotName) {
 
     modalContent
       .append('div')
+      .attr('id', 'close-button')
+      .text('×')
+      .on('click', function() {
+          d3.select('#modal-content')
+            .remove()
+          d3.select('#modal-overlay')
+            .remove()
+
+          d3.select('.leaflet-control')
+            .style('display', 'block')
+      })
+
+    modalContent
+      .append('div')
       .attr('id', 'spot')
       .text(spot[spotName])
+      .style('width', pictContainerWidth - document.getElementById('close-button').clientWidth + 'px')
       .append('span')
       .attr('id', 'era')
       .text(function() {
@@ -98,7 +114,6 @@ function createContents(spot, data, spotName) {
           'bottom': modalPadding + 'px'
       })
 
-    var pictContainerWidth = root.clientWidth - (modalPadding * 2);
     var pictContainerHeight = root.clientHeight
                               - document.getElementById('spot').clientHeight
                               - document.getElementById('description').clientHeight 
@@ -234,20 +249,6 @@ function createContents(spot, data, spotName) {
               .style('max-height', (pictContainerHeight - PICT_MARGIN) * SUB_PICT_CONTAINER + 'px')
         }
     })
-
-    modalContent
-      .append('div')
-      .attr('id', 'close-button')
-      .text('×')
-      .on('click', function() {
-          d3.select('#modal-content')
-            .remove()
-          d3.select('#modal-overlay')
-            .remove()
-
-          d3.select('.leaflet-control')
-            .style('display', 'block')
-      })
 
     d3.select(root)
       .append('div')
