@@ -3,6 +3,10 @@
 const HOME_LAT = 35.475846;
 const HOME_LNG = 139.628833;
 
+const PICT_MARGIN = 20;
+const MAIN_PICT_CONTAINER = 0.75;
+const SUB_PICT_CONTAINER = 0.25;
+
 d3.select(root)
   .append('div')
   .attr('id', 'map-container')
@@ -94,9 +98,13 @@ function createContents(spot, data, spotName) {
           'bottom': modalPadding + 'px'
       })
 
-    var pictMargin = 20;
     var pictContainerWidth = root.clientWidth - (modalPadding * 2);
-    var pictContainerHeight = root.clientHeight - document.getElementById('spot').clientHeight - document.getElementById('description').clientHeight - document.getElementById('address').clientHeight - 50 - (modalPadding * 2);
+    var pictContainerHeight = root.clientHeight
+                              - document.getElementById('spot').clientHeight
+                              - document.getElementById('description').clientHeight 
+                              - document.getElementById('address').clientHeight 
+                              - (PICT_MARGIN * 2) 
+                              - (modalPadding * 2);
 
     var mainPictBox = modalContent
       .append('div')
@@ -109,9 +117,9 @@ function createContents(spot, data, spotName) {
               .attr('id', 'picture1')
               .attr('src', spot[PICT1_LABEL])
               .style({
-                  'max-width': (pictContainerWidth - pictMargin) / 2 + 'px',
+                  'max-width': (pictContainerWidth - PICT_MARGIN) / 2 + 'px',
                   'max-height': pictContainerHeight + 'px',
-                  'margin-right': pictMargin + 'px',
+                  'margin-right': PICT_MARGIN + 'px',
               })
               .on('click', function() {
                   createPictPreview(spot[PICT1_LABEL]);
@@ -131,7 +139,7 @@ function createContents(spot, data, spotName) {
               .attr('id', 'picture2')
               .attr('src', spot[PICT2_LABEL])
               .style({
-                  'max-width': (pictContainerWidth - pictMargin) / 2  + 'px',
+                  'max-width': (pictContainerWidth - PICT_MARGIN) / 2  + 'px',
                   'max-height': pictContainerHeight + 'px'
               })
               .on('click', function() {
@@ -157,10 +165,10 @@ function createContents(spot, data, spotName) {
           .attr('id', 'picture3')
           .attr('src', spot[PICT3_LABEL])
           .style({
-              'max-width': (pictContainerWidth - pictMargin) / 2 + 'px',
+              'max-width': (pictContainerWidth - PICT_MARGIN) / 2 + 'px',
               'max-height': pictContainerHeight + 'px',
-              'margin-right': pictMargin + 'px',
-              'margin-top': pictMargin + 'px'
+              'margin-right': PICT_MARGIN + 'px',
+              'margin-top': PICT_MARGIN + 'px'
           })
           .on('click', function() {
               createPictPreview(spot[PICT3_LABEL]);
@@ -171,9 +179,9 @@ function createContents(spot, data, spotName) {
           .attr('id', 'picture4')
           .attr('src', spot[PICT4_LABEL])
           .style({
-              'max-width': (pictContainerWidth - pictMargin) / 2 + 'px',
+              'max-width': (pictContainerWidth - PICT_MARGIN) / 2 + 'px',
               'max-height': pictContainerHeight + 'px',
-              'margin-top': pictMargin + 'px'
+              'margin-top': PICT_MARGIN + 'px'
           })
           .on('click', function() {
               createPictPreview(spot[PICT4_LABEL]);
@@ -187,10 +195,10 @@ function createContents(spot, data, spotName) {
               })
 
             d3.select('#picture1')
-              .style('max-width', (pictContainerWidth * 0.75) / 2 - pictMargin + 'px')
+              .style('max-width', (pictContainerWidth * MAIN_PICT_CONTAINER) / 2 - PICT_MARGIN + 'px')
 
             d3.select('#picture2')
-              .style('max-width', (pictContainerWidth * 0.75) / 2 - pictMargin + 'px')
+              .style('max-width', (pictContainerWidth * MAIN_PICT_CONTAINER) / 2 - PICT_MARGIN + 'px')
 
             d3.select('#sub-pict-box')
               .style('display', 'inline-block')
@@ -198,8 +206,8 @@ function createContents(spot, data, spotName) {
             d3.select('#picture3')
               .style({
                   'display': 'block',
-                  'max-width': pictContainerWidth * 0.25 + 'px',
-                  'max-height': (pictContainerHeight - 20) / 2 + 'px',
+                  'max-width': pictContainerWidth * SUB_PICT_CONTAINER + 'px',
+                  'max-height': (pictContainerHeight - PICT_MARGIN) / 2 + 'px',
                   'margin-top': 0,
                   'margin-right': 0
               })
@@ -207,23 +215,23 @@ function createContents(spot, data, spotName) {
             d3.select('#picture4')
               .style({
                   'display': 'block',
-                  'max-width': pictContainerWidth * 0.25 + 'px',
-                  'max-height': (pictContainerHeight - 20) / 2 + 'px',
+                  'max-width': pictContainerWidth * SUB_PICT_CONTAINER + 'px',
+                  'max-height': (pictContainerHeight - PICT_MARGIN) / 2 + 'px',
                   'margin-right': 0
               })
 
         } else {
             d3.select('#picture1')
-              .style('max-height', pictContainerHeight * 0.75 + 'px')
+              .style('max-height', pictContainerHeight * MAIN_PICT_CONTAINER + 'px')
 
             d3.select('#picture2')
-              .style('max-height', pictContainerHeight * 0.75 + 'px')
+              .style('max-height', pictContainerHeight * MAIN_PICT_CONTAINER + 'px')
 
             d3.select('#picture3')
-              .style('max-height', (pictContainerHeight - pictMargin) * 0.25 + 'px')
+              .style('max-height', (pictContainerHeight - PICT_MARGIN) * SUB_PICT_CONTAINER + 'px')
 
             d3.select('#picture4')
-              .style('max-height', (pictContainerHeight - pictMargin) * 0.25 + 'px')
+              .style('max-height', (pictContainerHeight - PICT_MARGIN) * SUB_PICT_CONTAINER + 'px')
         }
     })
 
