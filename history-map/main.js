@@ -7,6 +7,9 @@ const PICT_MARGIN = 20;
 const MAIN_PICT_CONTAINER = 0.75;
 const SUB_PICT_CONTAINER = 0.25;
 
+const PREVIEW_MARGIN = 20;
+const  PREVIEW_MARGIN_TOP = 10;
+
 d3.select(root)
   .append('div')
   .attr('id', 'map-container')
@@ -282,8 +285,8 @@ function createPictPreview(picture) {
       .attr('id', 'pict-preview')
       .attr('src', picture)
       .style({
-          'max-width': root.clientWidth - 40 + 'px',
-          'max-height': root.clientHeight - 50 + 'px'
+          'max-width': root.clientWidth - PREVIEW_MARGIN * 2 + 'px',
+          'max-height': root.clientHeight - PREVIEW_MARGIN * 2 - PREVIEW_MARGIN_TOP + 'px'
       })
       .on('load', function() {
           var width = parseInt(
@@ -296,7 +299,7 @@ function createPictPreview(picture) {
                 .style('height')
               )
 
-          if (width == parseInt(root.clientWidth) - 40) {
+          if (width == parseInt(root.clientWidth) - PREVIEW_MARGIN * 2) {
               setFullWidthPictPreview(height);
 
           } else {
@@ -311,14 +314,14 @@ function createPictPreview(picture) {
 var setFullWidthPictPreview = function(height) {
     d3.select('#preview-area')
       .style({
-          'width': root.clientWidth - 40 + 'px',
-          'height': height + 30 + 'px',
-          'top': (root.clientHeight - height - 20) / 2 + 'px'
+          'width': root.clientWidth - PREVIEW_MARGIN * 2 + 'px',
+          'height': height + PREVIEW_MARGIN + PREVIEW_MARGIN_TOP + 'px',
+          'top': (root.clientHeight - height - PREVIEW_MARGIN) / 2 + 'px'
       })
 
     d3.select('#pict-preview')
       .style({
-          'top': (root.clientHeight - height) / 2 + 10 + 'px'
+          'top': (root.clientHeight - height) / 2 + PREVIEW_MARGIN_TOP + 'px'
       })
 }
 
@@ -326,8 +329,8 @@ var setFullHeightPictPreview = function(width) {
     d3.select('#preview-area')
       .style({
           'width': width + 'px',
-          'height': root.clientHeight - 20 + 'px',
-          'left': (root.clientWidth - width - 20) / 2 + 'px'
+          'height': root.clientHeight - PREVIEW_MARGIN + 'px',
+          'left': (root.clientWidth - width - PREVIEW_MARGIN) / 2 + 'px'
       })
 
     d3.select('#pict-preview')
