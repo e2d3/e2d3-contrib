@@ -20,17 +20,6 @@ recommended:
   - jthree-example
   - multi-series-radar-chart
   - wordcloud
-statistics:
-  - scatterplot-matrix-brushing
-  - principal-component-analysis
-  - principal-component-analysis-text
-  - dcjs-example
-example:
-  - barchart-javascript
-  - bubblechart
-  - piechart-javascript
-  - react-javascript
-  - multi-series-line-chart
 map:
   - history-map
   - japanmap-javascript
@@ -50,6 +39,17 @@ marathon:
   - virtual-toyamamarathon1
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
+statistics:
+    - scatterplot-matrix-brushing
+    - principal-component-analysis
+    - principal-component-analysis-text
+    - dcjs-example
+basic:
+  - barchart-javascript
+  - bubblechart
+  - piechart-javascript
+  - react-javascript
+  - multi-series-line-chart
 hackathon:
   - curry
   - jizou-javascript
