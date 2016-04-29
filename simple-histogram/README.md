@@ -1,7 +1,7 @@
-Simple Bar Chart
+Simple Histogram
 ====
 
-Simple Bar Chart
+Simple Histogram
 
 ## Data Format
 
