@@ -25,6 +25,7 @@ statistics:
   - principal-component-analysis
   - principal-component-analysis-text
   - dcjs-example
+  - simple-histogram
 example:
   - barchart-javascript
   - bubblechart
