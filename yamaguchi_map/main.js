@@ -169,14 +169,14 @@ var seriesArray=map.header;
 //##########################################################
 
 
-//svg.append("rect")
-//.attr("x",function(){ return width/6;})
-//.attr("y",function(){ return height/6-30;})
-//.attr("width",200)
-//.attr("height",70)
-//.attr("fill","rgba(0,255,0,0.3")
-//.attr("stroke","rgba(255,255,0,0.5")
-//.attr("stroke-width","5");
+svg.append("rect")
+.attr("x",function(){ return width/6;})
+.attr("y",function(){ return height/6-60;})
+.attr("width",200)
+.attr("height",110)
+.attr("fill","rgba(0,255,0,0.1)")
+.attr("stroke","rgba(255,255,0,0.5)")
+.attr("stroke-width","5");
 
 
 
@@ -194,17 +194,17 @@ cityname();  //市町村名記載
 
 
 		svg.append("text")
-   .attr("transform", "translate("+(width/5)+", "+(height/6-25)+")")
+   .attr("transform", "translate("+(width/5.5)+", "+(height/6-25)+")")
 		   .text(key)            //凡例文字の設定
   		   .attr("fill","black")       //線の色を設定
    　　　.attr("font-size","20pt");
 		svg.append("text")
-   .attr("transform", "translate("+(width/5)+", "+(height/6)+")")
+   .attr("transform", "translate("+(width/5.5)+", "+(height/6)+")")
 		   .text(d.properties.shi)            //凡例文字の設定
   		   .attr("fill","black")       //線の色を設定
    　　　　　　　 .attr("font-size","20pt");
 		svg.append("text")
-   .attr("transform", "translate("+(width/5)+", "+(height/6+25)+")")
+   .attr("transform", "translate("+(width/5.5)+", "+(height/6+25)+")")
 		   .text(map[d.properties.shi][key])            //凡例文字の設定
   		   .attr("fill","red")       //線の色を設定
    　　　　　　　 .attr("font-size","20pt");
