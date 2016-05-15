@@ -1,7 +1,6 @@
-name: Leaflet timeline
+name: See through globe
 description:
 tags:
-  - leaflet
   - map
 homepage: https://github.com/e2d3/e2d3-contrib
 bugs: https://github.com/e2d3/e2d3-contrib/issues

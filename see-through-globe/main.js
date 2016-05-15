@@ -1,6 +1,10 @@
 //# require=d3,topojson
 
 function update(data) {
+  if (tick != null) {
+    clearInterval(tick);
+    tick = null;
+  }
   show(data.toList({ typed: false }));
 }
 
@@ -37,6 +41,35 @@ var isVisible = {
   }
 };
 
+var rScale = d3.scale.linear()
+    .domain([0, width])
+    .range([-180, 180]);
+
+var tick = null;
+
+svg.on('mousemove', function() {
+  var p = d3.mouse(this);
+  if (globe != null) {
+    if (tick != null) {
+      clearInterval(tick);
+      tick = null;
+    }
+    globe.redraw([rScale(p[0]), 0]);
+  }
+}).on('mouseout', function() {
+  if (globe != null) {
+    if (tick != null) {
+      clearInterval(tick);
+    }
+    var t0 = new Date().getTime();
+    var rot = projection.rotate()[0];
+    tick = setInterval(function() {
+      var t = new Date().getTime() - t0;
+      globe.redraw([rot + t*velocity, 0]);
+    }, 50);
+  }
+});
+
 var globe = null;
 var proc = function(cb) {
   if (globe == null) {
@@ -68,7 +101,6 @@ var proc = function(cb) {
           .attr('fill', '#737368')
           .attr('d', path);
       globe.circleFront = svg.append('g');
-
       globe.redraw = function(rot) {
         projection.rotate(rot).clipAngle(180);
         globe.landBack.attr('d', path);
@@ -85,9 +117,12 @@ var proc = function(cb) {
           .attr('cy', function(d){return d.xy[1];})
           .attr('visibility', isVisible.front);
       }
-      d3.timer(function(elapsed) {
-        globe.redraw([velocity * elapsed, 0])
-      });
+//      globe._timer = d3.timer(function(elapsed) {
+//        globe.redraw(velocity * elapsed);
+//      });
+//      globe.start = function() {globe._timer.restart();}
+//      globe.stop = function() {globe._timer.stop();}
+//      globe.stop();
       return cb(null, globe);
     });
   } else {

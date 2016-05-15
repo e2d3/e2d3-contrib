@@ -1,1 +1,1 @@
-Leaflet-timeline====Data must contains fields named "time", "longitude" and "latitude."This program uses Leaflet.js.
+see-through-globe====Data must contains fields named "longitude" and "latitude."
