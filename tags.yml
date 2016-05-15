@@ -44,6 +44,7 @@ map:
   - takahashigawa-color
   - tokyomap-koganei
   - leaflet-timeline
+  - see-through-globe
   - yamaguchi-map
 marathon:
   - virtual-tokyomarathon

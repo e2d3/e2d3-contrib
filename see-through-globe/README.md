@@ -1,0 +1,1 @@
+see-through-globe====Data must contains fields named "longitude" and "latitude."
