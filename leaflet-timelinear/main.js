@@ -1,6 +1,7 @@
 //# require=d3,leaflet
 
 function update(data) {
+  tick = null;
   show(data.toList({ typed: false }));
 }
 
@@ -13,7 +14,7 @@ function update(data) {
 {
   var map = {};
   var tracking = true;
-  var zoom = 13;
+  var zoom = 2;
   var mapLayer = null;
   var svgLayer = null;
   var pathLayer = null;
@@ -24,10 +25,11 @@ function update(data) {
 
   map.init = function(s)
   {
+
     selection = s;
     selection.style('height', root.clientHeight+'px');
     selection.style('width', root.clientWidth+'px');
-    var point = [35.10300377075564,136.9695284611471];
+    var point = [0, 0];
     mapLayer = L.map(selection.attr('id')).setView(point, zoom);
 
     var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -36,20 +38,20 @@ function update(data) {
 
     svgLayer = d3.select(mapLayer.getPanes().overlayPane).append("svg");
 
-    pathLayer = svgLayer.append('g');
     plotLayer = svgLayer.append('g');
-    infoLayer = svgLayer.append('g');
+    timeLayer = svgLayer.append('g');
     mapLayer.on("viewreset", map.reset);
+    d3.rebind(map, mapLayer, 'on');
     map.reset();
   }
 
-  map.projectPoint = function(x, y)
+  map.projectPoint = function(lat, lng)
   {
-    if (y===void 0)
+    if (lng===void 0)
     {
-      return mapLayer.latLngToLayerPoint(x);
+      return mapLayer.latLngToLayerPoint(lat);
     }
-    return mapLayer.latLngToLayerPoint(new L.LatLng(y, x));
+    return mapLayer.latLngToLayerPoint(new L.LatLng(lat, lng));
   }
   map.invertPoint = function(x, y)
   {
@@ -59,6 +61,9 @@ function update(data) {
     }
     return mapLayer.layerPointToLatLng(new L.point(x,y));
   }
+  map.getBounds = function() {
+    return mapLayer.getBounds();
+  }
   map.svg = function()
   {
     return svgLayer;
@@ -67,13 +72,9 @@ function update(data) {
   {
     return plotLayer;
   }
-  map.infoLayer = function()
+  map.timeLayer = function()
   {
-    return infoLayer;
-  }
-  map.pathLayer = function()
-  {
-    return pathLayer;
+    return timeLayer;
   }
   map.bound = function()
   {
@@ -83,26 +84,25 @@ function update(data) {
   }
   map.reset = function()
   {
-    plotLayer.selectAll('circle')
-      .each(function(d){d.point = map.projectPoint(+d.latlon[1],+d.latlon[0]);})
-      .attr('cx', function(d){return d.point.x;})
-      .attr('cy', function(d){return d.point.y;});
+    var bounds = map.getBounds();
+    var topLeft = map.projectPoint(bounds.getNorthWest());
+    var bottomRight = map.projectPoint(bounds.getSouthEast());
 
-    var bounds = map.bound();
-
-    svgLayer.attr("width", bounds.width)
-      .attr("height", bounds.height)
-      .style("left", bounds.x + "px")
-      .style("top", bounds.y + "px");
-
-    pathLayer.attr("transform", "translate(" + -bounds.x + "," + -bounds.y + ")");
-    plotLayer.attr("transform", "translate(" + -bounds.x + "," + -bounds.y + ")");
-    infoLayer.attr("transform", "translate(" + -bounds.x + "," + -bounds.y + ")");
-
-    redrawVoronoi(plotLayer.selectAll('circle').data());
+    svgLayer.attr("width", bottomRight.x - topLeft.x)
+      .attr("height", bottomRight.y - topLeft.y)
+      .style("left", topLeft.x + "px")
+      .style("top", topLeft.y + "px");
+    timeLayer.selectAll('line').attr('opacity', function(d) {
+      return (bounds.getWest() <= d.longitude && d.longitude <= bounds.getEast() &&
+             bounds.getSouth() <= d.latitude && d.latitude <= bounds.getNorth())? 1.0: 0.08;
+    });
+    plotLayer.attr('transform', 'translate('+ -topLeft.x + ',' + -topLeft.y + ')');
   }
   this.map = map;
 }(d3,L));
+
+map.init(d3.select(root).append('div').attr('id','map-container'))
+var tick = null;
 
 function show(data)
 {
@@ -114,7 +114,7 @@ function show(data)
   var width = root.clientWidth;
   var height = root.clientHeight;
 
-  var margin = {left: 20, bottom: 20, top: 0, right: 20};
+  var margin = {left: 20, bottom: 60, top: 0, right: 20};
   var padding = {left: 10, bottom: 20, top: 10, right: 10};
 
   var panelHeight = 40;
@@ -122,7 +122,7 @@ function show(data)
   var graphHeight = panelHeight - padding.left - padding.right;
   var graphWidth = panelWidth - padding.top - padding.bottom;
 
-  var timeFormat = {parse: function(d){return new Date(d);}};
+  var timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%S.%LZ');
   var timeDispFormat = d3.time.format('%Y/%m/%d %H:%M:%S');
 
   var timeDispFunc = function(d) {
@@ -143,9 +143,8 @@ function show(data)
     d3.event.sourceEvent.stopPropagation();
   });
 
-  var tick = null;
   data.forEach(function(d) {
-    d.time = timeFormat.parse(+d.time);
+    d.time = timeFormat.parse(d.time);
     d.latitude = +d.latitude;
     d.longitude = +d.longitude;
   });
@@ -154,17 +153,10 @@ function show(data)
   graphXScale.domain(d3.extent(data, function(d){return d.time;}));
   graphYScale.domain([0, 1]);
 
-  var map = new L.Map(d3.select('div').node()).setView([0, 0], 1);
-  var tile = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution : '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
-  var svgLayer = d3.select(map.getPanes().overlayPane).append('svg').attr('class', 'leaflet-zoom-hide');
-  var plotLayer = svgLayer.append('g');
+  var svgLayer = map.svg();
+  var plotLayer = map.plotLayer();
   var uiHeight = 100;
-  var timeLayer = svgLayer
-                    .append('g')
-                    .attr('transform', 'translate('+margin.left+','+(height - margin.bottom - panelHeight)+')');
+  var timeLayer = map.timeLayer().attr('transform', 'translate('+margin.left+','+(height - margin.bottom - panelHeight)+')');
 
   var startAnim = function(t0, dt) {
     if (tick != null) {
@@ -195,6 +187,8 @@ function show(data)
     setTimeout(tick, 300);
   };
 
+  timeLayer.selectAll('rect').remove();
+  timeLayer.selectAll('g').remove();
   timeLayer.append('rect').attr({x:0, y:0, width: panelWidth, height: panelHeight})
     .style({fill: 'rgba(0,0,0,0.8)'});
   var graphLayer = timeLayer.append('g')
@@ -213,7 +207,7 @@ function show(data)
     .on('click', function() {
       d3.event.preventDefault();
       d3.event.stopPropagation();
-      startAnim(graphXScale.invert(d3.event.x - margin.left - padding.left), 3600);
+      startAnim(graphXScale.invert(d3.event.x - margin.left - padding.left), (timeScale.domain()[1].getTime() - timeScale.domain()[0].getTime())/30000);
     }).call(drag);
   graphLayer.append('text')
     .attr({x:0, y: graphHeight + padding.bottom, 'text-anchor': 'middle', 'font-size': 12, 'opacity': 0.0, fill: '#000', stroke: 'none'});
@@ -221,35 +215,17 @@ function show(data)
     .attr({cx: 0, cy: graphHeight, r: 4, fill: '#FFF', stroke: 'none'});
   var updatePosition = function(d)
   {
-    d.pos = map.latLngToLayerPoint(new L.LatLng(d.latitude, d.longitude));
+    d.pos = map.projectPoint(d.latitude, d.longitude);
     d3.select(this).attr( {cx: d.pos.x, cy: d.pos.y } );
   }
 
-  var reset = function()
-  {
-    var bounds = map.getBounds();
-    var topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
-    var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
-
-    svgLayer.attr("width", bottomRight.x - topLeft.x)
-      .attr("height", bottomRight.y - topLeft.y)
-      .style("left", topLeft.x + "px")
-      .style("top", topLeft.y + "px");
-    graphLayer.selectAll('line').attr('opacity', function(d) {
-      return (bounds.getWest() <= d.longitude && d.longitude <= bounds.getEast() &&
-             bounds.getSouth() <= d.latitude && d.latitude <= bounds.getNorth())? 1.0: 0.08;
-    });
-    plotLayer.attr('transform', 'translate('+ -topLeft.x + ',' + -topLeft.y + ')');
-  }
-
-  map.on("move", reset);
-
+  plotLayer.selectAll('circle').remove();
   plotLayer.selectAll('circle').data(data).enter().append('circle')
     .attr({opacity: 0.8, r: 4, fill: 'rgba(0, 0, 255, 0.5)', stroke: 'white', 'stroke-width': 1})
     .each(updatePosition);
   map.on('move', function()
   {
+    map.reset();
     plotLayer.selectAll('circle').each(updatePosition);
   });
-  reset();
 }
