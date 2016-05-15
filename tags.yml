@@ -43,6 +43,7 @@ map:
   - okayama-color
   - takahashigawa-color
   - tokyomap-koganei
+  - yamaguchi_map
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
