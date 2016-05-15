@@ -1,0 +1,21 @@
+.axis text {
+  font: 15px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*.x.axis path {
+  display: none;
+}
+*/
+
+.barNum {
+	font-size: 15pt;
+	text-anchor: middle;
+	fill:white;
+}
