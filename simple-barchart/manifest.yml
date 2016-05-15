@@ -1,0 +1,13 @@
+name: Simple bar chart m1
+description:
+tags:
+  - bar
+  - example
+homepage: https://github.com/e2d3/e2d3-contrib
+bugs: https://github.com/e2d3/e2d3-contrib/issues
+license: Apache-2.0
+contributors:
+  - Yasuhide Minoda <yminoda@tetsuryokukai.com>
+repository: e2d3/e2d3-contrib
+capabilities:
+  selectColorThemes: true

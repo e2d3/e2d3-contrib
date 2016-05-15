@@ -43,7 +43,11 @@ map:
   - okayama-color
   - takahashigawa-color
   - tokyomap-koganei
+<<<<<<< HEAD
   - leaflet-timeline
+=======
+  - yamaguchi-map
+>>>>>>> master
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -71,3 +75,4 @@ tbd:
   - les-miserables
   - the-euro-debt-crisis
   - treemap
+  - simple-barchart
