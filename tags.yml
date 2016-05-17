@@ -45,7 +45,6 @@ map:
   - tokyomap-koganei
   - leaflet-timeline
   - see-through-globe
-  - yamaguchi-map
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -74,3 +73,4 @@ tbd:
   - the-euro-debt-crisis
   - treemap
   - simple-barchart
+  - yamaguchi-map
