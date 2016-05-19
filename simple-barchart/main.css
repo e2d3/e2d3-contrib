@@ -15,7 +15,8 @@
 */
 
 .barNum {
-	font-size: 15pt;
+	font-size: 12pt;
 	text-anchor: middle;
 	fill:white;
+	font-family : arial
 }
