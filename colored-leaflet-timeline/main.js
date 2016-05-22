@@ -261,9 +261,9 @@ function show(data)
   var indicator = graphLayer.append('rect')
     .attr({
       x: -4,
-      y: -4,
+      y: -8,
       width: 8,
-      height: graphHeight + 8,
+      height: graphHeight + 16,
       fill: 'none',
       stroke: '#000',
       'stroke-width': 3,
@@ -296,15 +296,15 @@ function show(data)
 
   var updatePosition = function(d)
   {
-    d.pos = map.latLngToLayerPoint(new L.LatLng(d.latitude, d.longitude));
+    d.pos = map.projectPoint(d.latitude, d.longitude);
     d3.select(this).attr( {cx: d.pos.x, cy: d.pos.y } );
   }
 
   var reset = function()
   {
     var bounds = map.getBounds();
-    var topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
-    var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+    var topLeft = map.projectPoint(bounds.getNorthWest());
+    var bottomRight = map.projectPoint(bounds.getSouthEast());
 
     svgLayer.attr("width", bottomRight.x - topLeft.x)
       .attr("height", bottomRight.y - topLeft.y)
