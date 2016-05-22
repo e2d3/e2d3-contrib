@@ -129,11 +129,35 @@ function show(data)
     return timeDispFormat(d.time);
   }
 
+  var timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%S.%LZ');
+  var timeDispFormat = d3.time.format('%Y/%m/%d(%a) %H:%M:%S');
+
+  var timeDispFunc = function(d) {
+    return timeDispFormat(d.time);
+  }
+
+  var colored = function(lng) {
+    return d3.hsl((lng<0)?(360+lng):lng, 1.0, 0.5);
+  }
+
   var timeScale = d3.time.scale();
   var graphXScale = d3.time.scale().range([0, graphWidth]);
   var graphYScale = d3.scale.linear().range([0, graphHeight]);
 
   var drag = d3.behavior.drag();
+
+  var getMouseX = function(event) {
+    if (event.offsetX != null) {
+      getMouseX = function(event) {return event.offsetX;};
+      return event.offsetX;
+    }
+    if (event.layerX != null) {
+      getMouseX = function(event) {return event.layerX;};
+      return event.layerX;
+    }
+    getMouseX = function(event) {return event.x;}
+    return event.x;
+  }
 
   drag.on('dragstart', function() {
     d3.event.sourceEvent.stopPropagation();
@@ -143,10 +167,13 @@ function show(data)
     d3.event.sourceEvent.stopPropagation();
   });
 
+  var tick = null;
+
   data.forEach(function(d) {
     d.time = timeFormat.parse(d.time);
     d.latitude = +d.latitude;
     d.longitude = +d.longitude;
+    d.color = colored(d.longitude);
   });
 
   timeScale.domain(d3.extent(data, function(d){return d.time;}));
@@ -158,23 +185,42 @@ function show(data)
   var uiHeight = 100;
   var timeLayer = map.timeLayer().attr('transform', 'translate('+margin.left+','+(height - margin.bottom - panelHeight)+')');
 
+  var showAll = null;
+
   var startAnim = function(t0, dt) {
+    if (showAll != null) {
+      clearTimeout(showAll);
+      showAll = null;
+    }
     if (tick != null) {
       tick = null;
     }
-    plotLayer.selectAll('circle').attr('opacity', 0.0);
-    var circ = graphLayer.select('circle');
+    plotLayer.selectAll('circle').transition().duration(0).attr('opacity', 0.0);
     var t1 = timeScale.domain()[1];
     var tc = t0;
-    var txt = graphLayer.select('text').text(timeDispFormat(tc)).attr({x: graphXScale(tc),'opacity': 1.0});
+    textLabel.text(timeDispFormat(tc))
+      .transition().duration(0)
+      .attr({'opacity': 0.8});
+    indicator.transition().duration(0).attr('opacity', 0.8);
     var lastTime = new Date().getTime();
     tick = function() {
       if ( t1 < tc ) {
         tick = null;
+        if (showAll != null) {
+          clearTimeout(showAll);
+          showAll = null;
+        }
+        showAll = setTimeout(function() {
+          textLabel.transition().duration(0).attr('opasity', 0.0).text('');
+          plotLayer.selectAll('circle').transition().duration(2000)
+            .attr('opacity', 0.8);
+          showAll = null;
+          indicator.transition().attr('opacity', 0.0);
+        }, 2000);
         return;
       }
-      circ.attr('cx', graphXScale(tc));
-      txt.text(timeDispFormat(tc)).attr({x: graphXScale(tc)});
+      indicator.moveTo(tc);
+      textLabel.text(timeDispFormat(tc));
       var currentTime = new Date().getTime();
       delta = (currentTime - lastTime) * dt;
       plotLayer.selectAll('circle').filter(function(d) {
@@ -184,48 +230,97 @@ function show(data)
       lastTime = currentTime;
       setTimeout(tick, 10);
     }
-    setTimeout(tick, 10);
+    tick();
   };
 
   timeLayer.selectAll('rect').remove();
-  timeLayer.selectAll('g').remove();
   timeLayer.append('rect').attr({x:0, y:0, width: panelWidth, height: panelHeight})
-    .style({fill: 'rgba(0,0,0,0.8)'});
+    .style({fill: 'rgba(255,255,255,0.2)'});
+  var textLabel = timeLayer.append('text')
+    .attr({
+      x:0,
+      y: -8,
+      'text-anchor': 'start',
+      'font-size': 64,
+      'opacity': 0.0,
+      fill: '#000',
+      stroke: 'none'
+    }).text('');
+  timeLayer.selectAll('g').remove();
   var graphLayer = timeLayer.append('g')
     .attr('transform', 'translate('+padding.left+','+padding.top+')');
   graphLayer.selectAll('line')
     .data(data).enter().append('line')
-    .style({stroke: 'rgba(255,255,255,0.5)', fill: 'none', 'stroke-width': 1})
+    .style({stroke: function(d) {return d.color;}, fill: 'none', 'stroke-width': 1})
     .attr({x1: function(d){return graphXScale(d.time);},
            x2: function(d){return graphXScale(d.time);},
            y1: graphHeight,
-           y2: function(d){return 0;}
+           y2: function(d){return 0;},
+           opacity: 0.4
     });
+  var indicator = graphLayer.append('rect')
+    .attr({
+      x: -4,
+      y: -4,
+      width: 8,
+      height: graphHeight + 8,
+      fill: 'none',
+      stroke: '#000',
+      'stroke-width': 3,
+      opacity: 0.0
+    });
+  indicator.moveTo = function(t){
+    indicator.attr('x', graphXScale(t) - 8);
+  };
   graphLayer.append('rect')
-    .attr({x: 0, y: 0, width: graphWidth, height: graphHeight})
+    .attr({
+      x: -padding.left,
+      y: -padding.top,
+      width: panelWidth,
+      height: panelHeight
+    })
     .style({fill: 'rgba(0,0,0,0)', stroke: 'none'})
     .on('click', function() {
       d3.event.preventDefault();
       d3.event.stopPropagation();
-      startAnim(graphXScale.invert(d3.event.x - margin.left - padding.left), (timeScale.domain()[1].getTime() - timeScale.domain()[0].getTime())/30000);
+      startAnim(graphXScale.invert(
+        Math.min(
+          Math.max(
+            0,
+            getMouseX(d3.event) - margin.left - padding.left
+          ),
+          graphWidth
+        )
+      ), 144000);
     }).call(drag);
-  graphLayer.append('text')
-    .attr({x:0, y: graphHeight + padding.bottom, 'text-anchor': 'middle', 'font-size': 12, 'opacity': 0.0, fill: '#000', stroke: 'none'});
-  graphLayer.append('circle')
-    .attr({cx: 0, cy: graphHeight, r: 4, fill: '#FFF', stroke: 'none'});
+
   var updatePosition = function(d)
   {
-    d.pos = map.projectPoint(d.latitude, d.longitude);
+    d.pos = map.latLngToLayerPoint(new L.LatLng(d.latitude, d.longitude));
     d3.select(this).attr( {cx: d.pos.x, cy: d.pos.y } );
+  }
+
+  var reset = function()
+  {
+    var bounds = map.getBounds();
+    var topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
+    var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
+
+    svgLayer.attr("width", bottomRight.x - topLeft.x)
+      .attr("height", bottomRight.y - topLeft.y)
+      .style("left", topLeft.x + "px")
+      .style("top", topLeft.y + "px");
+    graphLayer.selectAll('line').attr('opacity', function(d) {
+      return (bounds.getWest() <= d.longitude && d.longitude <= bounds.getEast() &&
+             bounds.getSouth() <= d.latitude && d.latitude <= bounds.getNorth())? 0.4: 0;
+    });
+    plotLayer.attr('transform', 'translate('+ -topLeft.x + ',' + -topLeft.y + ')');
+    plotLayer.selectAll('circle').each(updatePosition);
   }
 
   plotLayer.selectAll('circle').remove();
   plotLayer.selectAll('circle').data(data).enter().append('circle')
-    .attr({opacity: 0.8, r: 4, fill: 'rgba(0, 0, 255, 0.5)', stroke: 'white', 'stroke-width': 1})
+    .attr({opacity: 0.75, r: 4, fill: function(d) {return d.color;}, stroke: 'rgba(255,255,255,0.1)', 'stroke-width': 3})
     .each(updatePosition);
-  map.on('move', function()
-  {
-    map.reset();
-    plotLayer.selectAll('circle').each(updatePosition);
-  });
+  map.on('move', reset);
 }
