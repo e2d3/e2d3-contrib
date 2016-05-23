@@ -33,6 +33,7 @@ example:
   - react-javascript
   - multi-series-line-chart
 map:
+  - colored-leaflet-timeline
   - history-map
   - japanmap-javascript
   - aichi-color
