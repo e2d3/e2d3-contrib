@@ -291,7 +291,7 @@ function show(data)
           ),
           graphWidth
         )
-      ), (timeScale.domain()[1].getTime() - timeScale.domain()[0].getTime())/30000);
+      ), (timeScale.domain()[1].getTime() - timeScale.domain()[0].getTime())/60000);
     }).call(drag);
 
   var updatePosition = function(d)
