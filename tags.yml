@@ -46,6 +46,7 @@ map:
   - tokyomap-koganei
   - leaflet-timeline
   - see-through-globe
+  - saga-color
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
