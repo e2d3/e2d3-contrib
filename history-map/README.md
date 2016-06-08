@@ -1,7 +1,7 @@
 History Map Chart
 ====
 
-History Map Chart
+※写真をクリックすると拡大表示が出来ます。
 
 ## Data Format
 
