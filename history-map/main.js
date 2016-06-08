@@ -8,7 +8,7 @@ const MAIN_PICT_CONTAINER = 0.75;
 const SUB_PICT_CONTAINER = 0.25;
 
 const PREVIEW_MARGIN = 20;
-const  PREVIEW_MARGIN_TOP = 10;
+const PREVIEW_MARGIN_TOP = 10;
 
 d3.select(root)
   .append('div')
@@ -28,10 +28,9 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 }).addTo(mapLayer);
 
 function update(data) {
-    const AREA_LABEL = data[0][0];
-    const SPOT_NAME_LABEL = data[0][1];
-    const LAT_LABEL = data[0][4];
-    const LNG_LABEL = data[0][5];
+    const SPOT_NAME_LABEL = data[0][0];
+    const LAT_LABEL = data[0][3];
+    const LNG_LABEL = data[0][4];
 
     d3.selectAll('.leaflet-marker-icon')
       .remove()
@@ -59,13 +58,13 @@ function update(data) {
 }
 
 function createContents(spot, data, spotName) {
-    const DESCRIPTION_LABEL = data[0][2];
-    const ERA_LABEL = data[0][6];
-    const ADDRESS_LABEL = data[0][3];
-    const PICT1_LABEL = data[0][7];
-    const PICT2_LABEL = data[0][8];
-    const PICT3_LABEL = data[0][9];
-    const PICT4_LABEL = data[0][10];
+    const DESCRIPTION_LABEL = data[0][1];
+    const ERA_LABEL = data[0][5];
+    const ADDRESS_LABEL = data[0][2];
+    const PICT1_LABEL = data[0][6];
+    const PICT2_LABEL = data[0][7];
+    const PICT3_LABEL = data[0][8];
+    const PICT4_LABEL = data[0][9];
 
     var modalPadding = root.clientHeight / 20;
     var pictContainerWidth = root.clientWidth - (modalPadding * 2);
