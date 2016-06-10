@@ -1,0 +1,17 @@
+﻿body {
+    background: url(bg_body.jpg);
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+#e2d3-chart-area > div {
+    background-image: url(bg_ipad.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#e2d3-chart-area > div > div {
+    background-image: url(star_border.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
