@@ -111,7 +111,7 @@ function show(data) {
     var graphHeight = panelHeight - padding.left - padding.right;
     var graphWidth = panelWidth - padding.top - padding.bottom;
 
-    var timeFormat = d3.time.format('%Y-%m-%d %H:%M:%S');
+    var timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%S');
     var timeDispFormat = d3.time.format('%H:%M:%S');
 
     var colored = function (gids) {
