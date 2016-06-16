@@ -12,7 +12,7 @@ function update(data) {
 // map handler
 !(function (d3, L) {
     var map = {};
-    var zoom = 2;
+    var zoom = 11;
     var mapLayer = null;
     var svgLayer = null;
     var plotLayer = null;
@@ -24,7 +24,7 @@ function update(data) {
         selection = s;
         selection.style('height', root.clientHeight + 'px');
         selection.style('width', root.clientWidth + 'px');
-        var point = [0, 0];
+        var point = [35.351093, 139.319971];
         mapLayer = L.map(selection.attr('id')).setView(point, zoom);
 
         var tileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -292,7 +292,7 @@ function show(data) {
                     ),
                     graphWidth
                 )
-            ), (timeScale.domain()[1].getTime() - timeScale.domain()[0].getTime()) / 30000);
+            ), (timeScale.domain()[1].getTime() - timeScale.domain()[0].getTime()) / 80000);
         }).call(drag);
 
     var updatePosition = function (d) {
