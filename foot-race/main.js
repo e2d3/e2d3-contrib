@@ -189,7 +189,7 @@ pitchmag=0.0086*height+85.091; //added 20160403 nagahisa
 
 
 //label click
-d3.select('.chart-label').on('click', function() {
+d3.selectAll('.chart-label').on('click', function() {
     d3.selectAll('.chart-label').classed('active', false);
     d3.select(this).classed('active', true);
 
