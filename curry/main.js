@@ -4,20 +4,6 @@ var margin = { top: 20, right: 30, bottom: 30, left: 40 };
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
 
-var x = d3.scale.ordinal()
-  .rangeRoundBands([0, width], .1)
-
-var y = d3.scale.linear()
-  .rangeRound([height, 0]);
-
-var color = d3.scale.category10();
-
-var chart = d3.select(root).append('svg')
-    .attr('width', root.clientWidth)
-    .attr('height', root.clientHeight)
-    .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
 var color = d3.scale.ordinal()
     .range(["#d6616b", "#3182bd", "transparent"]);
 
@@ -41,19 +27,17 @@ var cfg = {
 var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
 
 function update(data) {
+    d3.selectAll('svg').remove();
+    var chart = d3.select(root).append('svg')
+        .attr('width', root.clientWidth)
+        .attr('height', root.clientHeight)
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
     var list = data.transpose().toList({header: ['axis', 'value'], typed: true});
     var key = 'value';
     var total = list.length;
 
-    x.domain(list.map(function (d) {
-        return d.name;
-    }));
-    y.domain([0, d3.max(list.values('axis'))]);
-
-
-    cfg.maxValue = Math.max(cfg.maxValue, d3.max(list, function(i){
-        return i.value;
-    }));
+    cfg.maxValue = d3.max(list, function(i){return i.value;});
     var g = chart.append('g');
 
     for(var j=0; j<cfg.levels-1; j++){
@@ -104,7 +88,7 @@ function update(data) {
         g.selectAll(".nodes")
             .data(z, function(j, i){
                 console.log(j);
-                
+
                 dataValues.push([
                     cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
                     cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
