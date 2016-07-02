@@ -1,7 +1,7 @@
-Simple Bar Chart
+Simple Rader chart
 ====
 
-Simple Bar Chart
+Simple Rader chart
 
 ## Data Format
 
