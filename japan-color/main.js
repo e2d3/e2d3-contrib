@@ -70,7 +70,7 @@ function show(data) {
     var values = {}; // all of data;
     labels.forEach(function(label, i) {
         if(label){
-            values[dd] = [];
+            values[label] = [];
             data.keys.forEach(function(pre) {
                 values[label].push(data[pre][label]);
             }
