@@ -73,11 +73,11 @@ function show(data) {
             values[label] = [];
             data.keys.forEach(function(pre) {
                 values[label].push(data[pre][label]);
-            }
+            })
         }else{
             labels.splice(i, 1);
         }
-    }
+    });
     //slider
     var isSelected = false;
     var hasActive = false;
