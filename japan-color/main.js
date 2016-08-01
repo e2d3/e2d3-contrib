@@ -67,17 +67,17 @@ function show(data) {
   if (data && topo.objects) {
     //max and slider labels
     var labels = data.header;
-    var values = []; // all of data;
-    data.keys.forEach(function(d) {
-      labels.forEach(function(dd, i) {
-        if(dd){
-          var v = data[d][dd];
-          values.push(v);
+    var values = {}; // all of data;
+    labels.forEach(function(label, i) {
+        if(label){
+            values[dd] = [];
+            data.keys.forEach(function(pre) {
+                values[label].push(data[pre][label]);
+            }
         }else{
-          labels.splice(i, 1);
+            labels.splice(i, 1);
         }
-      });
-    });
+    }
     //slider
     var isSelected = false;
     var hasActive = false;
@@ -134,7 +134,7 @@ function show(data) {
       })
       .transition()
       .attr("fill", function(d) {
-        return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values, selectedColor) : "#ffffff";
+        return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values[selectedLabel], selectedColor) : "#ffffff";
       });
     //onchange label
     $(document).on('click', '.chart-label', function() {
@@ -175,7 +175,7 @@ function show(data) {
         })
         .transition()
         .attr("fill", function(d) {
-          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values, selectedColor) : "#ffffff";
+          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values[selectedLabel], selectedColor) : "#ffffff";
         });
     });
     //change color
@@ -189,7 +189,7 @@ function show(data) {
         .data(topojson.feature(topo, topo.objects.japan).features)
         .transition()
         .attr("fill", function(d) {
-          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values, selectedColor) : "#ffffff"
+          return (data[d.properties.nam_ja] && data[d.properties.nam_ja][selectedLabel] && !isNaN(+data[d.properties.nam_ja][selectedLabel])) ? color(data[d.properties.nam_ja][selectedLabel], values[selectedLabel], selectedColor) : "#ffffff"
         });
     });
   }
