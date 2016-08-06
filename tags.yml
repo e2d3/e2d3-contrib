@@ -47,6 +47,7 @@ map:
   - leaflet-timeline
   - see-through-globe
   - saga-color
+  - yamaguchi-map
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -75,4 +76,4 @@ tbd:
   - the-euro-debt-crisis
   - treemap
   - simple-barchart
-  - yamaguchi-map
+  - ishikawa_map
