@@ -1,4 +1,4 @@
-//# require=d3,topojson,jquery,colorbrewer
+//# require=d3,topojson,jquery
 
 
 //#######################################
@@ -43,7 +43,7 @@ var svg = d3.select(root).append('svg')
 
 //設定した経度、緯度を画面の中心にして地図を描写する。
 var projection = d3.geo.mercator()  
-  .center([136.652514, 36.599003])   //経度、緯度の設定
+  .center([136.652514, 36.699003])   //経度、緯度の設定
   .scale(Math.min(width, height) * 25)   
   .translate([ width/2, height/2]);　//画面の中心にセットする
 
