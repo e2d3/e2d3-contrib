@@ -1,4 +1,4 @@
-﻿//# require=d3,Symbols
+﻿//# require=d3,Symbols,jQuery:jquery
 
 
 
