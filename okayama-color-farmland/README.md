@@ -1,0 +1,1 @@
+Okayama Color Farmland====topojsonデータについて出典：国土数値情報（http://nlftp.mlit.go.jp/）（世界測地系緯度経度・Shape形式）を加工して作成csvデータについて出典：地域経済分析システムRESAS（https://resas.go.jp/）農林水産マップ　農地分析（2010年）
