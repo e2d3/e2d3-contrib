@@ -46,7 +46,7 @@ function update(data) {
           .addTo(mapLayer)
           // .bindPopup(spot[SPOT_NAME_LABEL] + '<img class="camera-icon" src="images/icon-camera.png" />');
           // .bindPopup(spot[SPOT_NAME_LABEL]);
-          .bindPopup(spot[SPOT_NAME_LABEL] + '\n 集音日時 :' + spot[ERA_LABEL]);
+          .bindPopup(spot[SPOT_NAME_LABEL] + '<br> 集音日時 :' + spot[ERA_LABEL]);
 
         marker.on('click', function() {
             d3.select('.leaflet-popup-content').on('click', function() {
