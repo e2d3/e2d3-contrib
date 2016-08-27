@@ -1,0 +1,39 @@
+svg {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+}
+
+text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.background {
+  fill: #eee;
+}
+
+line {
+  stroke: #fff;
+}
