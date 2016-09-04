@@ -31,19 +31,17 @@ var chart = d3.select(root).append('svg')
 
 function update(data) {
   var list = data.toList();
-  console.log(list);
-
-  var key = yMetrics;
+  var header = list.header;
+  xMetrics = header[3];
+  yMetrics = header[2];
+  zMetrics = header[1];
+  var key = header[4];
 
   x.domain([
       d3.min(list, function (d) {
-      // console.log(d);
-      // console.log(d[xMetrics]);
         return d[xMetrics];
       }), 
       d3.max(list, function (d) {
-      // console.log(d);
-      // console.log(d[xMetrics]);
         return d[xMetrics];
       })
     ]);
@@ -59,17 +57,12 @@ function update(data) {
   color.domain(list.map(function (d) { return d.name; }))
 
   var setup = function (selection) {
-    console.log('setup');
-    console.log(selection);
-
     selection
         .attr('class', 'bubble')
         .attr('cx', function (d) {
-          console.log(d);
           return x(d[xMetrics]);
         })
         .attr('cy', function (d) {
-          console.log(d);
           return y(d[yMetrics]);
         })
         .style('fill', function (d) { return color(d.name); })
@@ -90,17 +83,24 @@ function update(data) {
   chart.append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis);
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text(xMetrics);
 
+  console.log(key);
   chart.append('g')
       .attr('class', 'y axis')
       .call(yAxis)
-    .append('text')
+      .append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', 6)
       .attr('dy', '.71em')
       .style('text-anchor', 'end')
-      .text(key);
+      .text(yMetrics);
 
   rect = chart.selectAll('.bubble').data(list);
 

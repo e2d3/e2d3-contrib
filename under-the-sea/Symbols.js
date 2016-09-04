@@ -100,7 +100,7 @@ define(function() {
                 rotate: "none"
             })
             .append('mpath')
-            .attr('xlink:href', "#path1");
+            .attr('xlink:href', "../../../../../../frame.html#path1");
     };
 
     //利用
@@ -109,7 +109,7 @@ define(function() {
         return sel.append('use')
             .attr({
                 // 'xmlns:xlink': "http://www.w3.org/1999/xlink",
-                'xlink:href': '#' + id
+                'xlink:href': '../../../../../../frame.html#' + id
             });
     };
 

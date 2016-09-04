@@ -4,9 +4,6 @@ var width = root.clientWidth;
 var height = root.clientHeight;
 var radius = Math.min(width, height) * 0.4;
 
-var color = d3.scale.ordinal()
-  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
 var arc = d3.svg.arc()
   .outerRadius(radius)
   .innerRadius(radius * 0.2);
@@ -23,6 +20,9 @@ var chart = d3.select(root).append('svg')
 
 function update(data) {
   var list = data.transpose().toList({header: ['name', 'age'], typed: true});
+
+  if (!env.colors()) env.colors(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+  var color = d3.scale.ordinal().range(env.colors());
 
   var setup = function (path, text) {
     path

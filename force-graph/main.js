@@ -6,7 +6,7 @@ var h = root.clientHeight - margin.top - margin.bottom;
 
 function select_nodes(data){
     var res = [];
-    for(var i=0; i<data.length; i++){
+    for(var i=1; i<data.length; i++){
         if(data[i][0]=="node"){
             res.push({id:parseInt(data[i][1]),label:data[i][2]});
         }
@@ -16,7 +16,7 @@ function select_nodes(data){
 
 function select_links(data){
     var res = [];
-    for(var i=0; i<data.length; i++){
+    for(var i=1; i<data.length; i++){
         console.log(data[i]);
         if(data[i][0]=="link"){
             res.push({source:parseInt(data[i][1]),target:parseInt(data[i][2])});
@@ -25,11 +25,73 @@ function select_links(data){
     return res
 }
 
+var changeFormat = {
+
+    nodes: function(nodes) {
+        nodes.sort(function(a, b) {
+            if (a.id < b.id) return -1;
+            if (a.id > b.id) return 1;
+            return 0;
+        });
+
+        return nodes;
+    },
+
+    links: function(nodes, links) {
+        var newLinks = [];
+
+        links.forEach(function(link) {
+            var sourceFlg = false;
+            var targetFlg = false;
+            var sourceVal, targetVal;
+
+            nodes.forEach(function(node) {
+                if (link.source == node.id) {
+                    sourceFlg = true;
+                    sourceVal = node.id;
+                }
+                if (link.target == node.id) {
+                    targetFlg = true;
+                    targetVal = node.id;
+                }
+            });
+
+            if (sourceFlg && targetFlg) {
+                newLinks.push({source: sourceVal, target: targetVal});
+            }
+        });
+
+        return newLinks;        
+    },
+
+    serialNumberID: function(nodes, links) {
+        for (var index = 0; index < nodes.length; index++) {
+            if (nodes[index].id != index) {
+                var id = nodes[index].id;
+                nodes[index].id = index;
+                    
+                links.forEach(function(d) {
+                    if (id == d.source) {
+                        d.source = index;
+                    }
+                    if (id == d.target) {
+                        d.target = index;
+                    }                
+                });
+            }
+        }
+    }
+};
+
 function update(data) {
     d3.select(root).selectAll('*').remove();
 
     nodes = select_nodes(data);
     links = select_links(data);
+
+    nodes = changeFormat.nodes(nodes);          // nodesの整形
+    links = changeFormat.links(nodes, links);   // linksの整形
+    changeFormat.serialNumberID(nodes, links);  // idが連番になるように整形
 
     var force = d3.layout.force()
         .nodes(nodes)
