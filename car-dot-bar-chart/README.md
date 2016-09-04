@@ -1,1 +1,0 @@
-Car Dot Bar Chart====出典：一般財団法人　自動車検査登録情報協会https://www.airia.or.jp/publish/statistics/number.html
