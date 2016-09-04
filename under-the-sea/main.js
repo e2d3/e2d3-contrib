@@ -61,9 +61,8 @@ function update(data) {
 }
 
 function draw(m, data) {
-    if (preMetrics !== m) {
-        remove();
-    }
+    remove();
+    
     preMetrics = m;
 
     var metrics = m;
@@ -306,7 +305,7 @@ function drawBackground(svg, width, height, margin) {
             class: 'background',
             width: width,
             height: height,
-            fill: 'url(#sGradient)'
+            fill: 'url(../../../../../../frame.html#sGradient)'
         });
 
     // backbround-ground
@@ -316,7 +315,7 @@ function drawBackground(svg, width, height, margin) {
             class: 'background',
             width: width,
             height: margin.bottom,
-            fill: 'url(#gGradient)',
+            fill: 'url(../../../../../../frame.html#gGradient)',
             y: height - margin.bottom
         });
 }

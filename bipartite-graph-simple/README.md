@@ -1,4 +1,3 @@
-
 bipartite-graph(2部グラフ)
 
 ■使い方  

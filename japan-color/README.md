@@ -1,1 +1,1 @@
-Japan Color====Paint any data to japanese states.
+Japan Color====Paint any data to japanese prefecture.

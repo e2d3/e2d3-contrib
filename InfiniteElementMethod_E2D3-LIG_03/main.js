@@ -1,9 +1,11 @@
 //# require=d3
 
-var main = d3.select(root)
-        .append("svg");
+var main = d3.select(root).append("svg");
 
-function update(data) {
+function update(data) {	
+d3.selectAll("svg").remove();
+var main = d3.select(root).append("svg");
+iniprocess();
 
     var sales_data = data;
 
@@ -26,12 +28,12 @@ function update(data) {
     }, ];
 
     bP.draw(data, svg);
-
-
-
 }
 
-!function(){
+iniprocess();
+
+
+function iniprocess(){
 	var bP={};	
 	var b=30, bb=150, height=600, buffMargin=1, minHeight=14;
 	var c1=[-150, 40], c2=[-50, 170], c3=[-10, 240]; //Column positions of labels.
@@ -308,4 +310,4 @@ function update(data) {
 	}
 	
 	this.bP = bP;
-}();
+};

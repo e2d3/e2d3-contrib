@@ -1,3 +1,4 @@
+node or link,id(node) or source(link),label(node) or target(link)
 node,0,田中
 node,1,三木
 node,2,大平

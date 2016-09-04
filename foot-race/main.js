@@ -1,8 +1,12 @@
-//# require=d3,Symbols
+﻿//# require=d3,Symbols,jQuery:jquery
+
+
 
 function update(data) {
     draw(data.toList());
 }
+
+
 
 function draw(data) {
 
@@ -27,8 +31,9 @@ var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
 
 var startDelay = 1000;
-var objYspace = 50;
+var objYspace = 50*(height/485);  //change 20160402 nagahisa
 var xStartPosOrg = 0;
+
 
 //draw background-image (should be called before base-svg creation)
 d3.select(root).append('img')
@@ -64,14 +69,12 @@ var drawArea = svg
 var dataReserved = null;
 
 
-
-
-
     //create symbol-manage object
     var symbols = new Symbols(svg);
     symbols.storeAllSym(data, false);
 
     var metrics = m;
+
 
     //max min
     var yMax = height;
@@ -95,11 +98,21 @@ var dataReserved = null;
             return d['名前'] + metrics;
         })
 
+
+mag=0.0011*height+0.00757;   //added 20160403 nagahisa
+pitchmag=0.0086*height+85.091; //added 20160403 nagahisa
+
+
     var newDots = symbols.appendSymbol(dots.enter(), metrics)
         .attr('class', metrics + 'class')
+        .attr("transform", "scale(" + (mag) +  ")")    //change 20160402
+
+
 
     setDotProperty(newDots);
     setDotProperty(dots);
+
+
 
     var texts = drawArea
         .selectAll('.' + metrics + 'label')
@@ -110,9 +123,9 @@ var dataReserved = null;
     setTextProperty(texts);
 
     function setDotProperty(line) {
-        line.attr('x', xStartPosOrg)
+       line.attr('x', xStartPosOrg)
             .attr('y', function(d, i){
-                return i * objYspace;
+                return i * pitchmag;    //change 20160403 nagahisa
             })
             .transition()
             .delay(startDelay)
@@ -126,20 +139,23 @@ var dataReserved = null;
             })
             .ease('linear')
             .attr('x', function(d, i) {
-                return xScale(xMax);
+                return xScale(xMax)*(1/mag); //change 20160403 nagahisa
             })
             .attr('y', function(d, i) {
-                return i * objYspace;
-            })
+                return i * pitchmag;            })   //change 20160403 nagahisa
             .attr('stroke', 'none')
             .attr('display', 'inherited')
     }
+
+
+
+
 
     function setTextProperty(line) {
         line.text(function(d) {
                 return d['名前'];
             })
-            .attr('font-size', '9px')
+            .attr('font-size', '12px')  //change 20160403 nagahisa
             .attr('fill', 'white')
             .attr('display', 'inherited')
             .attr('x', xStartPosOrg)
@@ -166,6 +182,11 @@ var dataReserved = null;
 
     }
     dataReserved = data;
+
+
+
+
+
 
 //label click
 jQuery(document).on('click', '.chart-label', function() {
