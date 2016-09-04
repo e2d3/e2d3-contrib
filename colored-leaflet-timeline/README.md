@@ -1,1 +1,0 @@
-colored-Leaflet-timeline====Data must contains fields named "time", "longitude" and "latitude."This program uses Leaflet.js.
