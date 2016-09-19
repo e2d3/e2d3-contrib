@@ -1,0 +1,1 @@
+medal chart====1912-2012間のオリンピックで獲得した都道府県別個人メダル数source:http://www.nikkansports.com/olympic/rio2016/column/rioeys/news/1695271.html

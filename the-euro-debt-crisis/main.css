@@ -1,0 +1,13 @@
+.group text {
+  font: 11px sans-serif;
+  pointer-events: none;
+}
+
+.group path {
+  stroke: #000;
+}
+
+path.chord {
+  stroke-width: .75;
+  fill-opacity: .75;
+}

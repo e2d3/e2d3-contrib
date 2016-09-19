@@ -1,0 +1,79 @@
+recommended:
+  - InfiniteElementMethod_E2D3-LIG_03
+  - compare-ipo
+  - dot-bar-chart
+  - parallel-coordinates
+  - sequences-sumburst
+  - nagoya-wind
+  - scatter
+  - foot-race
+  - pictured-treemap
+  - food-analyzer
+  - radial-reingold-tilford-tree
+  - bubble-chart
+  - bipartite-graph-simple
+  - force-graph
+  - japan-color
+  - population-map-iran
+  - under-the-sea
+  - leaflet-voronoi
+  - jthree-example
+  - multi-series-radar-chart
+  - wordcloud
+statistics:
+  - scatterplot-matrix-brushing
+  - principal-component-analysis
+  - principal-component-analysis-text
+  - dcjs-example
+  - simple-histogram
+example:
+  - barchart-javascript
+  - bubblechart
+  - piechart-javascript
+  - react-javascript
+  - multi-series-line-chart
+map:
+  - colored-leaflet-timeline
+  - history-map
+  - japanmap-javascript
+  - aichi-color
+  - anjo-color
+  - hiroshima-color
+  - nagoya-color
+  - nishimikawa-color
+  - okayama-color
+  - takahashigawa-color
+  - tokyomap-koganei
+  - leaflet-timeline
+  - see-through-globe
+  - saga-color
+  - yamaguchi-map
+  - ishikawa_map
+marathon:
+  - virtual-tokyomarathon
+  - virtual-koganeinewyear-roadrace
+  - virtual-frostbite-halfmarathon
+  - virtual-katsuta-marathon
+  - virtual-toyamamarathon1
+  - virtual-toyamamarathon2
+  - virtual-tsukubamarathon
+hackathon:
+  - curry
+  - jizou-javascript
+  - piechart2-javascript
+  - plain-barchart-javascript
+  - suimin-checker
+  - takahashigawa-gesui
+  - goal-tree
+  - kurashiki-jinkou-chart
+  - kurashiki-landmark-chart
+  - okayama-foreigner-chart
+  - text-chart
+tbd:
+  - wanamin
+  - topic-model
+  - chained-transitions
+  - les-miserables
+  - the-euro-debt-crisis
+  - treemap
+  - simple-barchart
