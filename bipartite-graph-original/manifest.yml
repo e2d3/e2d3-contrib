@@ -1,7 +1,8 @@
-name: Bipartite Graph Original 
+name: Bipartite Graph Simple 
 description:
 tags:
   - recommended
+  - hackathon
 homepage: https://github.com/e2d3/e2d3-contrib
 bugs: https://github.com/e2d3/e2d3-contrib/issues
 license: Apache-2.0
