@@ -1,7 +1,7 @@
-Yamaguchi Map
+Japan Map
 ====
 
-Color Mapping any data on Yamaguchi Prefecture.
+Color Mapping any data on Japan.
 
 ## Data Format
 
