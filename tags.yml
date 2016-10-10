@@ -69,6 +69,12 @@ hackathon:
   - kurashiki-landmark-chart
   - okayama-foreigner-chart
   - text-chart
+kurashiki:
+  - kurashiki-causeofdeath-chart
+  - kurashiki-jinkou-chart
+  - kurashiki-landmark-chart
+  - kurashiki-sound-map
+  - kurashiki_wordcloud
 tbd:
   - wanamin
   - topic-model
