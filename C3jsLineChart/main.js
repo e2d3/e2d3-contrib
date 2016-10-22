@@ -7,8 +7,8 @@ function update(data) {
 		bindto: d3.select(root),
 		data: {
 			columns: [
-			data(0),
-			data(1)
+			data[0],
+			data[1]
 			]
 		}
 	});
