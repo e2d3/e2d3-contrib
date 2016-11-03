@@ -45,6 +45,7 @@ map:
   - takahashigawa-color
   - tokyomap-koganei
   - leaflet-timeline
+  - leaflet-timeline-with-value
   - see-through-globe
   - saga-color
   - yamaguchi-map
@@ -85,4 +86,3 @@ tbd:
   - simple-barchart
   - c3js-line-chart
   - c3js-charts
-  - leaflet-timeline-with-value
