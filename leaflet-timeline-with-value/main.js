@@ -147,10 +147,10 @@ function show(data)
   });
 
   data.forEach(function(d) {
-    d.time = timeFormat.parse(d.time);
-    d.latitude = +d.latitude;
-    d.longitude = +d.longitude;
-    d.value = +d.value;
+    d.time = timeFormat.parse(d["Captured Time"]);
+    d.latitude = +d.Latitude;
+    d.longitude = +d.Longitude;
+    d.value = +d.Value;
   });
 
   timeScale.domain(d3.extent(data, function(d){return d.time;}));
