@@ -105,6 +105,7 @@ map.init(d3.select(root).append('div').attr('id','map-container'))
 var tick = null;
 var speed = 300000
 var valueMaxR = 20
+var timeformat = '%Y-%m-%d %H:%M:%S'
 
 function show(data)
 {
@@ -124,7 +125,7 @@ function show(data)
   var graphHeight = panelHeight - padding.left - padding.right;
   var graphWidth = panelWidth - padding.top - padding.bottom;
 
-  var timeFormat = d3.time.format('%Y-%m-%d %H:%M:%S UTC');
+  var timeFormat = d3.time.format(timeformat);
   var timeDispFormat = d3.time.format('%Y/%m/%d %H:%M:%S');
 
   var timeDispFunc = function(d) {
