@@ -85,4 +85,9 @@ tbd:
   - treemap
   - simple-barchart
   - c3js-line-chart
+<<<<<<< HEAD
   - c3js-charts
+=======
+  - c3js-charts
+  - leaflet-timeline-with-value
+>>>>>>> 2ff1344da67d7e29ef6e56b745e0a69a40c347fb
