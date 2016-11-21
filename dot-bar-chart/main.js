@@ -1,252 +1,227 @@
 //# require=d3
 
+/* global d3 */
+
 var dim = { width: root.clientWidth, height: root.clientHeight };
 var margin = { top: 30, bottom: 50, left: 50, right: 20 };
 var inputHeight = 20;
-var numberFormat = d3.format('.0f');
 dim.graphWidth = dim.width - margin.left - margin.right;
 dim.graphHeight = dim.height - margin.top - margin.bottom;
 
 var prev, next, trans;
 
 d3.select('body').on('keydown', function () {
-    if (d3.event.which === 39) {
-        next();
-    }
-    if (d3.event.which === 37) {
-        prev();
-    }
+  if (d3.event.which === 39) {
+    next();
+  }
+  if (d3.event.which === 37) {
+    prev();
+  }
 });
 
-function update(data) {
-    d3.select(root).selectAll('*').remove();
+var time = 0;
 
-    var svg = d3.select(root).append('svg')
-      .attr({ width: dim.width, height: dim.height })
-      .style({ padding: 0 });
-
-    var axisLayer = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id","g-axis-layer");
-    var graphLayer = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').attr("id", "g-graph-layer");
-    var inputLayer = svg.append('g').attr('transform', 'translate(0,' + (dim.height - inputHeight) + ')').attr("id", "g-input-layer");
-
-    var xScale = d3.scale.ordinal().rangeBands([0, dim.graphWidth], 0.05);
-    var xLocalScale = d3.scale.ordinal();
-    var yScale = d3.scale.ordinal().rangePoints([dim.graphHeight, 0]);
-    var colorScale = d3.scale.category10();
-    var inputScale = d3.scale.ordinal().rangeBands([0, dim.width - margin.right]);
-
-    var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
-    var yAxis = d3.svg.axis().orient('left').scale(yScale);
-
-    var xAxisObj = axisLayer.append('g')
-      .attr('transform', 'translate(' + 0 + ',' + dim.graphHeight + ')')
-      .attr('class', 'axis')
-      .call(xAxis);
-    var yAxisObj = axisLayer.append('g')
-      .attr('transform', 'translate(' + 0 + ',' + 0 + ')')
-      .attr('class', 'axis')
-      .call(yAxis);
-
-    axisLayer.selectAll('.axis text').style('font', '14px "Lucida Grande", Helvetica, Arial, sans-serif');
-    axisLayer.selectAll('.axis path.domain').style({ fill: 'none', stroke: '#000000', 'shape-rendering': 'crispEdges' });
-    axisLayer.selectAll('.axis line').style({ fill: 'none', stroke: '#000000', 'shape-rendering': 'crispEdges' });
-
-    var time = 0;
-    var radius = 3;
-    var mar = 0.6;
-    var barWidth = 16;
-
-    var auto = true;
-
-    var duration = 2000;
-    var delayMax = 1000;
-
-    prev = function () {
-        trans(time - 1);
+var optimizeArrange = function(m, x, y) {
+  // [radius, NCol, Nrow]
+  if (x * m <= y) {
+    return [x/2, 1, m];
+  }
+  if (x/m > y) {
+    return [y/2, m, 1];
+  }
+  var rng = [1, m];
+  while (rng[1] - rng[0] > 1) {
+    var mid = Math.floor((rng[1] + rng[0])/2);
+    var d = x/mid;
+    if (Math.ceil(m/mid) * d < y) {
+      rng[1] = mid;
+    } else {
+      rng[0] = mid;
     }
-
-    next = function () {
-        trans(time + 1);
-    }
-
-    var json = data.toMap({typed: true});
-
-    var displaydata = [];
-    var labels = json.keys;
-    var parties = json.header;
-
-    var partDict = {};
-    parties.forEach(function (d, i) {
-        partDict[d] = i;
-    });
-    var sums = {};
-    var data = {};
-
-    labels.forEach(function (label) {
-        var r = [];
-        parties.forEach(function (party) {
-          r.push(+json[label][party]);
-        });
-        data[label] = r;
-        sums[label] = d3.sum(data[label]);
-    });
-
-    var max = d3.max(labels.map(function (d) { return d3.max(data[d]); }));
-
-    var denominator = Math.ceil(max / 1000);
-    if (denominator != 1)
-    {
-      var legend = axisLayer.append('g')
-        .attr('class', 'legend')
-        .attr('transform', 'translate(-20,-10)');
-      legend.append('circle')
-        .attr({r: radius, fill: '#888', stroke: 'none'});
-      legend.append('text')
-        .attr({x: 5, y: 4, 'font-size': 12, 'font-family': '"Lucida Grande", Helvetica, Arial, sans-serif'})
-        .text('=' + denominator);
-
-      labels.forEach(function (label) {
-          var r = [];
-          parties.forEach(function (party) {
-            r.push(Math.ceil(+json[label][party]/denominator));
-          });
-          data[label] = r;
-          sums[label] = d3.sum(data[label]);
-      });
-
-      max = d3.max(labels.map(function (d) { return d3.max(data[d]); }));
-    }
-    else
-    {
-      axisLayer.select('g.legend').remove();
-    }
-
-    var nrow = Math.ceil(dim.graphHeight / (2 * (radius + mar)));
-    barWidth = Math.ceil(max / nrow);
-    yScale.domain(d3.range(nrow));
-    yAxis.tickValues(d3.range(nrow).filter(function (d) { return d % 10 === 0; }));
-    yAxis.tickFormat(function (d) { return (d * barWidth)*denominator; });
-    xScale.domain(parties.map(function (d, i) { return i; }));
-    xAxis.tickFormat(function (d) { return parties[d]; });
-    xAxisObj.call(xAxis);
-    yAxisObj.call(yAxis);
-    xLocalScale.rangeBands([0, xScale.rangeBand()]).domain(d3.range(barWidth));
-    colorScale.domain(d3.range(parties.length));
-
-    inputScale.domain(labels);
-    var currentButton = inputLayer.append('rect')
-      .attr('class', 'cursor')
-      .attr({ x: 0, y: 0, height: inputHeight, width: inputScale.rangeBand() })
-      .style('stroke', '#FFF')
-      .style('stroke-width', 2)
-      .style('fill', '#000');
-    var buttons = inputLayer.selectAll('.button').data(labels).enter().append('g').attr('class', 'button')
-      .attr('transform', function (d) { return 'translate(' + inputScale(d) + ',' + 0 + ')'; })
-      .on('click', function () {
-          var s = d3.select(this);
-          trans(labels.indexOf(s.datum()));
-      });
-    buttons.append('rect')
-      .attr({ x: 0, y: 0, height: inputHeight, width: inputScale.rangeBand() })
-      .style('stroke', '#FFF')
-      .style('stroke-width', 2)
-      .style('fill', 'rgba(0,0,0,0.1)');
-    buttons.append('text')
-      .text(function (d) { return d; })
-      .attr('x', function (d) { return inputScale.rangeBand() / 2; })
-      .attr('y', 16)
-      .style('fill', function (d, i) { return (i === 0) ? '#FFF' : '#000'; })
-      .style('text-anchor', 'middle')
-      .style('font', (inputHeight - 4) + 'px "Lucida Grande", Helvetica, Arial, sans-serif');
-
-    var summax = d3.max(labels.map(function (d) { return sums[d]; }));
-    var displaydata = d3.range(summax).map(function (d) { return []; });
-    var indexMargin = 0;
-    parties.forEach(function (party, partyidx) {
-        for (var i = 0; i < data[labels[0]][partyidx]; ++i) {
-            displaydata[indexMargin + i].push({ label: partyidx, idx: i });
-        }
-        indexMargin += data[labels[0]][partyidx];
-    });
-    for (var i = indexMargin; i < summax; ++i) {
-        displaydata[i].push({ label: null, idx: null });
-    }
-
-    d3.range(1, labels.length).forEach(function (idx) {
-        var year = labels[idx];
-        var lastyear = labels[idx - 1];
-        var yearidx = idx;
-        var pool = [];
-        var unused = [];
-        var keep = [];
-        displaydata.forEach(function (d, i) {
-            var copy = { label: d[yearidx - 1].label, idx: d[yearidx - 1].idx };
-            d.push(copy);
-            if (d[yearidx].label == null) {
-                unused.push(i);
-            }
-            else {
-                if (data[year][d[yearidx].label] <= d[yearidx].idx) {
-                    pool.push(i);
-                }
-                else {
-                    keep.push(i);
-                }
-            }
-        });
-
-        d3.shuffle(pool);
-        if (sums[year] - sums[lastyear] > 0) {
-            pool = pool.concat(unused.splice(0, sums[year] - sums[lastyear]));
-            d3.shuffle(pool);
-        }
-        else {
-            pool.splice(sums[year] - keep.length).forEach(function (d) {
-                displaydata[d][yearidx] = { label: null, idx: null };
-            });
-            pool = pool.splice(0, sums[year] - keep.length);
-        }
-        var poolmargin = 0;
-
-        parties.forEach(function (party) {
-            if (data[year][partDict[party]] - data[lastyear][partDict[party]] > 0) {
-                for (var i = 0; i < (data[year][partDict[party]] - data[lastyear][partDict[party]]) ; ++i) {
-                    if (pool[poolmargin + i]) displaydata[pool[poolmargin + i]][yearidx] = { label: partDict[party], idx: i + data[lastyear][partDict[party]] };
-
-                };
-                poolmargin += data[year][partDict[party]] - data[lastyear][partDict[party]];
-            }
-        });
-
-    });
-    var votes = graphLayer.selectAll('.vote').data(displaydata).enter().append('circle')
-      .attr('class', 'vote')
-      .attr('r', radius)
-      .attr('cx', function (d) { return ((d[time].label != null) ? (xScale(d[time].label) + xLocalScale(d[time].idx % barWidth) + radius + mar) : (dim.graphWidth / 2)); })
-      .attr('cy', function (d) { return ((d[time].label != null) ? (yScale(Math.floor((d[time].idx + 0.1) / barWidth)) - radius - mar) : 0); })
-      .style('opacity', function (d) { return (d[time].label != null) ? 0.8 : 0.0; })
-      .style('fill', function (d) { return colorScale(d[time].label); });
-
-    trans = function (to) {
-        if (to === time || to < 0 || to >= labels.length) {
-            return;
-        }
-        var current = time;
-        time = to;
-        yearTarget = labels[time];
-        var votes = graphLayer.selectAll('.vote')
-          .filter(function (d) { return d[current].label != d[time].label || d[current].idx != d[time].idx; })
-          .transition()
-          .duration(duration)
-          .delay(function (d) { return Math.random() * delayMax; })
-          .attr('cx', function (d) { return ((d[time].label != null) ? (xScale(d[time].label) + xLocalScale(d[time].idx % barWidth) + radius + mar) : (dim.graphWidth / 2)); })
-          .attr('cy', function (d) { return ((d[time].label != null) ? (yScale(Math.floor((d[time].idx + 0.1) / barWidth)) - radius - mar) : 0); })
-          .style('opacity', function (d) { return (d[time].label != null) ? 0.8 : 0.0; })
-          .style('fill', function (d) { return colorScale(d[time].label); });
-
-        inputLayer.select('.cursor').transition().duration(duration / 2)
-          .attr('x', function (d) { return inputScale(labels[time]); });
-        inputLayer.selectAll('.button text').transition().duration(duration / 2)
-          .style('fill', function (d, i) { return (i === time) ? '#FFF' : '#000'; })
-    }
+  }
+  return [x/rng[1] * 0.5, rng[1], Math.ceil(m/rng[1])];
 };
+
+function update(data) {
+  d3.select(root).selectAll('*').remove();
+
+  var svg = d3.select(root).append('svg')
+    .attr({ width: dim.width, height: dim.height })
+    .style({ padding: 0 });
+
+  var axisLayer = svg.append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+  var graphLayer = svg.append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+  var inputLayer = svg.append('g')
+    .attr('transform', 'translate(0,' + (dim.height - inputHeight) + ')');
+
+  var labels = data[0].slice(1);
+  var times = data.slice(1).map(function(v) {return v[0];});
+  var inputScale = d3.scale.ordinal()
+    .rangeBands([0, dim.width]).domain(d3.range(times.length));
+  var cursor = inputLayer.append('rect')
+    .attr('width', inputScale.rangeBand())
+    .attr('height', inputHeight)
+    .attr('x', 0).attr('y', 0)
+    .style('fill', '#000');
+  var timeButtonContainer = inputLayer.selectAll('g')
+    .data(times).enter().append('g')
+    .attr('transform', function(d, i) {
+      return 'translate(' + inputScale(i) + ',0)';
+    }).on('click', function(d, i) {
+      trans(i);
+    });
+  timeButtonContainer.append('rect')
+    .attr('width', inputScale.rangeBand())
+    .attr('height', inputHeight)
+    .attr('x', 0).attr('y', 0)
+    .style('fill', 'rgba(0, 0, 0, 0)')
+    .style('stroke-width', 1)
+    .style('stroke', '#000');
+  var buttonLabels = timeButtonContainer.append('text')
+    .attr('x', inputScale.rangeBand()*0.5)
+    .attr('y', inputHeight-2)
+    .attr('text-anchor', 'middle')
+    .style('fill', function(d, i) {
+      return (i==time)?'#FFF':'000';
+    }).style('font-size', inputHeight-4)
+    .style('font', '"Lucida Grande", Helvetica, Arial, sans-serif')
+    .text(function(d) {return d;});
+  var counts = data.slice(1).map(function(v) {
+    var obj = {};
+    labels.forEach(function(label, i) {
+      obj[label] = +v[i+1];
+    });
+    return obj;
+  });
+  var maxBar = d3.max(counts.map(function(tmp) {
+    return d3.max(d3.values(tmp));
+  }));
+
+  var denominator = Math.ceil(maxBar / 500);
+  if (denominator > 1) {
+    counts = counts.map(function(v) {
+      var obj = {};
+      labels.forEach(function(label) {
+        obj[label] = Math.ceil(v[label] / denominator);
+      });
+      return obj;
+    });
+    maxBar = Math.ceil(maxBar / denominator);
+  }
+
+  var colorScale = d3.scale.category10().domain(labels);
+  var xScale = d3.scale.ordinal()
+    .rangeBands([0, dim.graphWidth], 0.2)
+    .domain(labels);
+  var params = optimizeArrange(maxBar, xScale.rangeBand(), dim.graphHeight);
+  var radius = params[0];
+  var nCol = params[1];
+  var nRow = params[2];
+  var yScale = d3.scale.ordinal()
+    .rangePoints([dim.graphHeight, dim.graphHeight - nRow * radius * 2], 0)
+    .domain(d3.range(nRow));
+  var xLocalScale = d3.scale.ordinal()
+    .rangeBands([0, xScale.rangeBand()])
+    .domain(d3.range(nCol));
+
+  var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
+  var yAxis = d3.svg.axis().orient('left').scale(yScale)
+    .tickValues(d3.range(nRow).filter(function(d) {return d%Math.ceil(nRow / (dim.graphHeight/14)) === 0;}))
+    .tickFormat(function(d) {return (d*nCol);});
+
+  axisLayer.append('g')
+    .attr('transform', 'translate(' + 0 + ',' + dim.graphHeight + ')')
+    .attr('class', 'axis')
+    .call(xAxis);
+  axisLayer.append('g')
+    .attr('transform', 'translate(' + 0 + ',' + 0 + ')')
+    .attr('class', 'axis')
+    .call(yAxis);
+
+  axisLayer.selectAll('.axis text')
+    .style('font-size', 14)
+    .style('font', '"Lucida Grande", Helvetica, Arial, sans-serif');
+  axisLayer.selectAll('.axis path.domain')
+    .style('fill', 'none')
+    .style('stroke', '#000')
+    .style('shape-rendering', 'crispEdges');
+  axisLayer.selectAll('.axis line')
+    .style('fill', 'none')
+    .style('stroke', '#000')
+    .style('shape-rendering', 'crispEdges');
+
+  if (denominator > 1) {
+    var legend = axisLayer.append('g')
+      .attr('class', 'legend')
+      .attr('transform', 'translate(-20,-10)');
+    legend.append('circle')
+      .attr({r: radius, fill: '#888', stroke: 'none'});
+    legend.append('text')
+      .attr({x: 5, y: 4, 'font-size': 12, 'font-family': '"Lucida Grande", Helvetica, Arial, sans-serif'})
+      .text('=' + denominator);
+  }
+  var labelMax = {};
+  labels.forEach(function(label) {
+    labelMax[label] = d3.max(counts, function(d) {return d[label];});
+  });
+
+  var displayData = labels.map(function(label) {
+    return {label: label, mat: d3.range(labelMax[label]).map(function(d) {
+      return d3.range(times.length).map(function(t) {
+        return [d, d < counts[t][label]];
+      });
+    })};
+  });
+
+  var dotContainers = graphLayer.selectAll('g')
+    .data(displayData).enter().append('g')
+    .attr('transform', function(d) {return 'translate(' + xScale(d.label) + ',0)';})
+    .style('fill', function(d) {return colorScale(d.label);});
+  var dots = dotContainers.selectAll('circle')
+    .data(function(d) {return d.mat;})
+    .enter().append('circle')
+    .attr('r', function(d) {return d[time][1]?radius:0;})
+    .attr('cx', function(d) {return xLocalScale(d[time][0] % nCol) + radius;})
+    .attr('cy', function(d) {
+      return d[time][1]?
+        (yScale(Math.floor(d[time][0] / nCol))+yScale.rangeBand()-radius):
+        (yScale(Math.floor(d[time][0] / nCol))+yScale.rangeBand()-radius - 16 * radius);
+    });
+
+  var delayMax = 500;
+  var duration = 1000;
+  trans = function(t) {
+    var pastTime = time;
+    time = t;
+    dots.filter(function(d) {return d[time][1] && !d[pastTime][1];}).transition()
+      .delay(function(){return Math.random() * delayMax;})
+      .duration(duration)
+      .attr('r', radius)
+      .attr('cy', function(d) {
+        return (yScale(Math.floor(d[time][0] / nCol))+yScale.rangeBand()-radius);
+      });
+    dots.filter(function(d) {return !d[time][1] && d[pastTime][1];}).transition()
+      .delay(function(){return Math.random() * delayMax;})
+      .duration(duration)
+      .attr('r', 0)
+      .attr('cy', function(d) {
+        return (yScale(Math.floor(d[time][0] / nCol))+yScale.rangeBand()-radius - 16 * radius);
+      });
+
+    cursor.transition()
+      .duration(duration + delayMax)
+      .attr('x', inputScale(time));
+    buttonLabels.transition()
+      .duration(duration + delayMax)
+      .style('fill', function(d, i) {return (i===time)?'#FFF':'#000';});
+  };
+
+  prev = function() {
+    trans((times.length + time - 1) % times.length);
+  };
+  next = function() {
+    trans((time + 1) % times.length) ;
+  };
+}
