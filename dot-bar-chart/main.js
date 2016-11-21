@@ -129,7 +129,7 @@ function update(data) {
   var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
   var yAxis = d3.svg.axis().orient('left').scale(yScale)
     .tickValues(d3.range(nRow).filter(function(d) {return d%Math.ceil(nRow / (dim.graphHeight/14)) === 0;}))
-    .tickFormat(function(d) {return (d*nCol);});
+    .tickFormat(function(d) {return denominator * (d*nCol);});
 
   axisLayer.append('g')
     .attr('transform', 'translate(' + 0 + ',' + dim.graphHeight + ')')
