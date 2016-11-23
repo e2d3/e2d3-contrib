@@ -32,6 +32,7 @@ example:
   - piechart-javascript
   - react-javascript
   - multi-series-line-chart
+  - dot-bar-chart-transition
 map:
   - colored-leaflet-timeline
   - history-map
