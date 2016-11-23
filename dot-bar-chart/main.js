@@ -219,9 +219,13 @@ function update(data) {
   };
 
   prev = function() {
+    if (time - 1 < 0) {return;}
     trans((times.length + time - 1) % times.length);
   };
   next = function() {
+    if ((time + 1) == times.length) {return;}
     trans((time + 1) % times.length) ;
   };
 }
+
+update;
