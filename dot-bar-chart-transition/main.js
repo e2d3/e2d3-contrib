@@ -90,7 +90,10 @@ function update(data) {
   var mat = data.slice(1)
     .map(function(v) {return v.map(function(d) {
       return (d.trim()=='' || d==null)?null:d;
-    });});
+    });})
+    .filter(function(v) {
+      return !v.every(function(d) {return d===null;});
+    });
   var labels = mat.map(function(d) {
     return d3.set(d.filter(function(dd) {
       return dd !== null;
@@ -102,10 +105,12 @@ function update(data) {
   times.forEach(function(t, i) {
     var tmp = {};
     mat.forEach(function(v) {
-      if (tmp[v[i]] === void 0) {
-        tmp[v[i]] = 0;
+      if (v[i] !== null) {
+        if (tmp[v[i]] === void 0) {
+          tmp[v[i]] = 0;
+        }
+        ++tmp[v[i]];
       }
-      ++tmp[v[i]];
     });
     counts.push(tmp);
   });
@@ -127,6 +132,15 @@ function update(data) {
   var xLocalScale = d3.scale.ordinal()
     .rangeBands([0, xScale.rangeBand()])
     .domain(d3.range(nCol));
+
+  var cx = function(d) {
+    if (d.indices[time] < 0) {return 0;}
+    return xScale(d.labels[time]) +xLocalScale(d.indices[time]%nCol) + radius;
+  };
+  var cy = function(d) {
+    if (d.indices[time] < 0) {return 0;}
+    return yScale(Math.floor(d.indices[time]/nCol))+yScale.rangeBand()-radius;
+  };
 
   var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
   var yAxis = d3.svg.axis().orient('left').scale(yScale)
@@ -154,82 +168,159 @@ function update(data) {
     .style('stroke', '#000')
     .style('shape-rendering', 'crispEdges');
 
-  var countChanges = function(v) {
-    var ret = 0;
-    v.forEach(function(d, i) {
-      if (d != v[(i+1) % v.length]) {
-        ++ret;
-      }
-    });
-    return ret;
+  mat = mat.map(function(v) {
+    return {
+      labels: v,
+      indices: v.map(function(d) {return (d==null)?null:-1;})
+    };
+  });
+  var matRef = [];
+  mat.forEach(function(d) {matRef.push(d);});
+  var matRefLock = null;
+  var alterMatRef = function(f) {
+    if (matRefLock === null) {
+      matRefLock = f;
+    }
+    if (matRefLock === f) {
+      f();
+      matRefLock = null;
+      return;
+    } else {
+      return setTimeout(function() {alterMatRef(f);}, 200);
+    }
   };
-  mat = mat.map(function(d) {
-    return {cc: countChanges(d), data: d};
-  }).sort(function(a, b) {return (a.cc === b.cc)?0:((a.cc < b.cc)?-1:1);})
-  .map(function(d) {return d.data;});
 
-  var displayData = mat.map(function(d) {
-    return times.map(function(t, i) {
-      return {label: d[i]};
-    });
-  });
-
-  times.forEach(function(t, i) {
-    var indices = {};
-    labels.forEach(function(label) {indices[label] = 0;});
-    mat.forEach(function(d, j) {
-      if (d[i] === null) {
-        displayData[j][i].x = 0;
-        displayData[j][i].y = 0;
-        displayData[j][i].label = null;
-      } else {
-        var index = indices[d[i]]++;
-        displayData[j][i].x = index % nCol;
-        displayData[j][i].y = Math.floor(index / nCol);
+  var optimize = function() {
+    var fill_slots = function(label, idx, slots, mat) {
+      if (slots.every(function(b) {return !b;})){return;}
+      var focus = [];
+      slots.forEach(function(b, j) {
+        if (b) {
+          focus.push(j);
+        }
+      });
+      if (focus.length === 0) {return;}
+      mat.forEach(function(d) {
+        d.priority = 0.0;
+        slots.forEach(function(b, j) {
+          if (d.labels[j] == label && d._indices[j] == -1) {
+            if (b) {
+              d.priority += 1.0;
+            } else {
+              d.priority -= (0.99/slots.length);
+            }
+          }
+        });
+      });
+      mat = mat.filter(function(d) {
+        return !d._indices.every(function(dd) {return dd!==-1;});
+      })
+      .sort(function(a, b) {
+        return (a.priority == b.priority)?0:((a.priority<b.priority)?1:-1);
+      });
+      for (var k in mat) {
+        if (slots.every(function(b, j) {
+          return (!b) || ((mat[k].labels[j] == label) && (mat[k]._indices[j] == -1));
+        })) {
+          slots.forEach(function(b, j) {
+            if (b) {
+              mat[k]._indices[j] = idx;
+            }
+          });
+          return;
+        }
       }
+      slots.forEach(function(b, j) {
+        if (b && mat[0].labels[j] == label && mat[0]._indices[j] == -1) {
+          slots[j] = false;
+          mat[0]._indices[j] = idx;
+        }
+      });
+      fill_slots(label, idx, slots, mat);
+    };
+    mat.forEach(function(d) {
+      d.priority = 0.0;
+      d._indices = d.labels.map(function(d) {return (d==null)?null:-1;});
     });
-  });
-  var dots = graphLayer.selectAll('circle')
-    .data(displayData).enter().append('circle');
-  dots.filter(function(d) {return d[time].label === null;})
-    .attr('r', 0)
-    .style('fill', '#FFF');
-  dots.filter(function(d) {return d[time].label !== null;})
-    .attr('r', radius)
-    .attr('cx', function(d) {return xScale(d[time].label) +xLocalScale(d[time].x) + radius;})
-    .attr('cy', function(d) {return yScale(d[time].y)+yScale.rangeBand()-radius;})
-    .style('fill', function(d) {return colorScale(d[time].label);});
+    labels.forEach(function(label) {
+      var totalIndices = times.map(function(t, i) {return counts[i][label]||0;});
+      d3.range(d3.max(totalIndices)).forEach(function(idx) {
+        var slots = totalIndices.map(function(i) {return i > idx;});
+        fill_slots(label, idx, slots, mat);
+      });
+    });
+    alterMatRef(function() {
+      mat.forEach(function(d) {
+        d.indices = d._indices;
+        delete d.priority;
+        delete d._indices;
+      });
+    });
+  };
 
-  var delayMax = 500;
-  var duration = 1000;
-  trans = function(t) {
-    time = t;
-    dots.filter(function(d) {return d[time].label === null;}).transition()
-      .delay(function(){return Math.random() * delayMax;})
-      .duration(duration)
+  var drawChart = function() {
+    var dots = graphLayer.selectAll('circle')
+      .data(matRef).enter().append('circle');
+    dots.filter(function(d) {return d.labels[time] === null;})
       .attr('r', 0)
       .style('fill', '#FFF');
-    dots.filter(function(d) {return d[time].label !== null;}).transition()
-      .delay(function(){return Math.random() * delayMax;})
-      .duration(duration)
+    dots.filter(function(d) {return d.labels[time] !== null;})
       .attr('r', radius)
-      .attr('cx', function(d) {return xScale(d[time].label) +xLocalScale(d[time].x) + radius;})
-      .attr('cy', function(d) {return yScale(d[time].y)+yScale.rangeBand()-radius;})
-      .style('fill', function(d) {return colorScale(d[time].label);});
-    cursor.transition()
-      .duration(duration + delayMax)
-      .attr('x', inputScale(time));
-    buttonLabels.transition()
-      .duration(duration + delayMax)
-      .style('fill', function(d, i) {return (i===time)?'#FFF':'#000';});
+      .attr('cx', cx)
+      .attr('cy', cy)
+      .style('fill', function(d) {return colorScale(d.labels[time]);});
+
+    var delayMax = 500;
+    var duration = 1000;
+    trans = function(t) {
+      time = t;
+      dots.filter(function(d) {return d.labels[time] === null;}).transition()
+        .delay(function(){return Math.random() * delayMax * 0.5;})
+        .duration(duration * 0.5)
+        .attr('r', 0)
+        .style('fill', '#FFF');
+      dots.filter(function(d) {return d.labels[time] !== null;}).transition()
+        .delay(function(){return Math.random() * delayMax;})
+        .duration(duration)
+        .attr('r', radius)
+        .attr('cx', cx)
+        .attr('cy', cy)
+        .style('fill', function(d) {return colorScale(d.labels[time]);});
+      cursor.transition()
+        .duration((duration + delayMax)/2)
+        .attr('x', inputScale(time));
+      buttonLabels.transition()
+        .duration((duration + delayMax)/2)
+        .style('fill', function(d, i) {return (i===time)?'#FFF':'#000';});
+    };
+    prev = function() {
+      if (time - 1 < 0) {return;}
+      trans((times.length + time - 1) % times.length);
+    };
+    next = function() {
+      if ((time + 1) == times.length) {return;}
+      trans((time + 1) % times.length) ;
+    };
   };
 
-  prev = function() {
-    trans((times.length + time - 1) % times.length);
-  };
-  next = function() {
-    trans((time + 1) % times.length) ;
-  };
+  if (mat.length * times.length > 2000) {
+    alterMatRef(function() {
+      times.forEach(function(t, i) {
+        var indices = {};
+        labels.forEach(function(label) {indices[label] = 0;});
+        mat.forEach(function(d) {
+          if (d.labels[i] !== null) {
+            d.indices[i] = indices[d.labels[i]]++;
+          }
+        });
+      });
+    });
+    setTimeout(optimize, 100);
+    alterMatRef(drawChart);
+  } else {
+    optimize();
+    drawChart();
+  }
 }
 
 update;
