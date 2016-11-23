@@ -1,5 +1,6 @@
 recommended:
-  - InfiniteElementMethod_E2D3-LIG_03
+  - bipartite-graph-simple
+  - bipartite-graph-original
   - compare-ipo
   - dot-bar-chart
   - parallel-coordinates
@@ -11,7 +12,6 @@ recommended:
   - food-analyzer
   - radial-reingold-tilford-tree
   - bubble-chart
-  - bipartite-graph-simple
   - force-graph
   - japan-color
   - population-map-iran
@@ -26,31 +26,27 @@ statistics:
   - principal-component-analysis-text
   - dcjs-example
   - simple-histogram
-example:
-  - barchart-javascript
-  - bubblechart
-  - piechart-javascript
-  - react-javascript
-  - multi-series-line-chart
-  - dot-bar-chart-transition
+  - c3js-charts
+  - c3js-line-chart
 map:
+  - japan-color
+  - japan-map
   - colored-leaflet-timeline
   - history-map
   - japanmap-javascript
-  - aichi-color
-  - anjo-color
   - hiroshima-color
-  - nagoya-color
-  - nishimikawa-color
-  - okayama-color
-  - takahashigawa-color
   - tokyomap-koganei
   - leaflet-timeline
   - leaflet-timeline-with-value
   - see-through-globe
   - saga-color
   - yamaguchi-map
+  - nagoya-color
+  - aichi-color
+  - anjo-color
+  - nishimikawa-color
   - ishikawa_map
+  - ishikawa-biparite-graph
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -59,24 +55,29 @@ marathon:
   - virtual-toyamamarathon1
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
+kurashiki:
+  - kurashiki-landmark-chart
+  - takahashigawa-gesui
+  - kurashiki-jinkou-chart
+  - kurashiki-landmark-chart
+  - okayama-foreigner-chart
+  - kurashiki-causeofdeath-chart
+  - kurashiki-jinkou-chart
+  - kurashiki-sound-map
+  - kurashiki_wordcloud
+  - okayama-color
+  - takahashigawa-color
+  - okayama-color-farmland
+  - okayama-marriage-divorce-2014
 hackathon:
+  - InfiniteElementMethod_E2D3-LIG_03
   - curry
   - jizou-javascript
   - piechart2-javascript
   - plain-barchart-javascript
   - suimin-checker
-  - takahashigawa-gesui
   - goal-tree
-  - kurashiki-jinkou-chart
-  - kurashiki-landmark-chart
-  - okayama-foreigner-chart
   - text-chart
-kurashiki:
-  - kurashiki-causeofdeath-chart
-  - kurashiki-jinkou-chart
-  - kurashiki-landmark-chart
-  - kurashiki-sound-map
-  - kurashiki_wordcloud
 tbd:
   - wanamin
   - topic-model
@@ -87,3 +88,10 @@ tbd:
   - simple-barchart
   - c3js-line-chart
   - c3js-charts
+  - barchart-javascript
+  - bubblechart
+  - piechart-javascript
+  - react-javascript
+  - multi-series-line-chart
+example:
+  - barchart-javascript
