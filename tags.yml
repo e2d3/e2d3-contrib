@@ -1,6 +1,7 @@
 recommended:
   - bipartite-graph-simple
   - bipartite-graph-original
+  - history-map
   - compare-ipo
   - dot-bar-chart
   - parallel-coordinates
@@ -14,12 +15,12 @@ recommended:
   - bubble-chart
   - force-graph
   - japan-color
-  - population-map-iran
   - under-the-sea
   - leaflet-voronoi
   - jthree-example
   - multi-series-radar-chart
   - wordcloud
+  - barchart-javascript
 statistics:
   - scatterplot-matrix-brushing
   - principal-component-analysis
@@ -31,22 +32,17 @@ statistics:
 map:
   - japan-color
   - japan-map
-  - colored-leaflet-timeline
-  - history-map
   - japanmap-javascript
   - hiroshima-color
   - tokyomap-koganei
-  - leaflet-timeline
-  - leaflet-timeline-with-value
-  - see-through-globe
   - saga-color
   - yamaguchi-map
-  - nagoya-color
-  - aichi-color
-  - anjo-color
-  - nishimikawa-color
-  - ishikawa_map
-  - ishikawa-biparite-graph
+  - population-map-iran
+globe:
+  - see-through-globe
+  - leaflet-timeline
+  - leaflet-timeline-with-value
+  - colored-leaflet-timeline
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -55,7 +51,21 @@ marathon:
   - virtual-toyamamarathon1
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
-kurashiki:
+hackathon:
+  - InfiniteElementMethod_E2D3-LIG_03
+  - curry
+  - jizou-javascript
+  - piechart2-javascript
+  - plain-barchart-javascript
+  - suimin-checker
+  - goal-tree
+  - text-chart
+nagoya-hack:
+  - nagoya-color
+  - aichi-color
+  - anjo-color
+  - nishimikawa-color
+kurashiki-hack:
   - kurashiki-landmark-chart
   - takahashigawa-gesui
   - kurashiki-jinkou-chart
@@ -69,15 +79,10 @@ kurashiki:
   - takahashigawa-color
   - okayama-color-farmland
   - okayama-marriage-divorce-2014
-hackathon:
-  - InfiniteElementMethod_E2D3-LIG_03
-  - curry
-  - jizou-javascript
-  - piechart2-javascript
-  - plain-barchart-javascript
-  - suimin-checker
-  - goal-tree
-  - text-chart
+  - car-dot-bar-chart
+kanazawa-hack:
+  - ishikawa_map
+  - ishikawa-biparite-graph
 tbd:
   - wanamin
   - topic-model
@@ -93,5 +98,4 @@ tbd:
   - piechart-javascript
   - react-javascript
   - multi-series-line-chart
-example:
-  - barchart-javascript
+  
