@@ -65,6 +65,7 @@ nagoya-hack:
   - aichi-color
   - anjo-color
   - nishimikawa-color
+  - car-dot-bar-chart
 kurashiki-hack:
   - kurashiki-landmark-chart
   - takahashigawa-gesui
@@ -91,8 +92,6 @@ tbd:
   - the-euro-debt-crisis
   - treemap
   - simple-barchart
-  - c3js-line-chart
-  - c3js-charts
   - barchart-javascript
   - bubblechart
   - piechart-javascript
