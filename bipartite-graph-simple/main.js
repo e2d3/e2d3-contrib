@@ -33,7 +33,7 @@ for (var i=2 ; i<=data.length -1 ; i++){
         margin = {
             b: 10,
             t: 35,
-            l: 215,
+            l: 235,
             r: 10
         };
 
@@ -54,9 +54,9 @@ iniprocess();
 
 function iniprocess(){
 	var bP={};	
-	var b=70, bb=230, height=500, buffMargin=1, minHeight=14;
+	var b=70, bb=210, height=500, buffMargin=0.2, minHeight=14;
 	
-	var cx1 = -200;
+	var cx1 = -230;
 	var cy1 = 100;
 	var cx2 = -40;
 	var cy2 = 230;
