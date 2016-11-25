@@ -56,7 +56,7 @@ function iniprocess(){
 	var bP={};	
 	var b=70, bb=210, height=500, buffMargin=0.2, minHeight=14;
 	
-	var cx1 = -230;
+	var cx1 = -250;
 	var cy1 = 100;
 	var cx2 = -40;
 	var cy2 = 230;
