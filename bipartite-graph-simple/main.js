@@ -28,7 +28,7 @@ for (var i=2 ; i<=data.length -1 ; i++){
     arrTemp.push(eval("data[" + i + "][2]"));
     sales_data.push(arrTemp);
 }
-    var width = 800,
+    var width = 850,
         height = 510,
         margin = {
             b: 10,
