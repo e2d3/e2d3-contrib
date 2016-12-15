@@ -38,6 +38,7 @@ map:
   - saga-color
   - yamaguchi-map
   - population-map-iran
+  - ehime-color
 globe:
   - see-through-globe
   - leaflet-timeline
@@ -97,4 +98,3 @@ tbd:
   - piechart-javascript
   - react-javascript
   - multi-series-line-chart
-  
