@@ -1,8 +1,10 @@
 //# require=d3,leaflet,es6-promise.min
 
-const HOME_LAT = 35.475846;
-const HOME_LNG = 139.628833;
+const HOME_LAT = 34.6635218;
+const HOME_LNG = 133.919461;
 
+// const HOME_LAT = 35.475846;
+// const HOME_LNG = 139.628833;
 const PICT_MARGIN = 20;
 const MAIN_PICT_CONTAINER = 0.75;
 const SUB_PICT_CONTAINER = 0.25;
@@ -21,6 +23,7 @@ d3.select('#map-container')
   })
 
 // しぇあひるずを中心に表示  setView([緯度, 経度], ズーム)
+// var mapLayer = L.map('map-container').setView([HOME_LAT, HOME_LNG], 15);
 var mapLayer = L.map('map-container').setView([HOME_LAT, HOME_LNG], 15);
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -65,6 +68,7 @@ function createContents(spot, data, spotName) {
     const PICT2_LABEL = data[0][7];
     const PICT3_LABEL = data[0][8];
     const PICT4_LABEL = data[0][9];
+
 
     var modalPadding = root.clientHeight / 20;
     var pictContainerWidth = root.clientWidth - (modalPadding * 2);
@@ -123,9 +127,9 @@ function createContents(spot, data, spotName) {
 
     var pictContainerHeight = root.clientHeight
                               - document.getElementById('spot').clientHeight
-                              - document.getElementById('description').clientHeight 
-                              - document.getElementById('address').clientHeight 
-                              - (PICT_MARGIN * 2) 
+                              - document.getElementById('description').clientHeight
+                              - document.getElementById('address').clientHeight
+                              - (PICT_MARGIN * 2)
                               - (modalPadding * 2);
 
     var mainPictBox = modalContent
@@ -266,11 +270,11 @@ var getPictSize = function(self) {
     var pictSize = { };
     pictSize.width = parseInt(d3.select(self).style('width'));
     pictSize.height = parseInt(d3.select(self).style('height'));
-    return pictSize;          
+    return pictSize;
 }
 
 var is2PictHeightsMax = function(pictArray, pictContainerHeight) {
-    return pictArray[0].height == parseInt(pictContainerHeight) 
+    return pictArray[0].height == parseInt(pictContainerHeight)
         && pictArray[1].height == parseInt(pictContainerHeight);
 }
 
