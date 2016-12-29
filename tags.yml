@@ -4,6 +4,7 @@ recommended:
   - history-map
   - compare-ipo
   - dot-bar-chart
+  - dot-bar-chart-transition
   - parallel-coordinates
   - sequences-sumburst
   - nagoya-wind
