@@ -1,0 +1,88 @@
+﻿
+svg {
+        display: block;
+        margin: auto;
+    }
+    #e2d3-chart-area {
+        position: relative;
+    }
+    #chart-labels {
+        display: inline;
+        min-width: 80px;
+        position: absolute;
+        top: 0;
+        right: 10px;
+        background-color: transparent;
+        z-index: 900;
+    }
+    #chart-labels .chart-label{
+        padding: 10px 4px;
+        display: block;
+        cursor: pointer;
+        color: #ccc;
+        font-weight: bold;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        -o-transition: all 0.3s ease;
+        -ms-transition: all 0.3s ease;
+    }
+    #chart-labels .chart-label:hover {
+       font-size: 1.3em;
+       color: black;
+    }
+    #chart-labels .chart-label.active {
+        font-size: 1.3em;
+        color: black;
+    }
+    .chart-tooltip {
+        min-width: 120px;
+        border: 1px solid #1d76c1;
+        background-color: rgba(255,255,255,0.8);
+        padding: 10px;
+        color: #ccc;
+        z-index: 2000;
+    }
+    .chart-tooltip h4 {
+        color: black;
+    }
+    .chart-tooltip dt.active, .chart-tooltip dd.active {
+        color: black;
+    }
+    #chart-color-selector {
+        display: inline;
+        min-width: 80px;
+        position: absolute;
+        top: 0;
+        left: 30px;
+        background-color: transparent;
+        z-index: 800;
+    }
+    #chart-color-selector button {
+        width: 18px;
+        height: 18px;
+        border: 1px solid #ccc;
+        display: inline;
+        margin-right: 4px;
+        padding: 0;
+        opacity: 0.3;
+    }
+    #chart-color-selector .blue {
+        background-color: blue;
+    }
+    #chart-color-selector .red {
+        background-color: red;
+    }
+    
+    #chart-color-selector .multi {
+        background: #99f6ff;
+        background: -moz-linear-gradient(-45deg, #99f6ff 0%, #f24dcb 100%);
+        background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#99f6ff), color-stop(100%,#f24dcb));
+        background: -webkit-linear-gradient(-45deg, #99f6ff 0%,#f24dcb 100%);
+        background: -o-linear-gradient(-45deg, #99f6ff 0%,#f24dcb 100%);
+        background: -ms-linear-gradient(-45deg, #99f6ff 0%,#f24dcb 100%);
+        background: linear-gradient(135deg, #99f6ff 0%,#f24dcb 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99f6ff', endColorstr='#f24dcb',GradientType=1 );
+    }
+    #chart-color-selector button.active {
+        opacity: 1;
+    }

@@ -1,7 +1,10 @@
 recommended:
-  - InfiniteElementMethod_E2D3-LIG_03
+  - bipartite-graph-simple
+  - bipartite-graph-original
+  - history-map
   - compare-ipo
   - dot-bar-chart
+  - dot-bar-chart-transition
   - parallel-coordinates
   - sequences-sumburst
   - nagoya-wind
@@ -11,44 +14,37 @@ recommended:
   - food-analyzer
   - radial-reingold-tilford-tree
   - bubble-chart
-  - bipartite-graph-simple
   - force-graph
   - japan-color
-  - population-map-iran
   - under-the-sea
   - leaflet-voronoi
   - jthree-example
   - multi-series-radar-chart
   - wordcloud
+  - barchart-javascript
 statistics:
   - scatterplot-matrix-brushing
   - principal-component-analysis
   - principal-component-analysis-text
   - dcjs-example
   - simple-histogram
-example:
-  - barchart-javascript
-  - bubblechart
-  - piechart-javascript
-  - react-javascript
-  - multi-series-line-chart
+  - c3js-charts
+  - c3js-line-chart
 map:
-  - colored-leaflet-timeline
-  - history-map
+  - japan-color
+  - japan-map
   - japanmap-javascript
-  - aichi-color
-  - anjo-color
   - hiroshima-color
-  - nagoya-color
-  - nishimikawa-color
-  - okayama-color
-  - takahashigawa-color
   - tokyomap-koganei
-  - leaflet-timeline
-  - see-through-globe
   - saga-color
   - yamaguchi-map
-  - ishikawa_map
+  - population-map-iran
+  - ehime-color
+globe:
+  - see-through-globe
+  - leaflet-timeline
+  - leaflet-timeline-with-value
+  - colored-leaflet-timeline
 marathon:
   - virtual-tokyomarathon
   - virtual-koganeinewyear-roadrace
@@ -58,17 +54,38 @@ marathon:
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
 hackathon:
+  - InfiniteElementMethod_E2D3-LIG_03
   - curry
   - jizou-javascript
   - piechart2-javascript
   - plain-barchart-javascript
   - suimin-checker
-  - takahashigawa-gesui
   - goal-tree
+  - text-chart
+nagoya-hack:
+  - nagoya-color
+  - aichi-color
+  - anjo-color
+  - nishimikawa-color
+  - car-dot-bar-chart
+kurashiki-hack:
+  - kurashiki-landmark-chart
+  - takahashigawa-gesui
   - kurashiki-jinkou-chart
   - kurashiki-landmark-chart
   - okayama-foreigner-chart
-  - text-chart
+  - kurashiki-causeofdeath-chart
+  - kurashiki-jinkou-chart
+  - kurashiki-sound-map
+  - kurashiki_wordcloud
+  - okayama-color
+  - takahashigawa-color
+  - okayama-color-farmland
+  - okayama-marriage-divorce-2014
+  - car-dot-bar-chart
+kanazawa-hack:
+  - ishikawa_map
+  - ishikawa-biparite-graph
 tbd:
   - wanamin
   - topic-model
@@ -77,3 +94,9 @@ tbd:
   - the-euro-debt-crisis
   - treemap
   - simple-barchart
+  - barchart-javascript
+  - bubblechart
+  - piechart-javascript
+  - react-javascript
+  - multi-series-line-chart
+  - foot-race 2

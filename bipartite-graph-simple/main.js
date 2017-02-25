@@ -28,12 +28,12 @@ for (var i=2 ; i<=data.length -1 ; i++){
     arrTemp.push(eval("data[" + i + "][2]"));
     sales_data.push(arrTemp);
 }
-    var width = 780,
+    var width = 900,
         height = 510,
         margin = {
             b: 10,
             t: 35,
-            l: 175,
+            l: 210,
             r: 10
         };
 
@@ -54,11 +54,11 @@ iniprocess();
 
 function iniprocess(){
 	var bP={};	
-	var b=70, bb=230, height=500, buffMargin=1, minHeight=14;
+	var b=70, bb=210, height=500, buffMargin=0.2, minHeight=14;
 	
-	var cx1 = -150;
+	var cx1 = -200;
 	var cy1 = 100;
-	var cx2 = -50;
+	var cx2 = -40;
 	var cy2 = 230;
 	var cx3 = -10;
 	var cy3 = 290;

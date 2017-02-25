@@ -1,0 +1,1 @@
+Sequences Sunburst====----A ring chart, also known as a sunburst chart or a multilevel pie chart, is used to visualize hierarchical data, depicted by concentric circles.
