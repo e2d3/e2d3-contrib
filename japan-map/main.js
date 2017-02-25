@@ -90,41 +90,7 @@ function update(data) {
   if (svg.selectAll('.states').empty())
     return false;
 
-//##########################################
-//topojsonデータを取り込み地図を表示させる。&データに応じて着色する
-//##########################################
 
-   function draw(key){
-
-  var map = data.toMap({typed: true});
-  var values = map.values(key); //表のヘッダーに付随する全データ(Ex:2013年のデータ 1222,333,22・・・・)
-  if (!env.colors()) env.colors(['#ffffff', '#ff0000']);       
- var color = d3.scale.linear()                                  //(1)切り替え コンター
-   .domain(env.colorsDomain(d3.min(values), d3.max(values)))    //(1)切り替え コンター
-   .range(env.colors())                                         //(1)切り替え コンター
-   .interpolate(d3.interpolateLab);                             //(1)切り替え コンター
-//var color=d3.interpolateHsl("blue",'#ff0000');                   //(2)切り替え　ヒートマップ
-//var dValue=d3.max(values)-d3.min(values);                        //(2)切り替え　ヒートマップ
-//var minValue=d3.min(values);                                     //(2)切り替え　ヒートマップ
-
-  if (svg.selectAll('.states').empty())
-    return false;
-
-  svg.selectAll('.states')
-    .attr('fill', function (d) {
-      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key])) {
-       return color(+map[d.properties.nam_ja][key]);                //(1)切り替え コンター
-//    return color((+map[d.properties.nam_ja][key]-minValue)/(dValue)); //(2)切り替え　ヒートマップ
-
-     } else {
-        return '#ffffff';
-      };
-
- });
-};
-
-
-           draw(key);    //実行
 
 //##########################################################
 //プルダウンボックスにより選択された項目に応じて着色を行う
@@ -138,6 +104,8 @@ var seriesArray=map.header;
   d3.select('#legend-area').selectAll('select').remove();
   d3.select('#legend-area').selectAll('div').remove();
 
+
+//項目選択プルダウンボックス
 
     d3.select('#legend-area')
         .append('select')
@@ -153,6 +121,7 @@ var seriesArray=map.header;
            selectedRow = selectedIndex;
           key=data;
            draw(key);
+                      draw(key,IRO); 
         })
         .selectAll('option')
         .data(seriesArray)
@@ -167,6 +136,107 @@ var seriesArray=map.header;
         .text(function (d) {
             return d;
         });
+
+//配色選択プルダウンボックス
+
+var HAISYOKU=new Array("赤のみヒートマップ","赤→青ヒートマップ");
+var IRO=0;
+
+       d3.select('#legend-area')
+        .append('select')
+        .style('height', function () {
+            return legendHeight + 'px';
+        })
+        .style('width', function () {
+            return selectButtonWidth + 'px';
+        })
+        .on('change', function () {
+            var selectedIndex = d3.select(this).property('selectedIndex');  //添え字
+           IRO=selectedIndex;  
+           console.log("BBB");
+           console.log(IRO);
+                      draw(key,IRO); 
+        })
+        .selectAll('option')
+        .data(HAISYOKU)
+        .enter()
+        .append('option')
+        .style('height', function () {
+            return legendHeight + 'px';
+        })
+        .style('width', function () {
+            return selectButtonWidth + 'px';
+        })
+        .text(function (d) {
+            return d;
+        });
+
+
+
+
+
+
+
+//##########################################
+//topojsonデータを取り込み地図を表示させる。&データに応じて着色する
+//##########################################
+
+   function draw(key,IRO){
+
+
+
+  var map = data.toMap({typed: true});
+  var values = map.values(key); //表のヘッダーに付随する全データ(Ex:2013年のデータ 1222,333,22・・・・)
+  if (!env.colors()) env.colors(['#ffffff', '#ff0000']);       
+
+var dValue=d3.max(values)-d3.min(values);                        //(2)切り替え　ヒートマップ
+var minValue=d3.min(values);                                  
+
+if(IRO==0){
+
+ var color = d3.scale.linear()                                  //(1)切り替え コンター
+   .domain(env.colorsDomain(d3.min(values), d3.max(values)))    //(1)切り替え コンター
+   .range(env.colors())                                         //(1)切り替え コンター
+   .interpolate(d3.interpolateLab);                             //(1)切り替え コンター
+}else if(IRO==1){
+
+var color=d3.interpolateHsl("blue",'#ff0000');                   //(2)切り替え　ヒートマップ
+
+};
+
+
+  if (svg.selectAll('.states').empty())
+    return false;
+
+  svg.selectAll('.states')
+    .attr('fill', function (d) {
+      if (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key]) && IRO==0) {
+
+console.log("XXX");
+console.log(IRO);
+       return color(+map[d.properties.nam_ja][key]);                //(1)切り替え コンター
+//    return color((+map[d.properties.nam_ja][key]-minValue)/(dValue)); //(2)切り替え　ヒートマップ
+
+     } 
+     else if  (map[d.properties.nam_ja] && $.isNumeric(map[d.properties.nam_ja][key]) && IRO==1)  {
+    return color((+map[d.properties.nam_ja][key]-minValue)/(dValue)); //(2)切り替え　ヒートマップ
+     } else 
+      {
+
+        return '#ffffff';
+      }    
+ }
+
+ );
+};
+
+
+           draw(key,IRO);    //実行
+
+
+
+
+
 
 //##########################################################
 //データ表示エリアに緑長方形を配置する。
@@ -211,7 +281,15 @@ d3.selectAll("text").remove();
    .attr("transform", "translate("+(width/5.5)+", "+(height/6+25)+")")
 		   .text(map[d.properties.nam_ja][key])            //凡例文字の設定
   		   .attr("fill","red")       //線の色を設定
-   　　　　　　　 .attr("font-size","20pt");
+   　　　   .attr("font-size","20pt");
+
+//   	svg.append("text")
+//   .attr("transform", "translate("+(width/5.5)+", "+(height/6+50)+")")
+//		   .text("AAAA")            //凡例文字の設定
+// 		   .attr("fill","red")       //線の色を設定
+//   　　　　　　　 .attr("font-size","20pt");
+console.log("ASD");
+           console.log(IRO);
 
 
     });
