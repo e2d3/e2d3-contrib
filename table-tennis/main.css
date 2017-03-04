@@ -4,14 +4,16 @@
 }
 
 .man {
-    width: 25%
+    width: 200px;
 }
 
 .table {
-    width: 50%;
+    width: 450px;
 }
 
-svg {
-/*    position: absolute;
-    top: 0;*/
+.svg-area {
+    display: inline-block;
+    width: 850px;
+    margin-top: -373px;
+    padding-left: 90px;
 }
