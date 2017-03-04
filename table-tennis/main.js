@@ -1,22 +1,6 @@
 //# require=d3
 
 var margin = { top: 20, right: 30, bottom: 60, left: 80 };
-var width = root.clientWidth - margin.left - margin.right;
-var height = root.clientHeight - margin.top - margin.bottom;
-
-var x = d3.scale.ordinal()
-  .rangeRoundBands([0, width], .1)
-
-var y = d3.scale.linear()
-  .rangeRound([height, 0])
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient('bottom');
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient('left')
 
 d3.select(root)
   .append('div')
@@ -140,10 +124,12 @@ function update(data) {
         });
 
     chart.append('g')
+        .attr('class', 'axis')
         .attr('transform', 'translate(0, ' + (height - padding) + ')')
         .call(xaxis);
 
     chart.append('g')
+        .attr('class', 'axis')
         .attr('transform', 'translate(' + padding + ', 0)')
         .call(yaxis);
 
@@ -153,18 +139,6 @@ function update(data) {
         .attr('text-anchor', 'middle')
         .text('y = - ' + a + ' * x^2 + ' + b + '* x + ' + c);
     
-    chart.append('text')
-        .attr('x', xscale(0))
-        .attr('y', height - padding / 4)
-        .attr('text-anchor', 'middle')
-        .text('x');
-
-    chart.append('text')
-        .attr('x', padding / 5)
-        .attr('y', (height - padding) / 2 )
-        .attr('text-anchor', 'middle')
-        .text('y');
-
     // ボールの描画
     chart.append('circle')
         .attr("cx", 100)
