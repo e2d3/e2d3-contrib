@@ -166,10 +166,27 @@ function update(data) {
         .text('y');
 
     // ボールの描画
-    chart.append("circle")
-        .attr("cx", 300)
-        .attr("cy", 20)
+    chart.append('circle')
+        .attr("cx", 100)
+        .attr("cy", 220)
         .attr("r", 10)
         .attr("fill","orange");
+
+    chart.selectAll("circle")
+        .transition()
+        .ease("linear-in") // easeを設定する。
+        .delay(0)
+        .duration(800)
+        .attr("cx", 300)
+        .attr("cy", 20);
+
+    chart.selectAll("circle")
+        .transition()
+        .ease("linear-in") // easeを設定する。
+        .delay(1000)
+        .duration(1000)
+        .attr("cx", 500)
+        .attr("cy", 220);
+
 }
 
