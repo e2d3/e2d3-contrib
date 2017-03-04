@@ -43,6 +43,24 @@ var chart = backgroundImage.append('svg')
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+var xs = [],
+    x,
+    start = -100,
+    end = 101,
+    len = end - start - 1,
+    ys = [],
+    xys = [],
+    f,
+    y,
+    width = 600,
+    height = 300,
+    padding = 20,
+    svg,
+    xscale,
+    yaxis,
+    yscale,
+    yaxis;
+
 function update(data) {
     // 要素を更新するまえにグラフを削除する
     chart.selectAll("g").remove();
@@ -50,29 +68,11 @@ function update(data) {
     chart.selectAll("line").remove();
 
     console.log(data.toList());
-    var data_array = data.toList();
-    // とりあえず最初の１行を取得する
-    var a = data_array[0]['a'];
-    var b = data_array[0]['b'];
-    var c = data_array[0]['c'];
+    var list = data.toList();
 
-    var xs = [],
-        x,
-        start = -100,
-        end = 101,
-        len = end - start - 1,
-        ys = [],
-        xys = [],
-        f,
-        y,
-        width = 600,
-        height = 300,
-        padding = 20,
-        svg,
-        xscale,
-        yaxis,
-        yscale,
-        yaxis;
+    var a = list[0]['a'];
+    var b = list[0]['b'];
+    var c = list[0]['c'];
 
     f = function (x, a, b, c) {
         return - a * Math.pow(x, 2) + b * x + c;
@@ -84,6 +84,7 @@ function update(data) {
         ys.push(y);
         xys.push([x, y]);
     }
+
     xscale = d3.scale.linear()
         .domain([start, end])
         .range([padding, width - padding]);
@@ -160,5 +161,12 @@ function update(data) {
         .attr('y', (height - padding) / 2 )
         .attr('text-anchor', 'middle')
         .text('y');
+
+    // ボールの描画
+    chart.append("circle")
+        .attr("cx", 300)
+        .attr("cy", 20)
+        .attr("r", 10)
+        .attr("fill","orange");
 }
 
