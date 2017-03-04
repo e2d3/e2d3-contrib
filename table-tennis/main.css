@@ -1,0 +1,17 @@
+.background-image {
+    display: inline-block;
+    margin-top: 200px;
+}
+
+.man {
+    width: 25%
+}
+
+.table {
+    width: 50%;
+}
+
+svg {
+/*    position: absolute;
+    top: 0;*/
+}
