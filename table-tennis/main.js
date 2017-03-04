@@ -47,6 +47,7 @@ function update(data) {
     // 要素を更新するまえにグラフを削除する
     chart.selectAll("g").remove();
     chart.selectAll("text").remove();
+    chart.selectAll("line").remove();
 
     console.log(data.toList());
     var data_array = data.toList();
