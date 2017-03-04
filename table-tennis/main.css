@@ -1,0 +1,23 @@
+.background-image {
+    display: inline-block;
+    margin-top: 230px;
+}
+
+.man {
+    width: 200px;
+}
+
+.table {
+    width: 450px;
+}
+
+.svg-area {
+    display: inline-block;
+    width: 850px;
+    margin-top: -423px;
+    padding-left: 90px;
+}
+
+.axis {
+    fill: pink;
+}
