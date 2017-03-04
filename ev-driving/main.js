@@ -9,6 +9,10 @@ function update(data) {
  * Created by osoken on 2016/05/16.
  */
 
+/**
+ * Extends by Daiki Kawanuma on 2017/03/04.
+ */
+
 // map handler
 !(function (d3, L) {
     var map = {};
