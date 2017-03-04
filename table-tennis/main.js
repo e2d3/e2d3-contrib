@@ -25,7 +25,17 @@ var chart = d3.select(root).append('svg')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 function update(data) {
+    // 要素を更新するまえにグラフを削除する
+    chart.selectAll("g").remove();
+    chart.selectAll("text").remove();
+
     console.log(data.toList());
+    var data_array = data.toList();
+    // とりあえず最初の１行を取得する
+    var a = data_array[0]['a'];
+    var b = data_array[0]['b'];
+    var c = data_array[0]['c'];
+
     var xs = [],
         x,
         start = -100,
@@ -37,19 +47,19 @@ function update(data) {
         y,
         width = 600,
         height = 300,
-        padding = 50,
+        padding = 20,
         svg,
         xscale,
         yaxis,
         yscale,
         yaxis;
 
-    f = function (x) {
-        return Math.pow(x, 2) + 2 * x + 1;
+    f = function (x, a, b, c) {
+        return - a * Math.pow(x, 2) + b * x + c;
     };
 
     for (x = start; x < end; x += 1) {
-        y = f(x);
+        y = f(x, a, b, c);
         xs.push(x);
         ys.push(y);
         xys.push([x, y]);
@@ -117,7 +127,7 @@ function update(data) {
         .attr('x', xscale(0))
         .attr('y', padding / 2)
         .attr('text-anchor', 'middle')
-        .text('y = x^2 + 2 * x + 1');
+        .text('y = - ' + a + ' * x^2 + ' + b + '* x + ' + c);
     
     chart.append('text')
         .attr('x', xscale(0))
