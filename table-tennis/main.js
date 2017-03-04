@@ -124,10 +124,12 @@ function update(data) {
         });
 
     chart.append('g')
+        .attr('class', 'axis')
         .attr('transform', 'translate(0, ' + (height - padding) + ')')
         .call(xaxis);
 
     chart.append('g')
+        .attr('class', 'axis')
         .attr('transform', 'translate(' + padding + ', 0)')
         .call(yaxis);
 
