@@ -18,7 +18,7 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient('left')
 
-var backgroundImage = d3.select(root)
+d3.select(root)
   .append('div')
     .attr('class', 'background-image');
 
@@ -37,7 +37,10 @@ d3.select('.background-image')
     .attr('src', baseUrl + '/man_right.png')
     .attr('class', 'man');
 
-var chart = backgroundImage.append('svg')
+var chart = d3.select(root)
+  .append('div')
+    .attr('class', 'svg-area')
+  .append('svg')
     .attr('width', root.clientWidth)
     .attr('height', root.clientHeight)
     .append('g')
