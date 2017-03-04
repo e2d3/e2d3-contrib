@@ -137,18 +137,6 @@ function update(data) {
         .attr('text-anchor', 'middle')
         .text('y = - ' + a + ' * x^2 + ' + b + '* x + ' + c);
     
-    chart.append('text')
-        .attr('x', xscale(0))
-        .attr('y', height - padding / 4)
-        .attr('text-anchor', 'middle')
-        .text('x');
-
-    chart.append('text')
-        .attr('x', padding / 5)
-        .attr('y', (height - padding) / 2 )
-        .attr('text-anchor', 'middle')
-        .text('y');
-
     // ボールの描画
     chart.append("circle")
         .attr("cx", 300)
