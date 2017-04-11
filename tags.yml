@@ -54,6 +54,7 @@ marathon:
   - virtual-toyamamarathon2
   - virtual-tsukubamarathon
 hackathon:
+  - animal-olympic
   - InfiniteElementMethod_E2D3-LIG_03
   - curry
   - jizou-javascript
@@ -62,6 +63,9 @@ hackathon:
   - suimin-checker
   - goal-tree
   - text-chart
+  - tennis-serve
+  - table-tennis
+  - virtual-evacuation-marathon
 nagoya-hack:
   - nagoya-color
   - aichi-color
@@ -100,3 +104,4 @@ tbd:
   - react-javascript
   - multi-series-line-chart
   - foot-race 2
+  - ev-driving
