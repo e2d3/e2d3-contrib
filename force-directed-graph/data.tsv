@@ -1,0 +1,11 @@
+id	label	source	target	value
+1	nodeA	0	1	1
+2	nodeB	0	2	1
+3	nodeC	1	3	1
+4	nodeD	1	3	1
+5	nodeE	2	1	1
+6	nodeF	2	3	1
+7	nodeG	3	5	1
+		4	3	5
+		4	2	5
+		5	3	5
