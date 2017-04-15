@@ -4,6 +4,7 @@
 ** Created by jw on 2017/04/10
 */
 
+
 /* initial settings ********************************/
 
 //Screen size
@@ -22,15 +23,22 @@ var svg = d3.select(root).append('svg')
   .attr('style', 'display: block; margin: auto;');
 
 
-
 function update(data) {
   /* tsv形式を一括取り込みする */
   var rowdata = data.toList();
 
   /* Node情報とリンク情報にふるい分けする */
   var arrNodes = [];
+  var arrNodeColor = [];
+  var arrNodeSize = [];
   var arrLinks = [];
+  var arrLinkColor = [];
+  var arrLinkWidth = [];
+  var arrLinkDistance = [];
   var intX;
+  var intSource;
+  var intTarget;
+  var intValue;
 
   var strTemp = "";
   for(key in rowdata){
@@ -38,29 +46,62 @@ function update(data) {
     strTemp = String(rowdata[key].id) + String(rowdata[key].label);
     if (strTemp != "" && typeof(rowdata[key].id) != "undefined"){
       arrNodes.push({id:rowdata[key].id,label:rowdata[key].label});  
+      if (typeof(rowdata[key].color) != "undefined"){
+        arrNodeColor.push(rowdata[key].color);
+      }else{
+        arrNodeColor.push("#000000");
+      }
+      if (typeof(rowdata[key].size) != "undefined"){
+        arrNodeSize.push(rowdata[key].size);
+      }else{
+        arrNodeSize.push(30);
+      }
     }
+
     strTemp = "";
-    
     strTemp = String(rowdata[key].source) + String(rowdata[key].target) + String(rowdata[key].value);
     if (typeof rowdata[key].source === "undefined") {
-      rowdata[key].source= 0;
+      intSource = -1;
+    }else{
+      intSource = Number(rowdata[key].source);
     }
     if (typeof rowdata[key].target === "undefined") {
-      rowdata[key].target= 0;
+      intTarget = -1;
+    }else{
+      intTarget = Number(rowdata[key].target);
     }
     if (typeof rowdata[key].value === "undefined") {
-      rowdata[key].value= 0;
+      intValue = -1;
+    }else{
+      intValue = Number(rowdata[key].value);
     }
-    intX = Number(rowdata[key].source) + Number(rowdata[key].target) + Number(rowdata[key].value);
-    if (strTemp != "" && intX == 0){
-      arrLinks.push({source:rowdata[key].source,target:rowdata[key].target,value:rowdata[key].value});
+//    intX = Number(rowdata[key].source) + Number(rowdata[key].target) + Number(rowdata[key].value);
+    intX = intSource + intTarget + intValue;
+    if (intX != -3){
+      arrLinks.push({source:intSource,target:intTarget,value:intValue});
+      if (typeof(rowdata[key].color) != "undefined"){
+        arrLinkColor.push(rowdata[key].color);
+      }else{
+        arrLinkColor.push("#333333");
+      }
+      if (typeof(rowdata[key].width) != "undefined"){
+        arrLinkWidth.push(rowdata[key].width);
+      }else{
+        arrLinkWidth.push(3);
+      }
+      if (typeof(rowdata[key].distance) != "undefined"){
+        arrLinkDistance.push(rowdata[key].distance);
+      }else{
+        arrLinkDistance.push(3);
+      }
     }
   }
-
+console.log(arrNodeColor);
+console.log(JSON.stringify(arrLinks,null,'\t'));
+console.log(arrLinks.length);
 // d3.dataで一括代入するときは下記で処理する。
 // d3.data(objJson);
 // var objJson = JSON.parse("{\"nodes\":[" + JSON.stringify(arrNodes) + "],\"links\":[" + JSON.stringify(arrLinks) + "]}");
-
 //var svg = d3.select(root).append('svg')
 //  .attr('width', width) 
 //  .attr('height', height) 
@@ -70,20 +111,19 @@ function update(data) {
                        .nodes(arrNodes)
                        .links(arrLinks)
                        .size([width, height])
-                       .distance(200) // node間距離
-                       .friction(0.9) // 摩擦力
-                       .charge(-1500) // 反発力
-                       .gravity(0.1) // 引力。
+                       .distance(function(d,i){return arrLinkDistance[i];}) // node間距離
+                       .friction(0.5) // 摩擦力
+                       .charge(-5000) // 反発力
+                       .gravity(0.7) // 引力。
                        .start();
 // link線の描画(svgのline描画機能を利用)
   var link = svg.selectAll("line")
       .data(arrLinks)
       .enter()
       .append("line")
-      .style({stroke: "#ccc",
-      "stroke-width": 1
+      .style({stroke: function(d,i){return arrLinkColor[i];},
+      "stroke-width": function(d,i){return arrLinkWidth[i];}
   });
-
   // nodes描画
   var node = svg.selectAll("circle")
                 .data(arrNodes)
@@ -91,10 +131,10 @@ function update(data) {
                 .append("circle")
                 .attr({
           //半径をランダムにする
-          r: function() {return Math.random() * (50 - 10) + 15;}
+          r: function(d,i){return arrNodeSize[i];}
       })
       .style({
-        fill: "pink"
+        fill: function(d,i){return arrNodeColor[i];}
       })
       .call(force.drag);
 
@@ -128,5 +168,4 @@ function update(data) {
           y: function(data) { return data.y;}
       });
   });
-
 }
