@@ -22,8 +22,14 @@ var svg = d3.select(root).append('svg')
   .attr('height', height) 
   .attr('style', 'display: block; margin: auto;');
 
-
 function update(data) {
+
+d3.selectAll("svg").remove();
+var svg = d3.select(root).append('svg')
+  .attr('width', width) 
+  .attr('height', height) 
+  .attr('style', 'display: block; margin: auto;');
+
   /* tsv形式を一括取り込みする */
   var rowdata = data.toList();
 
