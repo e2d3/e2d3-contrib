@@ -1,0 +1,48 @@
+.line {
+    fill: none;
+    stroke-width: 1.5px;
+}
+
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.5;
+    shape-rendering: crispEdges;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+.v_label {
+    font-size: 9pt;
+}
+
+.yaxis path,
+.yaxis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 0.5px;
+    shape-rendering: crispEdges;
+}
+
+.x_lab {
+    font-size: 9pt;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 90px;
+    height: 40px;
+    padding: 2px;
+    font: 12px sans-serif;
+    color: steelblue;
+    background: white;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.tick {
+    font-size: 8pt;
+}
