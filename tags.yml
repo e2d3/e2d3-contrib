@@ -30,6 +30,7 @@ statistics:
   - simple-histogram
   - c3js-charts
   - c3js-line-chart
+  - slope-graph
 map:
   - japan-color
   - japan-map
