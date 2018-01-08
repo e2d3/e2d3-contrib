@@ -1,5 +1,16 @@
 athlete,HH,MM,SS,acolor
 Osone,0,58,23,ffffff
-Jane,1,10,11,ffffff
-Mike,1,45,00,ffffff
-Wat,2,15,00,ffffff
+1h,1,00,00,ffffff
+Jane,1,07,11,ffffff
+Mike,1,10	,24,ffffff
+1.25h,1,15,00,ffffff
+Iga,1,22,41,ffffff
+1.5h,1,30,00,ffffff
+Iki,1,27,23,ffffff
+Satoshi,1,35,11,ffffff
+Tori,1,40,12,ffffff
+1.75h,1,45,00,ffffff
+2.0h,2,00,00,ffffff
+Wat,2,27,00,ffffff
+2.25h,2,15,00,ffffff
+2.5h,2,30,00,ffffff
