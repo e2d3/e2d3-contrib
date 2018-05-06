@@ -32,6 +32,7 @@ statistics:
   - c3js-line-chart
   - slope-graph
 map:
+  - us-map
   - japan-color
   - japan-map
   - japanmap-javascript
