@@ -7,10 +7,8 @@ function update(data) {
 /**
  * Created by yuuu on 14/12/22.
  * Edited by osoken on 15/10/21.
- * Nagoya Colorを流用して作成 15/11/23 by yuzen tsuzuki(tyx)
- *                                    変更点は"tyx"でマーク
- * tyxさん作のAnjo Colorを流用して、15/12/02に綿貫が小金井市を作成
- *                                    変更点は"wat"でマーク
+ * Nagoya Color 15/11/23 by yuzen tsuzuki(tyx)
+ * tyx-Anjo Color-15/12/02junichiwatanuki
 */
 
 !(function(d3,colorbrewer)
@@ -215,7 +213,7 @@ function show(data)
       tooltip.attr('transform','translate('+d3.event.pageX+','+(d3.event.pageY+40)+')');
 //    tooltipTitle.text(d.properties.prefecture+d.properties.city+d.properties.ward);   //tyx
 //      tooltipTitle.text(d.properties.ST_NAME +' '+ d.properties.MOJI);					//tyx
-      tooltipTitle.text(d.properties.fips_state +'_'+ d.properties.ST_NAME +'('+ d.properties.iso_3166_2 + ')');					//tyx
+      tooltipTitle.text(d.properties.ST_NAME +'(' + d.properties.iso_3166_2 + ' FIPS:' + d.properties.fips_state + ')');					//tyx
       tooltipData.selectAll('text').remove();
       tooltipData.selectAll('text')
         .data(d3.entries(d.properties.data))
