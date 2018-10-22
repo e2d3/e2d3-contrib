@@ -43,6 +43,7 @@ map:
   - yamaguchi-map
   - population-map-iran
   - ehime-color
+  - mie-color
   - opendata-viewer
 globe:
   - see-through-globe
