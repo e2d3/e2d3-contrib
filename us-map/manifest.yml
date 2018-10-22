@@ -6,7 +6,7 @@ homepage: https://github.com/e2d3/e2d3-contrib
 bugs: https://github.com/e2d3/e2d3-contrib/issues
 license: Apache-2.0
 contributors:
-  - junichi WATANUKI <junichi.watanuki@gmail.com>
+  - Keiko Ono <keiko.ono1@gmail.com>
 repository: e2d3/e2d3-contrib
 capabilities:
   saveImages: false

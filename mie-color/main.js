@@ -7,8 +7,8 @@ function update(data) {
 /**
  * Created by yuuu on 14/12/22.
  * Edited by osoken on 15/10/21.
- * Nagoya Color 15/11/23 by yuzen tsuzuki(tyx)
- * tyx-Anjo Color-15/12/02junichiwatanuki
+ * Nagoya Colorを流用して作成 16/01/25 by yuzen tsuzuki(tyx)
+ *                                    変更点は"tyx"でマーク
 */
 
 !(function(d3,colorbrewer)
@@ -16,7 +16,8 @@ function update(data) {
   var colormenu ={};
   var dispatcher = d3.dispatch('change');
   var flatCB = d3.entries(colorbrewer).map(function(d){return d3.entries(d.value).map(function(dd){return {name:d.key+': '+dd.key, parette:dd.value};});}).reduce(function(a,b){return a.concat(b);});
-  var selected = flatCB[0];
+//var selected = flatCB[0]; //tyx
+  var selected = flatCB[6]; //tyx
   var selection, display, selector;
 
   colormenu.open = function()
@@ -133,10 +134,8 @@ var tooltipData = tooltipInfo.append('g')
 var projection = d3.geo.mercator()
 //  .center([136.95,35.15])                 //tyx 
 //  .scale(Math.min(width, height) * 150)   //tyx
-//  .center([137.08,34.95])                   //wat
-//  .scale(Math.min(width, height) * 350.0)   //wat
-  .center([139.43,35.69])                   //wat
-  .scale(Math.min(width, height) * 80.0)   //wat
+  .center([136.25,34.50])                   //tyx
+  .scale(Math.min(width, height) * 30.0)    //tyx
   .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -145,14 +144,12 @@ var path = d3.geo.path()
 var topo = {};
 
 //var placeName = 'nagoya';                 //tyx
-//var placeName ='151122_anjo';               //wat
-var placeName ='us-states';               //wat
+var placeName ='mie'						//tyx
 
 var topoSelection = null;
 
-//d3.json(baseUrl + "/nagoya.topojson", function(error, o) {                 //tyx
-//d3.json(baseUrl + "/151122_anjo.topojson", function(error, o) {              //wat
-d3.json(baseUrl + "/us-states.topojson", function(error, o) {              //wat
+//d3.json(baseUrl + "/nagoya.topojson", function(error, o) { //tyx
+  d3.json(baseUrl + "/mie.topojson", function(error, o) {  //tyx
   topoSelection = mapLayer.selectAll(".states")
     .data(topojson.feature(o, o.objects[placeName]).features)
     .enter().append("path")
@@ -178,9 +175,8 @@ function show(data)
     topo.objects[placeName].geometries.forEach(function(d)
     {
       d.properties.data = {};
-//    d.properties.data = data[d.properties.ward] || {};  //tyx
-//      d.properties.data = data[d.properties.MOJI] || {};  //tyx
-      d.properties.data = data[d.properties.ST_NAME] || {};  //tyx
+//    d.properties.data = data[d.properties.ward] || {};		//tyx
+      d.properties.data = data[d.properties.CITY_NAME] || {};    //tyx
     });
     var discretizer = d3.scale.quantize().range(d3.range(colormenu.nColor()));
     var attr = labels[0];
@@ -212,8 +208,7 @@ function show(data)
       tooltip.style('display','block');
       tooltip.attr('transform','translate('+d3.event.pageX+','+(d3.event.pageY+40)+')');
 //    tooltipTitle.text(d.properties.prefecture+d.properties.city+d.properties.ward);   //tyx
-//      tooltipTitle.text(d.properties.ST_NAME +' '+ d.properties.MOJI);					//tyx
-      tooltipTitle.text(d.properties.ST_NAME +'(' + d.properties.iso_3166_2 + ' FIPS:' + d.properties.fips_state + ')');					//tyx
+      tooltipTitle.text(d.properties.CITY_NAME);										//tyx
       tooltipData.selectAll('text').remove();
       tooltipData.selectAll('text')
         .data(d3.entries(d.properties.data))
