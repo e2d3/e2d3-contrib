@@ -43,6 +43,7 @@ map:
   - yamaguchi-map
   - population-map-iran
   - ehime-color
+  - mie-color
   - opendata-viewer
 globe:
   - see-through-globe
@@ -109,4 +110,3 @@ tbd:
   - multi-series-line-chart
   - foot-race 2
   - ev-driving
-  - mie-color
