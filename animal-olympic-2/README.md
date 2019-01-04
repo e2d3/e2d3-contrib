@@ -1,6 +1,20 @@
-Animal Olumpic Kai
-====
+# Animal Olumpic Kai
 
-動物や乗り物と競争！
+## 概要
 
-[Original](https://github.com/e2d3/e2d3-contrib/tree/master/animal-olympic)
+100m の記録を書き込むことで、ボルトや動物、乗り物などと競争できるグラフ  
+
+## デフォルトの記録
+
+|名前|記録|
+|:----|:----|
+|あなた|16|
+|子供|17|
+|ボルト|9.58|
+|チータ|3|
+|台風|4|
+|車|7.2|
+|馬|7.5|
+
+## 派生元
+[動物オリンピック](https://github.com/e2d3/e2d3-contrib/tree/master/animal-olympic)
