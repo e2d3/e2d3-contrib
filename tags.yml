@@ -22,6 +22,7 @@ recommended:
   - multi-series-radar-chart
   - wordcloud
   - barchart-javascript
+  - animal-olympic-2
 statistics:
   - scatterplot-matrix-brushing
   - principal-component-analysis
