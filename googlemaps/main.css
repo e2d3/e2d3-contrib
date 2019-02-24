@@ -1,0 +1,8 @@
+.overlay, .overlay svg {
+  position: absolute;
+}
+
+.overlay svg {
+  width: 120px;
+  height: 120px;
+}
