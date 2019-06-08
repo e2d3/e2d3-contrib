@@ -1,4 +1,4 @@
-Word cloud
+Word cloud apply fonts
 ====
 
 This chart visualizes word cloud of the data.
