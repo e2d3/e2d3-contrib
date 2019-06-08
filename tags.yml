@@ -23,6 +23,7 @@ recommended:
   - wordcloud
   - barchart-javascript
   - animal-olympic-2
+  - wordcloud_add_font
 statistics:
   - scatterplot-matrix-brushing
   - principal-component-analysis
