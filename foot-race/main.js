@@ -189,11 +189,11 @@ pitchmag=0.0086*height+85.091; //added 20160403 nagahisa
 
 
 //label click
-jQuery(document).on('click', '.chart-label', function() {
-    jQuery('.chart-label').removeClass('active');
-    jQuery(this).addClass('active');
+d3.selectAll('.chart-label').on('click', function() {
+    d3.selectAll('.chart-label').classed('active', false);
+    d3.select(this).classed('active', true);
 
-    initialMetrix = jQuery(this).attr('data-chart-label');
+    initialMetrix = d3.select(this).attr('data-chart-label');
     // console.log('label change : ' + initialMetrix);
     draw(initialMetrix, dataReserved);
 });
@@ -203,4 +203,3 @@ function calcSpeed(d){
 }
 
 }
-
