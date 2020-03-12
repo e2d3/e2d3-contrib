@@ -1,7 +1,9 @@
 //# require=d3,leaflet,es6-promise.min
 
-const HOME_LAT = 35.475846;
-const HOME_LNG = 139.628833;
+// 中心位置
+var homeLat;
+var homeLng;
+var zoomLevel;
 
 const PICT_MARGIN = 20;
 const MAIN_PICT_CONTAINER = 0.75;
@@ -20,17 +22,24 @@ d3.select('#map-container')
       'width': root.clientWidth + 'px'
   })
 
-// しぇあひるずを中心に表示  setView([緯度, 経度], ズーム)
-var mapLayer = L.map('map-container').setView([HOME_LAT, HOME_LNG], 15);
-
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors',
-}).addTo(mapLayer);
 
 function update(data) {
-    const SPOT_NAME_LABEL = data[0][0];
-    const LAT_LABEL = data[0][3];
-    const LNG_LABEL = data[0][4];
+    const SPOT_NAME_LABEL = data[1][0];
+    const LAT_LABEL = data[1][3];
+    const LNG_LABEL = data[1][4];
+
+    // 中心位置を取得 取得後にデータ読み込み部に合わせて1行目を削除
+    homeLat = data[0][1];
+    homeLng = data[0][3];
+    zoomLevel = data[0][5];
+    data.shift();
+
+    // 指定した緯度経度を中心に表示  setView([緯度, 経度], ズーム)
+    var mapLayer = L.map('map-container').setView([homeLat, homeLng], zoomLevel);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+    }).addTo(mapLayer);
 
     d3.selectAll('.leaflet-marker-icon')
       .remove()
@@ -123,9 +132,9 @@ function createContents(spot, data, spotName) {
 
     var pictContainerHeight = root.clientHeight
                               - document.getElementById('spot').clientHeight
-                              - document.getElementById('description').clientHeight 
-                              - document.getElementById('address').clientHeight 
-                              - (PICT_MARGIN * 2) 
+                              - document.getElementById('description').clientHeight
+                              - document.getElementById('address').clientHeight
+                              - (PICT_MARGIN * 2)
                               - (modalPadding * 2);
 
     var mainPictBox = modalContent
@@ -266,11 +275,11 @@ var getPictSize = function(self) {
     var pictSize = { };
     pictSize.width = parseInt(d3.select(self).style('width'));
     pictSize.height = parseInt(d3.select(self).style('height'));
-    return pictSize;          
+    return pictSize;
 }
 
 var is2PictHeightsMax = function(pictArray, pictContainerHeight) {
-    return pictArray[0].height == parseInt(pictContainerHeight) 
+    return pictArray[0].height == parseInt(pictContainerHeight)
         && pictArray[1].height == parseInt(pictContainerHeight);
 }
 
