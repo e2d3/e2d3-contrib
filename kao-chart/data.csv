@@ -1,0 +1,8 @@
+date,ParamX,ParamY,ParamZ,jpglink
+1,2,4,4,"/contrib/bubblechart_2/face/red.png"
+2,5,8,4,"/contrib/bubblechart_2/face/black.png"
+3,5,5,5,"/contrib/bubblechart_2/face/pink.png"
+4,7,3,9,"/contrib/bubblechart_2/face/blue.png"
+5,8,5,8,"/contrib/bubblechart_2/face/green.png"
+3,2,2,4,
+3,4,5,3,
