@@ -1,21 +1,4 @@
-// ローカルサーバ上で index.html から確認する場合は以下のコメントを外す
-
-// d3.csv("data.csv").then(function(data) {
-//   data.forEach(function(d) {
-//     d.value = +d.value,
-//     d.lastValue = +d.lastValue,
-//     d.value = isNaN(d.value) ? 0 : d.value,
-//     d.year = +d.year,
-//     d.colour = d3.hsl(Math.random()*360,0.75,0.75)
-//   })
-
-//   var svg = d3.select("body").append("svg")
-//       .attr("width", 960)
-//       .attr("height", 600);
-
-//   barChartRace(data, svg);
-// });
-
+//# require=d3_5
 
 function update(data) {
   var dim = { width: root.clientWidth, height: root.clientHeight };
@@ -30,19 +13,18 @@ function update(data) {
     d.lastValue = +d.lastValue,
     d.value = isNaN(d.value) ? 0 : d.value,
     d.year = +d.year,
-    d.colour = d3.hsl(Math.random()*360,0.75,0.75)
+    d.colour = d3_5.hsl(Math.random()*360,0.75,0.75)
   })
 
-  d3.select(root).selectAll('*').remove();
-  var svg = d3.select(root).append('svg')
-      .attr({ width: dim.width, height: dim.height })
-      .style({ padding: 0 });
-  barChartRace(data, svg)
+  d3_5.select(root).selectAll('*').remove();
+  var svg = d3_5.select(root).append('svg')
+      .attr('width', dim.width)
+      .attr('height', dim.height)
+      .style('padding', 0);
+  barChartRace(dataList, svg)
 }
 
 function barChartRace(data, svg) {
-  // Feel free to change or delete any of the code you see in this editor!
-
   var tickDuration = 500;
 
   var top_n = 12;
@@ -78,7 +60,6 @@ function barChartRace(data, svg) {
   let year = 2000;
 
 
-  console.log(data);
 
   let yearSlice = data.filter(d => d.year == year && !isNaN(d.value))
       .sort((a,b) => b.value - a.value)
@@ -86,21 +67,19 @@ function barChartRace(data, svg) {
 
   yearSlice.forEach((d,i) => d.rank = i);
 
-  console.log('yearSlice: ', yearSlice)
-
-  let x = d3.scaleLinear()
-      .domain([0, d3.max(yearSlice, d => d.value)])
+  let x = d3_5.scaleLinear()
+      .domain([0, d3_5.max(yearSlice, d => d.value)])
       .range([margin.left, width-margin.right-65]);
 
-  let y = d3.scaleLinear()
+  let y = d3_5.scaleLinear()
       .domain([top_n, 0])
       .range([height-margin.bottom, margin.top]);
 
-  let xAxis = d3.axisTop()
+  let xAxis = d3_5.axisTop()
       .scale(x)
       .ticks(width > 500 ? 5:2)
       .tickSize(-(height-margin.top-margin.bottom))
-      .tickFormat(d => d3.format(',')(d));
+      .tickFormat(d => d3_5.format(',')(d));
 
   svg.append('g')
     .attr('class', 'axis xAxis')
@@ -109,6 +88,7 @@ function barChartRace(data, svg) {
     .selectAll('.tick line')
     .classed('origin', d => d == 0);
 
+  console.log(data)
   svg.selectAll('rect.bar')
     .data(yearSlice, d => d.name)
     .enter()
@@ -137,7 +117,7 @@ function barChartRace(data, svg) {
     .attr('class', 'valueLabel')
     .attr('x', d => x(d.value)+5)
     .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
-    .text(d => d3.format(',.0f')(d.lastValue));
+    .text(d => d3_5.format(',.0f')(d.lastValue));
 
   let yearText = svg.append('text')
       .attr('class', 'yearText')
@@ -147,7 +127,7 @@ function barChartRace(data, svg) {
       .html(~~year)
       .call(halo, 10);
 
-  let ticker = d3.interval(e => {
+  let ticker = d3_5.interval(e => {
 
     yearSlice = data.filter(d => d.year == year && !isNaN(d.value))
       .sort((a,b) => b.value - a.value)
@@ -157,12 +137,12 @@ function barChartRace(data, svg) {
 
     //console.log('IntervalYear: ', yearSlice);
 
-    x.domain([0, d3.max(yearSlice, d => d.value)]);
+    x.domain([0, d3_5.max(yearSlice, d => d.value)]);
 
     svg.select('.xAxis')
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .call(xAxis);
 
     let bars = svg.selectAll('.bar').data(yearSlice, d => d.name);
@@ -178,13 +158,13 @@ function barChartRace(data, svg) {
       .style('fill', d => d.colour)
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('y', d => y(d.rank)+5);
 
     bars
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('width', d => x(d.value)-x(0)-1)
       .attr('y', d => y(d.rank)+5);
 
@@ -192,7 +172,7 @@ function barChartRace(data, svg) {
       .exit()
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('width', d => x(d.value)-x(0)-1)
       .attr('y', d => y(top_n+1)+5)
       .remove();
@@ -210,14 +190,14 @@ function barChartRace(data, svg) {
       .html(d => d.name)
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
 
 
     labels
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('x', d => x(d.value)-8)
       .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
 
@@ -225,7 +205,7 @@ function barChartRace(data, svg) {
       .exit()
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('x', d => x(d.value)-8)
       .attr('y', d => y(top_n+1)+5)
       .remove();
@@ -240,22 +220,22 @@ function barChartRace(data, svg) {
       .attr('class', 'valueLabel')
       .attr('x', d => x(d.value)+5)
       .attr('y', d => y(top_n+1)+5)
-      .text(d => d3.format(',.0f')(d.lastValue))
+      .text(d => d3_5.format(',.0f')(d.lastValue))
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
 
     valueLabels
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('x', d => x(d.value)+5)
       .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
       .tween("text", function(d) {
-        let i = d3.interpolateRound(d.lastValue, d.value);
+        let i = d3_5.interpolateRound(d.lastValue, d.value);
         return function(t) {
-          this.textContent = d3.format(',')(i(t));
+          this.textContent = d3_5.format(',')(i(t));
         };
       });
 
@@ -264,7 +244,7 @@ function barChartRace(data, svg) {
       .exit()
       .transition()
       .duration(tickDuration)
-      .ease(d3.easeLinear)
+      .ease(d3_5.easeLinear)
       .attr('x', d => x(d.value)+5)
       .attr('y', d => y(top_n+1)+5)
       .remove();
@@ -272,7 +252,7 @@ function barChartRace(data, svg) {
     yearText.html(~~year);
 
     if(year == 2018) ticker.stop();
-    year = d3.format('.1f')((+year) + 0.1);
+    year = d3_5.format('.1f')((+year) + 0.1);
   },tickDuration);
 
 }
