@@ -33,14 +33,3 @@ body {
     height: 600px;
     border: 1px solid #000;
 }
-
-.axis text {
-  font: 15px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}

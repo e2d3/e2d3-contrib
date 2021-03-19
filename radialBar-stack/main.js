@@ -3,6 +3,9 @@
 // date 2021-01
 // By The Paper data news team
 
+//＃require = d3 = d3, d3-scale-radial = d3-scale-radial
+
+var root = document.getElementById("root");
 
 //margin
 var margin = {
@@ -19,9 +22,9 @@ var radius = Math.min(width, height) * 0.4;
 var innerRadius = 0;
 var outerRadius = Math.min(width, height) / 2;
 
-d3.csv("data.csv", function (error, data) {
-    update(data);
-});
+// d3.csv("data.csv", function (error, data) {
+//     update(data);
+// });
 
 
 function update(data) {
@@ -173,3 +176,55 @@ function update(data) {
         .text(function(d) { return d; });
     
 }
+
+
+//d3-scale-radial
+(function(global, factory) {
+    typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("d3-scale")) :
+    typeof define === "function" && define.amd ? define(["exports", "d3-scale"], factory) :
+    (factory(global.d3 = global.d3 || {}, global.d3));
+  }(this, function(exports, d3Scale) {
+    'use strict';
+  
+    function square(x) {
+      return x * x;
+    }
+  
+    function radial() {
+      var domain = [0, 1],
+          range = [0, 1];
+    
+      function scale(x) {
+        var r0 = range[0] * range[0], r1 = range[1] * range[1];
+        return Math.sqrt((x - domain[0]) / (domain[1] - domain[0]) * (r1 - r0) + r0);
+      }
+    
+      scale.domain = function(_) {
+        return arguments.length ? (domain = [+_[0], +_[1]], scale) : domain.slice();
+      };
+    
+      scale.range = function(_) {
+        return arguments.length ? (range = [+_[0], +_[1]], scale) : range.slice();
+      };
+    
+      scale.ticks = function(count) {
+        return d3.scale.linear().domain(domain).ticks(count);
+      };
+  
+      scale.nice = function(count) {
+        return d3.scale.linear().domain(domain).nice();
+      };
+      
+    
+      scale.tickFormat = function(count, specifier) {
+        return d3.scale.linear().domain(domain).tickFormat(count, specifier);
+      };
+    
+      return scale;
+    }
+  
+    exports.scale.radial = radial;
+    // exports.scaleRadial = radial;
+  
+    Object.defineProperty(exports, '__esModule', {value: true});
+  }));
