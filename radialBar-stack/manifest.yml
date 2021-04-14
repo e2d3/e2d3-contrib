@@ -1,0 +1,14 @@
+name: Simple Radial Bar Chart
+description:
+tags:
+  - radialBar
+  - simple
+  - example
+homepage: https://github.com/e2d3/e2d3-contrib
+bugs: https://github.com/e2d3/e2d3-contrib/issues
+license: Apache-2.0
+contributors:
+  - The Paper data news team
+repository: e2d3/e2d3-contrib
+capabilities:
+  selectColorThemes: true
