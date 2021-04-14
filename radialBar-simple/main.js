@@ -79,7 +79,7 @@ function update(data) {
         }
         new_data.push(temp)
     }
-    console.log(new_data)
+//     console.log(new_data)
     data = new_data;
 
     d3.select(root).selectAll('*').remove();
