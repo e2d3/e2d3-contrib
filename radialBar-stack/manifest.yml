@@ -1,8 +1,8 @@
-name: Simple Radial Bar Chart
+name: Stacked Radial Bar Chart
 description:
 tags:
   - radialBar
-  - simple
+  - Stacked
   - example
 homepage: https://github.com/e2d3/e2d3-contrib
 bugs: https://github.com/e2d3/e2d3-contrib/issues
