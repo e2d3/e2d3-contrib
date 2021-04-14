@@ -5,7 +5,7 @@
 
 //＃require = d3 = d3, d3-scale-radial = d3-scale-radial
 
-var root = document.getElementById("root");
+//var root = document.getElementById("root");
 
 //margin
 var margin = {
