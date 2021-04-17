@@ -1,11 +1,48 @@
+
+//＃require=d3
+
 // d3.v3
 // http:/www.thepaper.cn,
 // date 2021-01
 // By The Paper data news team
 
-//＃require = d3 = d3, d3-scale-radial = d3-scale-radial
+// var root = document.getElementById("root");
 
-var root = document.getElementById("root");
+function radial() {
+    var domain = [0, 1],
+        range = [0, 1];
+
+    function scale(x) {
+        var r0 = range[0] * range[0],
+            r1 = range[1] * range[1];
+        return Math.sqrt((x - domain[0]) / (domain[1] - domain[0]) * (r1 - r0) + r0);
+    }
+
+    scale.domain = function (_) {
+        return arguments.length ? (domain = [+_[0], +_[1]], scale) : domain.slice();
+    };
+
+    scale.range = function (_) {
+        return arguments.length ? (range = [+_[0], +_[1]], scale) : range.slice();
+    };
+
+    scale.ticks = function (count) {
+        return d3.scale.linear().domain(domain).ticks(count);
+    };
+
+    scale.nice = function (count) {
+        return d3.scale.linear().domain(domain).nice();
+    };
+
+
+    scale.tickFormat = function (count, specifier) {
+        return d3.scale.linear().domain(domain).tickFormat(count, specifier);
+    };
+
+    return scale;
+}
+(d3.scale || (d3.scale = {})).radial = radial;
+
 
 //margin
 var margin = {
@@ -15,6 +52,7 @@ var margin = {
     left: 60
 };
 
+// console.log(margin);
 //size
 var width = root.clientWidth - margin.left - margin.right;
 var height = root.clientHeight - margin.top - margin.bottom;
@@ -28,6 +66,21 @@ var outerRadius = Math.min(width, height) / 2;
 
 
 function update(data) {
+
+    // console.log(data)
+    //数据转置
+    // var data_title = data[0];
+    // console.log(data_title);
+    var new_data = [];
+    for( i = 1; i < data.length; i++){
+        var temp = {};
+        for( j = 0; j < data[i].length; j++){
+            temp[data[0][j]] = data[i][j]
+        }
+        new_data.push(temp)
+    }
+    console.log(new_data)
+    data = new_data;
 
     d3.select(root).selectAll('*').remove();
 
@@ -73,7 +126,6 @@ function update(data) {
         .nice()
         .range([innerRadius, outerRadius]); 
 
-    
 
     var label = g.append("g")
         .attr("class", "x_Tick")
@@ -82,7 +134,9 @@ function update(data) {
         .enter()
         .append("g")
         .attr("text-anchor", "middle")
-        .attr("transform", function(d) { return "rotate(" + ((x(d.key) + x.rangeBand() / 2) * 180 / Math.PI - 90) + ")translate(" + outerRadius + ",0)"; });
+        .attr("transform", function(d) { 
+            // console.log(data)
+            return "rotate(" + ((x(d.key) + x.rangeBand() / 2) * 180 / Math.PI - 90) + ")translate(" + outerRadius + ",0)"; });
 
     label.append("line")
         .attr("x2", -outerRadius)
@@ -145,12 +199,14 @@ function update(data) {
         .attr("stroke", "#fff")
         .attr("stroke-linejoin", "round")
         .attr("stroke-width", 3)
-        .text(y.tickFormat(10, "s"));
+        .text(function(d){ return d });
+        // .text(y.tickFormat(10, "s"));
 
     yTick.append("text")
         .attr("y", function(d) { return -y(d); })
         .attr("dy", "0.35em")
-        .text(y.tickFormat(10, "s"));
+        .text(function(d){ return d });
+        // .text(y.tickFormat(10, "s"));
     
 
     var legend = svg.selectAll(".title_legend")
@@ -178,53 +234,3 @@ function update(data) {
 }
 
 
-//d3-scale-radial
-(function(global, factory) {
-    typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("d3-scale")) :
-    typeof define === "function" && define.amd ? define(["exports", "d3-scale"], factory) :
-    (factory(global.d3 = global.d3 || {}, global.d3));
-  }(this, function(exports, d3Scale) {
-    'use strict';
-  
-    function square(x) {
-      return x * x;
-    }
-  
-    function radial() {
-      var domain = [0, 1],
-          range = [0, 1];
-    
-      function scale(x) {
-        var r0 = range[0] * range[0], r1 = range[1] * range[1];
-        return Math.sqrt((x - domain[0]) / (domain[1] - domain[0]) * (r1 - r0) + r0);
-      }
-    
-      scale.domain = function(_) {
-        return arguments.length ? (domain = [+_[0], +_[1]], scale) : domain.slice();
-      };
-    
-      scale.range = function(_) {
-        return arguments.length ? (range = [+_[0], +_[1]], scale) : range.slice();
-      };
-    
-      scale.ticks = function(count) {
-        return d3.scale.linear().domain(domain).ticks(count);
-      };
-  
-      scale.nice = function(count) {
-        return d3.scale.linear().domain(domain).nice();
-      };
-      
-    
-      scale.tickFormat = function(count, specifier) {
-        return d3.scale.linear().domain(domain).tickFormat(count, specifier);
-      };
-    
-      return scale;
-    }
-  
-    exports.scale.radial = radial;
-    // exports.scaleRadial = radial;
-  
-    Object.defineProperty(exports, '__esModule', {value: true});
-  }));
