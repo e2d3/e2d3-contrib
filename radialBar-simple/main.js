@@ -1,4 +1,3 @@
-
 //＃require=d3
 
 // d3.v3
@@ -82,7 +81,7 @@ function update(data) {
 //     console.log(new_data)
     data = new_data;
 
-    d3.select(root).selectAll('*').remove();
+  d3.select(root).selectAll('*').remove();
 
     for (var i = 0; i < data.length; i++) {
         var arrTitle = Object.keys(data[0]);//获取数据当表头
@@ -126,7 +125,7 @@ function update(data) {
         .nice()
         .range([innerRadius, outerRadius]); 
 
-
+  
     var label = g.append("g")
         .attr("class", "x_Tick")
         .selectAll("g")
