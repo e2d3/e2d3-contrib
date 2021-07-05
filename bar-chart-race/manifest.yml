@@ -1,0 +1,12 @@
+name: Bar Chart Race
+description:
+tags:
+  - recommended
+homepage: https://github.com/e2d3/e2d3-contrib
+bugs: https://github.com/e2d3/e2d3-contrib/issues
+license: Apache-2.0
+contributors:
+  - Ishikawa Hiromu <rock.lee.012086@gmail.com>
+repository: e2d3/e2d3-contrib
+capabilities:
+  saveImages: true
